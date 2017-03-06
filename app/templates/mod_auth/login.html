@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<div class="container-fluid" style="margin-top: 100px;">
+    <div class="row">
+        <div class="col-sm-4"></div>
+        <div class="col-md-4">
+                <br><br>
+            <h2>Login</h2>
+            <form id="login-form" action="{{ url_for('auth.login') }}" method="POST" role="form" data-toggle="validator">
+                  <div class="">
+                        <label><b>Email</b></label>
+                       <input class="form-control" id="email" name="email" type="email" value=""><br/>
+
+                        <label><b>Password</b></label>
+                         <input class="form-control" id="password" name="password" type="password" value="">
+                         <div class="help-block with-errors"></div>
+                        {% if error %}
+                            <div class="alert alert-danger">
+                              {{ error }}
+                            </div>
+                        {% endif %}
+                        <div align="right">
+                            <button type="submit" class="">Login</button>
+                            <br><br><br>
+                        </div>
+                  </div>
+            </form>
+        </div>
+        <div class="col-sm-4"></div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,130 @@
+{% extends 'layout.html' %} {% block body %}
+
+    <div class="container">
+	<div class="row">
+        <div class="col-md-12">
+            <div class="page-header">
+				<h1>
+					Ekonomija
+				</h1>
+			</div>
+        </div>
+        <div class="col-md-12">
+            <ul class="breadcrumb">
+                <li>
+                    <span>1 </span><span>of</span><span> 12</span>
+				</li>
+			</ul>
+        </div>
+	</div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title">
+						<b>Da bi uspešno privlačili strane investicije neophodno je davati subvencije investitorima.</b>
+					</h3>
+				</div>
+				<div class="panel-body">
+                    <div class="col-md-6 main-questions">
+                       <div>
+                        <input id="question1" name="question" type="radio" class="with-font" value="sel" />
+                        <label for="question1">Slažem se </label>
+                    </div>
+                    <div>
+                        <input id="question2" name="question" type="radio" class="with-font" value="sel" />
+                        <label for="question2">Ne slažem se</label>
+                    </div>
+                    <div>
+                        <input id="question3" name="question" type="radio" class="with-font" value="sel" />
+                        <label for="question3">Nemam stav</label>
+                    </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="panel-footer importance-question-labels">
+                            <p><b>Koliko je ovo pitanje važno</b></p>
+                            <div class="question-div">
+                                <input id="question-importance1" name="question-importance1-radio" type="radio" class="with-font" value="sel" />
+                                <label for="question-importance1">Nije važno</label>
+                            </div>
+                            <div class="question-div">
+                                <input id="question-importance2" name="question-importance1-radio" type="radio" class="with-font" value="sel" />
+                                <label for="question-importance2">Manje važno </label>
+                            </div>
+                            <div class="question-div">
+                                <input id="question-importance3" name="question-importance1-radio" type="radio" class="with-font" value="sel" />
+                                <label for="question-importance3">Važno </label>
+                            </div>
+                            <div class="question-div">
+                                <input id="question-importance4" name="question-importance1-radio" type="radio" class="with-font" value="sel" />
+                                <label for="question-importance4">Veoma važno </label>
+                            </div>
+				        </div>
+                    </div>
+				</div>
+
+
+			</div>
+
+            <div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title">
+						<b>Treba prekinuti saradnju sa MMF-om.</b>
+					</h3>
+				</div>
+				<div class="panel-body">
+                    <div class="col-md-6 main-questions">
+                       <div>
+                        <input id="question1" name="question" type="radio" class="with-font" value="sel" />
+                        <label for="question1">Slažem se </label>
+                    </div>
+                    <div>
+                        <input id="question2" name="question" type="radio" class="with-font" value="sel" />
+                        <label for="question2">Ne slažem se</label>
+                    </div>
+                    <div>
+                        <input id="question3" name="question" type="radio" class="with-font" value="sel" />
+                        <label for="question3">Nemam stav</label>
+                    </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="panel-footer importance-question-labels">
+                            <p><b>Koliko je ovo pitanje važno</b></p>
+                            <div class="question-div">
+                                <input id="question-importance1" name="question-importance1-radio" type="radio" class="with-font" value="sel" />
+                                <label for="question-importance1">Nije važno</label>
+                            </div>
+                            <div class="question-div">
+                                <input id="question-importance2" name="question-importance1-radio" type="radio" class="with-font" value="sel" />
+                                <label for="question-importance2">Manje važno </label>
+                            </div>
+                            <div class="question-div">
+                                <input id="question-importance3" name="question-importance1-radio" type="radio" class="with-font" value="sel" />
+                                <label for="question-importance3">Važno </label>
+                            </div>
+                            <div class="question-div">
+                                <input id="question-importance4" name="question-importance1-radio" type="radio" class="with-font" value="sel" />
+                                <label for="question-importance4">Veoma važno </label>
+                            </div>
+				        </div>
+                    </div>
+				</div>
+			</div>
+
+        </div>
+
+    </div>
+    <div class="row buttons-footer">
+        <div class="col-md-12">
+            <div class="col-md-6">
+                <button type="button" class="btn btn-default disabled back-btn">Prethodni</button>
+            </div>
+            <div class="col-md-6">
+                <button type="button" class="btn btn-primary next-btn">Sledeći</button>
+            </div>
+        </div>
+    </div>
+    </div>
+
+
+{% endblock %}
