@@ -8,7 +8,7 @@ mod_auth = Blueprint('auth', __name__, url_prefix='/auth')
 @mod_auth.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == "GET":
-        print "Dgfdgfh"
+
         # Return the login form template
         return render_template('mod_auth/login.html')
     else:

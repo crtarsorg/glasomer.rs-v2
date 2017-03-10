@@ -1,4 +1,5 @@
 from flask import Flask
+from os.path import join, dirname, realpath
 import os
 import ConfigParser
 from flask.ext.pymongo import PyMongo
@@ -12,6 +13,8 @@ from flask_mongoengine import MongoEngine
 from app.utils.mongo_utils import MongoUtils
 from app.utils.user_mongo_utils import UserMongoUtils
 
+UPLOAD_FOLDER =join(dirname(realpath(__file__)), 'static/uploads/')
+ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 mongo = PyMongo()
 
 login_manager = LoginManager()
@@ -35,7 +38,7 @@ bcrypt = Bcrypt()
 def create_app():
     # Here we  create flask app
     app = Flask(__name__)
-
+    app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
     # We load configurations
     load_config(app)
 
@@ -141,8 +144,9 @@ def init_modules(app):
     from app.mod_api.views import mod_api
     from app.mod_whatis.views import mod_whatis
     from app.mod_auth.views import mod_auth
-
+    from app.mod_admin.views import mod_admin
     app.register_blueprint(mod_auth)
     app.register_blueprint(mod_main)
     app.register_blueprint(mod_api)
     app.register_blueprint(mod_whatis)
+    app.register_blueprint(mod_admin)
