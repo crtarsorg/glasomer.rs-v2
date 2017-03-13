@@ -152,13 +152,30 @@ def remove_question():
 #candidates answrs
 @mod_admin.route('/answerscandidates', methods=['GET', "POST"])
 def answers_candidates():
+    candidate_url = request.args.get('candidate')
     docs = mongo_utils.find_all()
     questions=mongo_utils.find_all_questions()
-    return render_template('mod_admin/answers_candidates.html',docs=json.loads(json_util.dumps(docs)),questions=json.loads(json_util.dumps(questions)))
+    return render_template('mod_admin/answers_candidates.html',docs=json.loads(json_util.dumps(docs)),questions=json.loads(json_util.dumps(questions)),candidate_url=candidate_url)
 
 @mod_admin.route('/addcandidateanswers', methods=['GET', "POST"])
 def add_candidate_answers():
     if request.method == 'POST':
         data = request.form.to_dict()
+        mongo_utils.insert_candidate_answers(data)
+    return redirect(url_for('admin.candidates'))
 
-    return  "sfsdfds"
+@mod_admin.route('/getcandidateanswers', methods=['GET', "POST"])
+def get_candidate_answers():
+    candidate_url = request.args.get('candidate')
+    questions=mongo_utils.find_all_questions()
+    nr_questions=mongo_utils.get_nr_questions()
+    candidate_answers=mongo_utils.get_candidate_asnwers(candidate_url)
+    docs = mongo_utils.find_all()
+    return render_template('mod_admin/answers_candidate_results.html',docs=json.loads(json_util.dumps(docs)), candidates=json.loads(json_util.dumps(candidate_answers)),questions=json.loads(json_util.dumps(questions)),nr_questions=json_util.dumps(nr_questions),candidate_url=candidate_url)
+
+@mod_admin.route('/editcandidateanswers', methods=['GET', "POST"])
+def edit_candidate_answers():
+    if request.method == 'POST':
+        data = request.form.to_dict()
+        mongo_utils.update_candidate_answers(data)
+    return redirect(url_for('admin.candidates'))

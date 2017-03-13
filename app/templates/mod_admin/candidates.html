@@ -45,6 +45,12 @@
                             return "<a href='{{ url_for('admin.answers_candidates') }}?candidate="+data+"'>Assign Answers</a>";
                         }
                     },
+                    {
+                        "mData": "generated_id", "aTargets": [0],
+                        "render": function (data) {
+                            return "<a href='{{ url_for('admin.get_candidate_answers') }}?candidate="+data+"'>Answers</a>";
+                        }
+                    },
 
 					{"sDefaultContent": "<a  class='edit-candidate' id='' style='padding-right:20px'><i class='fa fa-pencil-square-o fa-lg edit-group' aria-hidden='true'></i></a>" + "<a href='#' class='remove-candidate'><i class='fa fa-trash-o fa-lg' aria-hidden='true'></i></a>"},
 
@@ -181,6 +187,7 @@
                                 <th>Biography</th>
                                 <th>Image</th>
                                 <th>Assign Answers</th>
+                                <th>Answers</th>
                                 <th></th>
                             </tr>
                             </thead>

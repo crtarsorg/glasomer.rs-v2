@@ -1,130 +1,261 @@
 {% extends 'layout.html' %} {% block body %}
+<script>
 
-    <div class="container">
-	<div class="row">
-        <div class="col-md-12">
-            <div class="page-header">
-				<h1>
-					Ekonomija
-				</h1>
-			</div>
-        </div>
-        <div class="col-md-12">
-            <ul class="breadcrumb">
-                <li>
-                    <span>1 </span><span>of</span><span> 12</span>
-				</li>
-			</ul>
-        </div>
-	</div>
+    $(document).ready(function(){
+         $('#insert-user-answer').on('click', function(e){
+	            e.preventDefault();
+				$.ajax({
+					url: "{{ url_for('main.insert_user_answers') }}", //this is the submit URL
+					type: 'POST', //or POST,
+					dataType: 'json',
+					data:$("form").serialize(),
+					success: function (data) {
+                        $('#user-div-results').html('');
+                        $('.user_questions').hide();
+                        $('.user_results').show();
+                        var count_questions=0;
+
+                        candidatesarray=[];
+                        $(data['all_question']).each(function(keyq,valueq){
+                               var match=0;
+                            count_questions=count_questions+1;
+                                 $(data['candidate_results']).each(function(keyc,valuek){
+                                     $(data['user_results']).each(function(keyu,valueu){
+                                    if(valuek['status_'+count_questions]==valueu['status_'+count_questions] && valuek['vazno_'+count_questions]==valueu['vazno_'+count_questions] && valuek['question_'+count_questions]==valueu['question_'+count_questions]){
+                                              match=match+1;
+                                        candidatesarray.push({
+                                                    "candidate_slug": valuek['candidate_slug'],
+                                                    'question':valuek['question_'+count_questions],
+                                                    'status':valuek['status_'+count_questions],
+                                                    'vazno':valuek['vazno_'+count_questions],
+                                                    "matchcount": match,
+
+                                                 });
+                                    }
+                                 })
+
+                             })
+                           })
+
+                        $(data['candidates']).each(function(key,value){
+                            var percentag=0;
+                            var count_match=0;
+                            $(candidatesarray).each(function(key1,value1){
+                                if (value['generated_id']==value1['candidate_slug']){
+                                    count_match=count_match+1;
+                                    percentage=(count_match/count_questions)*100;
+                                }
+                            })
+
+                            $('#user-div-results').append('<div class="row" style="margin-bottom:20px"><div class="col-md-6"><img style="width:200px;" src="{{ url_for('static', filename='uploads/') }}'+value['image']+'" class="img-responsive"/><br/><p>'+value['candidate_name']+'</p><h2 style="color:#337ab7">'+percentage.toFixed(2)+'%</h2></div>' +
+                                    '<div class="col-md-6">'+value['candidate_biography']+'</div></div>');
+                            console.log(count_match);
+                         })
+					}
+				});
+		});
+
+        $('#back-start').on('click',function(e) {
+                e.preventDefault();
+                $('.user_results').hide();
+                $('.user_questions').show();
+
+        })
+
+        var $tabs = $('#wheel-tab li');
+        $('#wheel-left').on('click', function () {
+            $tabs.filter('.active').prev('li').find('a[data-toggle="tab"]').tab('show');
+        });
+        $('#wheel-right').on('click', function () {
+            $tabs.filter('.active').next('li').find('a[data-toggle="tab"]').tab('show');
+        });
+
+    })
+ </script>
+    <style>
+    #wheel-tab { display: none; }
+    .social-icons ul {
+    list-style: none;
+    width: 200px;
+}
+    .social-icons ul li {
+    width: 60px;
+    float: left;
+}
+    .social-icons ul li a {
+    font-size: 30px;
+    color: #337ab7;
+    margin-top: 20px;
+}
+    </style>
+    <div class="container" style="margin-top:60px;">
     <div class="row">
         <div class="col-md-12">
-            <div class="panel panel-default">
-				<div class="panel-heading">
-					<h3 class="panel-title">
-						<b>Da bi uspešno privlačili strane investicije neophodno je davati subvencije investitorima.</b>
-					</h3>
-				</div>
-				<div class="panel-body">
-                    <div class="col-md-6 main-questions">
-                       <div>
-                        <input id="question1" name="question" type="radio" class="with-font" value="sel" />
-                        <label for="question1">Slažem se </label>
+            <div class="user_results" style="display: none;margin-top:40px;">
+                <div class="row" style="margin-bottom:20px;">
+                    <div class="col-md-3">
+                     <input type="button" class="btn btn-primary" value="Odgovori svih stranaka">
                     </div>
-                    <div>
-                        <input id="question2" name="question" type="radio" class="with-font" value="sel" />
-                        <label for="question2">Ne slažem se</label>
-                    </div>
-                    <div>
-                        <input id="question3" name="question" type="radio" class="with-font" value="sel" />
-                        <label for="question3">Nemam stav</label>
-                    </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="panel-footer importance-question-labels">
-                            <p><b>Koliko je ovo pitanje važno</b></p>
-                            <div class="question-div">
-                                <input id="question-importance1" name="question-importance1-radio" type="radio" class="with-font" value="sel" />
-                                <label for="question-importance1">Nije važno</label>
-                            </div>
-                            <div class="question-div">
-                                <input id="question-importance2" name="question-importance1-radio" type="radio" class="with-font" value="sel" />
-                                <label for="question-importance2">Manje važno </label>
-                            </div>
-                            <div class="question-div">
-                                <input id="question-importance3" name="question-importance1-radio" type="radio" class="with-font" value="sel" />
-                                <label for="question-importance3">Važno </label>
-                            </div>
-                            <div class="question-div">
-                                <input id="question-importance4" name="question-importance1-radio" type="radio" class="with-font" value="sel" />
-                                <label for="question-importance4">Veoma važno </label>
-                            </div>
-				        </div>
-                    </div>
-				</div>
+                    <div class="col-md-3">
+                        <input type="button" class="btn btn-primary" value="Uporedite svoje odgovore (sa odgovorima stranaka)">
 
+                    </div>
+              {#      <div class="col-md-6 social-icons">
+                      <ul>
+                                <li>
+                                    <a href="https://www.facebook.com/sharer/sharer.php?u=&amp;t=" class="fa fa-facebook-official" target="_blank" onclick="window.open('https://www.facebook.com/sharer/sharer.php?u=' +encodeURIComponent(document.URL) + '&amp;t='+ encodeURIComponent(document.title)); return false;">
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="https://twitter.com/intent/tweet?source=&amp;text=:%20" class="fa fa-twitter-square" target="_blank" onclick="window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(document.title)+ ':%20'  + encodeURIComponent(document.URL)); return false;">
+                                    </a>
+                                </li>
 
-			</div>
+                            </ul>
 
-            <div class="panel panel-default">
-				<div class="panel-heading">
-					<h3 class="panel-title">
-						<b>Treba prekinuti saradnju sa MMF-om.</b>
-					</h3>
-				</div>
-				<div class="panel-body">
-                    <div class="col-md-6 main-questions">
-                       <div>
-                        <input id="question1" name="question" type="radio" class="with-font" value="sel" />
-                        <label for="question1">Slažem se </label>
-                    </div>
-                    <div>
-                        <input id="question2" name="question" type="radio" class="with-font" value="sel" />
-                        <label for="question2">Ne slažem se</label>
-                    </div>
-                    <div>
-                        <input id="question3" name="question" type="radio" class="with-font" value="sel" />
-                        <label for="question3">Nemam stav</label>
-                    </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="panel-footer importance-question-labels">
-                            <p><b>Koliko je ovo pitanje važno</b></p>
-                            <div class="question-div">
-                                <input id="question-importance1" name="question-importance1-radio" type="radio" class="with-font" value="sel" />
-                                <label for="question-importance1">Nije važno</label>
-                            </div>
-                            <div class="question-div">
-                                <input id="question-importance2" name="question-importance1-radio" type="radio" class="with-font" value="sel" />
-                                <label for="question-importance2">Manje važno </label>
-                            </div>
-                            <div class="question-div">
-                                <input id="question-importance3" name="question-importance1-radio" type="radio" class="with-font" value="sel" />
-                                <label for="question-importance3">Važno </label>
-                            </div>
-                            <div class="question-div">
-                                <input id="question-importance4" name="question-importance1-radio" type="radio" class="with-font" value="sel" />
-                                <label for="question-importance4">Veoma važno </label>
-                            </div>
-				        </div>
-                    </div>
-				</div>
-			</div>
+                    </div>#}
+                </div>
 
-        </div>
+                  <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                <b>Tri stranke sa kojima se najviše podudaraju vaši odgovori</b>
+                            </h3>
+                        </div>
+                      <div class="panel-body" id="user-div-results">
 
-    </div>
-    <div class="row buttons-footer">
-        <div class="col-md-12">
-            <div class="col-md-6">
-                <button type="button" class="btn btn-default disabled back-btn">Prethodni</button>
-            </div>
-            <div class="col-md-6">
-                <button type="button" class="btn btn-primary next-btn">Sledeći</button>
+                      </div>
+                      <div class="row">
+                            <div class="col-md-12" style="text-align: center;margin-bottom: 50px;">
+                                <input type="button" class="btn btn-primary" value="Vratite se na kviz" id="back-start"/>
+                            </div>
+                      </div>
+
+                  </div>
             </div>
         </div>
     </div>
+
+    <div class="user_questions">
+    <ul id="wheel-tab" data-tabs="tabs">
+
+        {% set count = 0 %}
+        {% for doc in docs  %}
+            {% set count = count + 1 %}
+         <li {% if count==1 %} class="active" {% endif %}><a href="#tab-{{ count }}" data-toggle="tab"></a></li>
+        {% endfor %}
+    </ul>
+
+    <div class="tab-content">
+        {% set counttabs = 0 %}
+        {%  set total_tabs=[] %}
+        {% set countquestions=0 %}
+    {% for doc in docs  %}
+                 {% if total_tabs.append('1') %}{% endif %}
+    {% endfor %}
+        {% for doc in docs  %}
+            {% set counttabs = counttabs + 1 %}
+        <div class="tab-pane {% if counttabs==1 %} active {% endif %}" id="tab-{{ counttabs }}">
+        <form id="add-answers-form" name="add_group"  class="questionary-form" >
+          <div class="row">
+                <div class="col-md-12">
+                    <div class="page-header">
+                        <h1>
+                            {{ doc.group_name }}
+                        </h1>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <ul class="breadcrumb" style="text-align:center">
+                        <li>
+                            {% set percentage=(counttabs/total_tabs|length)*100  %}
+                           Deo {{ counttabs }}/{{ total_tabs|length }} - {{ percentage|round|int }}%
+                        </li>
+                    </ul>
+                </div>
+            </div>
+         {% for question in questions %}
+             {% set countquestions = countquestions + 1 %}
+             {% set count_items=0 %}
+             {% set count_important=0 %}
+             {% if doc.generated_id==question.group_slug %}
+                 <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                <b>{{ question.question_name }}</b>
+                            </h3>
+                        </div>
+
+                            <div class="panel-body">
+                                 <input type="hidden" name="question_{{ countquestions }}" value="{{ question.question_name }}"/>
+                                <div class="col-md-6 main-questions">
+                                   <div>
+                                        <input id="{% set count_items = count_items + 1 %}question_{{ count_items  }}_{{ countquestions }}" name="status_{{ countquestions }}" type="radio" class="with-font" value="Slažem se" />
+                                        <label for="question_{{ count_items  }}_{{ countquestions }}">Slažem se </label>
+                                    </div>
+                                <div>
+                                    <input id="{% set count_items = count_items + 1 %}question_{{ count_items  }}_{{ countquestions }}"  name="status_{{ countquestions }}" type="radio" class="with-font" value="Ne slažem se" />
+                                    <label for="question_{{ count_items  }}_{{ countquestions }}">Ne slažem se</label>
+                                </div>
+                                <div>
+                                    <input id="{% set count_items = count_items + 1 %}question_{{ count_items  }}_{{ countquestions }}" name="status_{{ countquestions }}" type="radio" class="with-font" value="Nemam stav" />
+                                    <label for="question_{{ count_items  }}_{{ countquestions }}">Nemam stav</label>
+                                </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="panel-footer importance-question-labels">
+                                        <p><b>Koliko je ovo pitanje važno</b></p>
+                                        <div class="question-div">
+                                            <input id="{% set count_important = count_important + 1 %}imprtance_{{ count_important  }}_{{ countquestions }}" name="vazno_{{ countquestions }}" type="radio" class="with-font" value="Nije važno" />
+                                            <label for="imprtance_{{ count_important  }}_{{ countquestions }}">Nije važno</label>
+                                        </div>
+                                        <div class="question-div">
+                                            <input id="{% set count_important = count_important + 1 %}imprtance_{{ count_important  }}_{{ countquestions }}" name="vazno_{{ countquestions }}" type="radio" class="with-font" value="Manje važno " />
+                                            <label for="imprtance_{{ count_important  }}_{{ countquestions }}">Manje važno </label>
+                                        </div>
+                                        <div class="question-div">
+                                            <input id="{% set count_important = count_important + 1 %}imprtance_{{ count_important  }}_{{ countquestions }}" name="vazno_{{ countquestions }}" type="radio" class="with-font" value="Važno" />
+                                            <label for="imprtance_{{ count_important  }}_{{ countquestions }}">Važno </label>
+                                        </div>
+                                        <div class="question-div">
+                                            <input id="{% set count_important = count_important + 1 %}imprtance_{{ count_important  }}_{{ countquestions }}" name="vazno_{{ countquestions }}" type="radio" class="with-font" value="Veoma važno" />
+                                            <label for="imprtance_{{ count_important  }}_{{ countquestions }}">Veoma važno </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                    </div>
+                 </div>
+                 </div>
+             {% endif %}
+
+         {% endfor %}
+         {% if doc|length - 2 ==counttabs  %}
+
+               <div class="row">
+               <div class="col-md-12">
+
+                   <div class="col-md-offset-5 col-md-6" style="margin-bottom:40px;">
+                     <input type="submit" id="insert-user-answer" class="btn btn-primary" value="Prikaži rezultate">
+                   </div>
+               </div>
+
+             </div>
+        {% endif %}
+        </form>
+        </div>
+        {% endfor %}
     </div>
-
-
+        <div class="row">
+            <ul class="nav nav-tabs nav-justified tab-bar">
+                <li><a href="#" id="wheel-left">PREVIOUS</a></li>
+                <li><a href="#" id="wheel-right">NEXT</a></li>
+            </ul>
+        </div>
+    </div>
+    </div>
 {% endblock %}

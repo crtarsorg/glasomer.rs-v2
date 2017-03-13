@@ -9,6 +9,7 @@ class MongoUtils(object):
         self.questions_collection = "questions_collection"
         self.candidates_collection = "candidates_collection"
         self.answers_candidates = "answers_candidates"
+        self.answers_users = "answers_users"
     def insert_question(self, doc):
         count_groups=self.mongo.db[self.group_collection].count()
         result = self.mongo.db[self.group_collection].insert({'generated_id':str(count_groups)+"-"+slugify(doc['group_name']),'slug': slugify(doc['group_name']), 'group_name': doc['group_name'],'order_number':doc['order_number']})
@@ -19,11 +20,11 @@ class MongoUtils(object):
         return result
 
     def find_all(self):
-        result = self.mongo.db[self.group_collection].find()
+        result = self.mongo.db[self.group_collection].find().sort('order_number')
         return result
 
     def find_all_questions(self):
-        result = self.mongo.db[self.questions_collection].find()
+        result = self.mongo.db[self.questions_collection].find().sort('order_number')
         return result
 
     def count_groups(self):
@@ -101,11 +102,29 @@ class MongoUtils(object):
         result = self.mongo.db[self.candidates_collection].remove({'generated_id': doc['candidate_gid']})
         return result
 
-    #def insert_answers_candidates(self, doc):
+    def insert_candidate_answers(self, doc):
+        result = self.mongo.db[self.answers_candidates].insert(doc)
 
-     #   result = self.mongo.db[self.answers_candidates].insert(
-      #      {'generated_id': str(count_groups) + "-" + slugify(doc['group_name']), 'slug': slugify(doc['group_name']),
-      #       'group_name': doc['group_name'], 'order_number': doc['order_number']})
-       # return result
+    def update_candidate_answers(self, doc):
 
+        result = self.mongo.db[self.answers_candidates].remove({'candidate_slug': slugify(doc['candidate_slug'])})
+        result = self.mongo.db[self.answers_candidates].insert(doc)
+
+    def get_candidate_asnwers(self,candidate_url):
+        result = self.mongo.db[self.answers_candidates].find({'candidate_slug':candidate_url})
+        return result
+
+    def get_nr_questions(self):
+        result = self.mongo.db[self.questions_collection].count()
+        return result
+
+    def insert_users_answers(self, doc):
+        print doc['user_id']
+        self.mongo.db[self.answers_users].remove({'user_id': doc['user_id']})
+        self.mongo.db[self.answers_users].insert(doc)
+        result_candidates=self.mongo.db[self.answers_candidates].find()
+        result_user=self.mongo.db[self.answers_users].find({'user_id':doc['user_id']})
+        candidates=self.mongo.db[self.candidates_collection].find()
+        all_question=self.mongo.db[self.questions_collection].find()
+        return {'user_results':result_user, 'candidate_results':result_candidates,'candidates':candidates,'all_question':all_question}
 

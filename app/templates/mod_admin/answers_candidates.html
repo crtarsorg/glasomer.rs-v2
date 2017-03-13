@@ -1,36 +1,44 @@
 {% extends 'layout_admin.html' %}
 
 {% block body %}
- <div id="wrapper">
+    <div id="wrapper" xmlns="http://www.w3.org/1999/html">
      <div id="page-wrapper">
          <div class="container-fluid" style="margin-top: 100px">
              <div class="row">
                  <div class="col-md-12">
                     <h2>Assign Answers</h2>
                     <form id="add-candidate-form" name="add_group"  method="POST" enctype="multipart/form-data" action="{{ url_for('admin.add_candidate_answers') }}">
-                    <ul>
+                        <input type="hidden" name="candidate_slug" value="{{ candidate_url }}"/>
+                        <ul>
+                        {% set count = 0 %}
                      {% for doc in docs  %}
                             <h2>{{ doc.group_name }}</h2>
                             <ul>
                             {% for question in questions %}
+                                  {% set count = count + 1 %}
                                     {% if doc.generated_id==question.group_slug %}
+
                                             <li><b>{{ question.question_name }}</b></li>
-                                        <input type="radio" name="{{ question.question_slug  }}"/>Slažem se <br/>
-                                         <input type="radio" name="{{ question.question_slug  }}"/>Ne slažem se  <br/>
-                                         <input type="radio" name="{{ question.question_slug  }}"/>Nemam stav   <br/>
+                                        <input type="hidden" name="question_{{ count }}" value="{{ question.question_name }}"/>
+                                        <input type="radio" name="status_{{ count }}" value="Slažem se"/>Slažem se <br/>
+                                         <input type="radio" name="status_{{ count }}" value="Ne slažem se"/>Ne slažem se  <br/>
+                                         <input type="radio" name="status_{{ count }}" value="Nemam stav"/>Nemam stav   <br/>
                                         <p><b>Koliko je ovo pitanje važno</b><br/>
-                                        <input type="radio" name="vazno_{{ question.question_slug  }}"/>Nije važno
-                                        <input type="radio" name="vazno_{{ question.question_slug  }}"/>Manje važno
-                                        <input type="radio" name="vazno_{{ question.question_slug  }}"/>Važno
-                                         <input type="radio" name="vazno_{{ question.question_slug  }}"/>Veoma važno
+                                        <input type="radio" name="vazno_{{ count }}" value="Nije važno"/>Nije važno
+                                        <input type="radio" name="vazno_{{ count }}" value="Manje važno"/>Manje važno
+                                        <input type="radio" name="vazno_{{ count }}" value="Važno"/>Važno
+                                         <input type="radio" name="vazno_{{ count }}" value="Veoma važno"/>Veoma važno
                                         </p>
+                                      <textarea rows="4" cols="50" name="comment_{{ count  }}">
+
+                                      </textarea>
                                     {% endif %}
                                 {% endfor %}
                             </ul>
                      {% endfor %}
                     </ul>
                     <div class="col-md-6">
-                        <input type="submit" value="Save changes" name="editInd" class="btn btn-primary" id="add-indicator-button" style="float:right">
+                        <input type="submit" class="btn btn-primary" id="add-indicator-button" style="float:right">
                     </div>
                     </form>
                  </div>

@@ -5,6 +5,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Glasomer</title>
+  <!-- Meta tags for Social media networks -->
+    <meta name="description" content="Glasomer pomaže građanima da uporede svoje političke stavove sa stavovima političkih stranaka koje se takmiče na izborima. Pitanja su u vezi sa aktuelnim temama iz ekonomije, politike, društva, obrazovanja, zdravstvene i socijalne zaštite, itd."/>
+
+
+    <meta property="og:title" content="Zanima te koliko se tvoji stavovi poklapaju sa stavovima stranaka? Proveri na Glasomeru!" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="http://0.0.0.0:5005/" />
+    <meta property="og:image" content="{{ url_for('static', filename = 'assets/logo.png') }}" />
+    <meta property="og:description" content="Glasomer pomaže građanima da uporede svoje političke stavove sa stavovima političkih stranaka koje se takmiče na izborima. Pitanja su u vezi sa aktuelnim temama iz ekonomije, politike, društva, obrazovanja, zdravstvene i socijalne zaštite, itd." />
+
+    <!-- Twitter meta -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@CRTArs">
+    <meta name="twitter:creator" content="@CRTArs">
+    <meta name="twitter:title" content="Zanima te koliko se tvoji stavovi poklapaju sa stavovima stranaka? Proveri na Glasomeru!">
+    <meta name="twitter:description" content="Zanima te koliko se tvoji stavovi poklapaju sa stavovima stranaka? Proveri na Glasomeru! http://glasomer.rs/">
+    <meta name="twitter:image" content="{{ url_for('static', filename='assets/logo.png') }}">
+
+
+
     <link href='//fonts.googleapis.com/css?family=Comfortaa' rel='stylesheet' type='text/css'>
     <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:600,400' rel='stylesheet' type='text/css'>
     <link href='//fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css'>
@@ -21,11 +41,14 @@
     <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
     <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
     <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+      <script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
     <script src="//code.jquery.com/ui/1.11.2/jquery-ui.min.js"></script>
 
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+
     <link rel="stylesheet" href="{{ url_for('static',filename='css/custom.css') }}" type="text/css">
+
+
 
 </head>
 {% block header %}
@@ -56,9 +79,10 @@
               </div>
               <!-- /.navbar-collapse -->
           </div>
-          <!-- /.container-fluid -->
-      </nav>
+                <!-- /.container-fluid -->
+            </nav>
     </div>
+
 {% endblock %}
 <!-- end header -->
 {% block body %}
