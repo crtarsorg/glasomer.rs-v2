@@ -162,3 +162,17 @@ span.psw {
 .questionary-form{
     border:0px;
 }
+ #wheel-tab { display: none; }
+    .social-icons ul {
+    list-style: none;
+    width: 200px;
+}
+    .social-icons ul li {
+    width: 60px;
+    float: left;
+}
+    .social-icons ul li a {
+    font-size: 30px;
+    color: #337ab7;
+    margin-top: 20px;
+}
