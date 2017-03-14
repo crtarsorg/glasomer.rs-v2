@@ -162,11 +162,7 @@ span.psw {
 .questionary-form{
     border:0px;
 }
- #wheel-tab { display: none; }
-    .social-icons ul {
-    list-style: none;
-    width: 200px;
-}
+
     .social-icons ul li {
     width: 60px;
     float: left;
@@ -176,3 +172,9 @@ span.psw {
     color: #337ab7;
     margin-top: 20px;
 }
+    .btn-l-custom{
+    width: 60%;
+    height: 45px;
+    font-size: 20px;
+    text-transform: uppercase;
+    }

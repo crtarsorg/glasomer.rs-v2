@@ -119,7 +119,6 @@ class MongoUtils(object):
         return result
 
     def insert_users_answers(self, doc):
-        print doc['user_id']
         self.mongo.db[self.answers_users].remove({'user_id': doc['user_id']})
         self.mongo.db[self.answers_users].insert(doc)
         result_candidates=self.mongo.db[self.answers_candidates].find()
@@ -128,3 +127,36 @@ class MongoUtils(object):
         all_question=self.mongo.db[self.questions_collection].find()
         return {'user_results':result_user, 'candidate_results':result_candidates,'candidates':candidates,'all_question':all_question}
 
+    def find_all_questions_results(self, user_id,question):
+        result_candidates=self.mongo.db[self.answers_candidates].find()
+        result_user = self.mongo.db[self.answers_users].find({'user_id':user_id})
+        all_question=self.mongo.db[self.questions_collection].find()
+        candidates = self.mongo.db[self.candidates_collection].find()
+        return {'user_results':result_user, 'candidate_results':result_candidates,'candidates':candidates,'all_question':all_question}
+    def find_all_answers_s(self,question_key,question):
+        result_candidates = self.mongo.db[self.answers_candidates].find({'question_'+str(question_key):question})
+        return result_candidates
+
+    def get_candidate_name(self,candidate_slug):
+        result_candidates_name = self.mongo.db[self.candidates_collection].find({'generated_id':candidate_slug})
+        return result_candidates_name
+
+    def find_all_questions_user(self,user_id):
+        result = self.mongo.db[self.answers_users].find({'user_id':user_id})
+        return result
+
+    def find_all_questions_user_key(self,question_key):
+        result = self.mongo.db[self.answers_users].find({'question_'+str(question_key): question_key})
+        return result
+
+    def find_candidates_question_a(self,question_key,question_name):
+        result = self.mongo.db[self.answers_candidates].find({'question_'+str(question_key):question_name})
+        return result
+
+    def find_users_question_a(self,user_id):
+        result = self.mongo.db[self.answers_users].find({'user_id':user_id})
+        return result
+
+    def find_all_answers_users(self,question_key,question,user_id):
+        result_candidates = self.mongo.db[self.answers_users].find({'question_'+str(question_key):question,'user_id':user_id})
+        return result_candidates

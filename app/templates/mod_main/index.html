@@ -1,7 +1,335 @@
 {% extends 'layout.html' %} {% block body %}
+    <style>
+         #wheel-tab {
+             display: none;
+         }
+         .social-icons ul {
+            list-style: none;
+            width: 200px;
+        }
+        .pagination_nr{
+            font-weight: 700;
+            font-size:20px;
+            color:#337ab7;
+        }
+        .page-header h1{
+            text-transform: uppercase;
+            color:#1A3966;
+            font-weight: 700;
+        }
+        .panel-title{
+            color:#1A3966;
+        }
+        .importance-question-labels p{
+            color:#337ab7;
+        }
+        .next-back{
+            text-transform: uppercase;
+        }
+    </style>
+         <div id="answers-candidates-modal" class="modal fade" tabindex="-1">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button class="close" type="button" data-dismiss="modal">x</button>
+						<h4 class="modal-title">Uporedite odgovore</h4>
+					</div>
+					<div class="modal-body">
+                           <table id="exampleTable" class="stripe">
+                            <thead>
+                            <tr>
+                                <th></th>
+
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+
+                        <div style="display:none" id="div-sub-table" style="background:#337ab7;height:auto;">
+                            <table id="detailsTable">
+                                <thead>
+                                    <tr>
+                                        <th>Ime stranke</th>
+                                        <th>Odgovor</th>
+                                        <th>Koliko je pitanje važno</th>
+                                        <th>Komentar</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+					</div><!-- /.modal-content -->
+				</div>
+			</div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->
+
+    <div id="answers-users-modal" class="modal fade" tabindex="-1">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button class="close" type="button" data-dismiss="modal">x</button>
+						<h4 class="modal-title">Uporedite odgovore</h4>
+					</div>
+					<div class="modal-body">
+                           <table id="exampleTable1" class="stripe">
+                            <thead>
+                            <tr>
+                                <th></th>
+
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+
+                        <div style="display:none" id="div-sub-table" style="background:#337ab7;height:auto;">
+                            <table id="detailsTable1">
+                                <thead>
+                                    <tr>
+                                        <th>Ime stranke</th>
+                                        <th>Odgovor</th>
+                                        <th>Koliko je pitanje važno</th>
+                                        <th>Komentar</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+					</div><!-- /.modal-content -->
+				</div>
+			</div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->
 <script>
 
+        function fnFormatDetails(table_id, html) {
+            var sOut = "<table id=\"exampleTable_" + table_id + "\">";
+            sOut += html;
+            sOut += "</table>";
+            return sOut;
+        }
+        function fnFormatDetails1(table_id, html) {
+            var sOut = "<table id=\"exampleTable1_" + table_id + "\">";
+            sOut += html;
+            sOut += "</table>";
+            return sOut;
+        }
+
+        var newRowData= $.ajax({
+					url: "{{ url_for('main.get_all_questions') }}", //this is the submit URL
+					type: 'GET', //or POST,
+					dataType: 'json',
+				    async: false,
+            }).responseJSON;
+
+         var newRowData1="";
+
     $(document).ready(function(){
+            var iTableCounter = 1;
+            var oTable;
+            var oInnerTable;
+            var detailsTableHtml;
+            var oTable;
+
+            var iTableCounter1 = 1;
+            var oTable1;
+            var oInnerTable1;
+            var detailsTableHtml1;
+            var oTable1;
+    // you would probably be using templates here
+		detailsTableHtml = $("#detailsTable").html();
+		//Insert a 'details' column to the table
+		var nCloneTh = document.createElement('th');
+		var nCloneTd = document.createElement('td');
+		nCloneTd.innerHTML = '<img src="{{ url_for('static',filename='assets/plus.png') }}" class="show-sub-table" style="width:20px"/>';
+		nCloneTd.className = "center";
+		$('#exampleTable thead tr').each(function () {
+			this.insertBefore(nCloneTh, this.childNodes[0]);
+		});
+		$('#exampleTable tbody tr').each(function () {
+			this.insertBefore(nCloneTd.cloneNode(true), this.childNodes[0]);
+		});
+
+        detailsTableHtml1 = $("#detailsTable1").html();
+		//Insert a 'details' column to the table
+		var nCloneTh1= document.createElement('th');
+		var nCloneTd1 = document.createElement('td');
+		nCloneTd1.innerHTML = '<img src="{{ url_for('static',filename='assets/plus.png') }}" class="show-sub-table1" style="width:20px"/>';
+		nCloneTd1.className = "center";
+		$('#exampleTable1 thead tr').each(function () {
+			this.insertBefore(nCloneTh1, this.childNodes[0]);
+		});
+		$('#exampleTable1 tbody tr').each(function () {
+			this.insertBefore(nCloneTd1.cloneNode(true), this.childNodes[0]);
+		});
+        var count_rows=0;
+           function init_sub_table() {
+			$('body').on('click','.show-sub-table',function(e){
+                count_rows=count_rows+1;
+				e.preventDefault();
+                 var question_name = $($(this).parent().parent().children()[1]).text();
+				var group_name =count_rows;
+                console.log(group_name);
+				var s_id = $($(this).parent().parent().children()[3]).text();
+				var nTr = $(this).parents('tr')[0];
+                console.log(nTr);
+				var nTds = this;
+				if (oTable.fnIsOpen(nTr)) {
+					/* This row is already open - close it */
+					this.src = '{{ url_for('static',filename='assets/plus.png') }}';
+				}
+				else {
+					this.src = '{{ url_for('static',filename='assets/minus.png') }}';
+				}
+				$.ajax({
+                    url: "{{ url_for('main.get_questions_results') }}",
+					type: 'POST', //or POST
+					dataType: 'json',
+					data: {'question_name': question_name},
+					success: function (data) {
+						if (oTable.fnIsOpen(nTr)) {
+							/* This row is already open - close it */
+							this.src = '{{ url_for('static',filename='assets/minus.png') }}';
+							this.id = group_name;
+							oTable.fnClose(nTr);
+						}
+						else {
+							this.src = '{{ url_for('static',filename='assets/minus.png') }}';
+							oTable.fnOpen(nTr, fnFormatDetails(group_name, detailsTableHtml), 'details');
+							oInnerTable = $("#exampleTable_"+group_name).dataTable({
+								"aaData": data,
+								"bSort": true, // disables sorting
+								"info": true,
+								"aoColumns": [
+                                    {"mDataProp": "candidate_slug"},
+									{"mDataProp": "status"},
+                                    {"mDataProp": "vazno"},
+                                    {"mDataProp": "comment"},
+								],
+								"bPaginate": true,
+								"oLanguage": {
+									"sInfo": "_TOTAL_ entries"
+								},
+							});
+
+						}
+
+					}
+				});
+
+			});
+		}
+            var count_user_question=0;
+		  function init_sub_table_user() {
+			$('body').on('click','.show-sub-table1',function(e){
+                count_user_question=count_user_question+1;
+				e.preventDefault();
+                 var question_name = $($(this).parent().parent().children()[1]).text();
+				var group_name =count_user_question;
+                console.log(group_name);
+				var s_id = $($(this).parent().parent().children()[3]).text();
+				var nTr1 = $(this).parents('tr')[0];
+
+				var nTds1 = this;
+				if (oTable1.fnIsOpen(nTr1)) {
+					/* This row is already open - close it */
+					this.src = '{{ url_for('static',filename='assets/plus.png') }}';
+				}
+				else {
+					this.src = '{{ url_for('static',filename='assets/minus.png') }}';
+				}
+				$.ajax({
+                    url: "{{ url_for('main.get_questions_results') }}",
+					type: 'POST', //or POST
+					dataType: 'json',
+					data: {'question_name': question_name},
+					success: function (data) {
+						if (oTable1.fnIsOpen(nTr1)) {
+							/* This row is already open - close it */
+							this.src = '{{ url_for('static',filename='assets/minus.png') }}';
+							this.id = group_name;
+							oTable1.fnClose(nTr1);
+						}
+						else {
+							this.src = '{{ url_for('static',filename='assets/minus.png') }}';
+							oTable1.fnOpen(nTr1, fnFormatDetails1(group_name, detailsTableHtml1), 'details');
+							oInnerTable1 = $("#exampleTable1_"+group_name).dataTable({
+								"aaData": data,
+								"bSort": true, // disables sorting
+								"info": true,
+								"aoColumns": [
+                                    {"mDataProp": "candidate_slug"},
+									{"mDataProp": "status"},
+                                    {"mDataProp": "vazno"},
+                                    {"mDataProp": "comment"},
+								],
+								"bPaginate": true,
+								"oLanguage": {
+									"sInfo": "_TOTAL_ entries"
+								},
+							});
+
+						}
+
+					}
+				});
+
+			});
+		}
+            function init_table(newRowData) {
+			    oTable = $('#exampleTable').dataTable({
+				"aaData": newRowData,
+				"aoColumns": [
+					{
+						"mDataProp": null,
+						"sClass": "control center",
+						"sDefaultContent": '<img src="{{ url_for('static',filename='assets/plus.png') }}" class="show-sub-table" style="width:20px;"/>'
+					},
+
+                    {"mDataProp": "question_name"},
+				],
+				"oLanguage": {
+					"sInfo": "_TOTAL_ entries"
+				},
+				"aaSorting": [[1, 'asc']]
+			});
+
+		}
+
+		  function init_table_users(newRowData1) {
+			    oTable1 = $('#exampleTable1').dataTable({
+				"aaData": newRowData1,
+				"aoColumns": [
+					{
+						"mDataProp": null,
+						"sClass": "control center",
+						"sDefaultContent": '<img src="{{ url_for('static',filename='assets/plus.png') }}" class="show-sub-table1" style="width:20px;"/>'
+					},
+
+                    {"mDataProp": "question_name"},
+				],
+				"oLanguage": {
+					"sInfo": "_TOTAL_ entries"
+				},
+				"aaSorting": [[1, 'asc']]
+			});
+
+		}
+
+        init_table(newRowData);
+           init_sub_table();
+            init_table_users(newRowData1);
+           init_sub_table_user();
+            $('body').on('click','#answers-candidates',function(e) {
+                $('#answers-candidates-modal').modal('show');
+            });
+            $('body').on('click','#user_answers',function(e) {
+
+                $('#answers-users-modal').modal('show');
+            });
+
          $('#insert-user-answer').on('click', function(e){
 	            e.preventDefault();
 				$.ajax({
@@ -10,35 +338,44 @@
 					dataType: 'json',
 					data:$("form").serialize(),
 					success: function (data) {
+                        newRowData1= $.ajax({
+					    url: "{{ url_for('main.get_all_q_a_u') }}", //this is the submit URL
+					    type: 'GET', //or POST,
+					    dataType: 'json',
+				        async: false,
+                    }).responseJSON;
+                        if (newRowData1!=""){
+                            oTable1.fnClearTable(0);
+                            oTable1.fnAddData(newRowData1);
+                            oTable1.fnDraw();
+                        }
+
                         $('#user-div-results').html('');
                         $('.user_questions').hide();
                         $('.user_results').show();
                         var count_questions=0;
-
                         candidatesarray=[];
                         $(data['all_question']).each(function(keyq,valueq){
                                var match=0;
                             count_questions=count_questions+1;
                                  $(data['candidate_results']).each(function(keyc,valuek){
                                      $(data['user_results']).each(function(keyu,valueu){
-                                    if(valuek['status_'+count_questions]==valueu['status_'+count_questions] && valuek['vazno_'+count_questions]==valueu['vazno_'+count_questions] && valuek['question_'+count_questions]==valueu['question_'+count_questions]){
-                                              match=match+1;
+                                    if(valuek['status_'+count_questions]==valueu['status_'+count_questions] && valuek['vazno_'+count_questions]==valueu['vazno_'+count_questions] && valuek['question_'+count_questions]==valueu['question_'+count_questions])
+                                    {
+                                        match=match+1;
                                         candidatesarray.push({
-                                                    "candidate_slug": valuek['candidate_slug'],
-                                                    'question':valuek['question_'+count_questions],
-                                                    'status':valuek['status_'+count_questions],
-                                                    'vazno':valuek['vazno_'+count_questions],
-                                                    "matchcount": match,
-
-                                                 });
+                                            "candidate_slug": valuek['candidate_slug'],
+                                            'question':valuek['question_'+count_questions],
+                                            'status':valuek['status_'+count_questions],
+                                            'vazno':valuek['vazno_'+count_questions],
+                                            "matchcount": match,
+                                        });
                                     }
                                  })
-
                              })
                            })
-
                         $(data['candidates']).each(function(key,value){
-                            var percentag=0;
+                            var percentage=0;
                             var count_match=0;
                             $(candidatesarray).each(function(key1,value1){
                                 if (value['generated_id']==value1['candidate_slug']){
@@ -46,22 +383,19 @@
                                     percentage=(count_match/count_questions)*100;
                                 }
                             })
-
-                            $('#user-div-results').append('<div class="row" style="margin-bottom:20px"><div class="col-md-6"><img style="width:200px;" src="{{ url_for('static', filename='uploads/') }}'+value['image']+'" class="img-responsive"/><br/><p>'+value['candidate_name']+'</p><h2 style="color:#337ab7">'+percentage.toFixed(2)+'%</h2></div>' +
-                                    '<div class="col-md-6">'+value['candidate_biography']+'</div></div>');
+                            $('#user-div-results').append('<div class="row" style="margin-bottom:20px"><div class="col-md-4" style="text-align:center"><img style="width:200px;margin:0 auto;" src="{{ url_for('static', filename='uploads/') }}'+value['image']+'" class="img-responsive"/><p style="font-size:15px;color:#1A3966;font-weight:bold;text-transform:uppercase">'+value['candidate_name']+'</p><h2 style="color:#337ab7;margin-top:0px;">'+percentage.toFixed(2)+'%</h2></div>' +
+                                    '<div class="col-md-8">'+value['candidate_biography']+'</div></div>');
                             console.log(count_match);
                          })
 					}
 				});
-		});
+		    });
 
         $('#back-start').on('click',function(e) {
                 e.preventDefault();
                 $('.user_results').hide();
                 $('.user_questions').show();
-
-        })
-
+        });
         var $tabs = $('#wheel-tab li');
         $('#wheel-left').on('click', function () {
             $tabs.filter('.active').prev('li').find('a[data-toggle="tab"]').tab('show');
@@ -69,21 +403,18 @@
         $('#wheel-right').on('click', function () {
             $tabs.filter('.active').next('li').find('a[data-toggle="tab"]').tab('show');
         });
-
     })
  </script>
-
-    <div class="container" style="margin-top:60px;">
+    <div class="container" style="margin-top:40px;">
     <div class="row">
         <div class="col-md-12">
-            <div class="user_results" style="display: none;margin-top:40px;">
+            <div class="user_results" style="display: none;margin-top:60px;">
                 <div class="row" style="margin-bottom:20px;">
-                    <div class="col-md-3">
-                     <input type="button" class="btn btn-primary" value="Odgovori svih stranaka">
+                    <div class="col-md-5">
+                     <input type="button" class="btn btn-default" value="Odgovori svih stranaka" id="answers-candidates" style="width:100%;text-transform: uppercase;font-size:20px;font-weight: 700">
                     </div>
-                    <div class="col-md-3">
-                        <input type="button" class="btn btn-primary" value="Uporedite svoje odgovore (sa odgovorima stranaka)">
-
+                    <div class="col-md-7">
+                        <input type="button" class="btn btn-default" value="Uporedite svoje odgovore (sa odgovorima stranaka)" id="user_answers"style="width:100%;text-transform: uppercase;font-size:20px;font-weight: 700">
                     </div>
               {#      <div class="col-md-6 social-icons">
                       <ul>
@@ -105,15 +436,11 @@
                         <div class="panel-heading">
                             <h3 class="panel-title">
                                 <b>Tri stranke sa kojima se najviše podudaraju vaši odgovori</b>
+                                <a href="#" id="back-start" style="float:right;text-transform: uppercase;font-weight: 700">Vratite se na kviz</a>
                             </h3>
                         </div>
                       <div class="panel-body" id="user-div-results">
 
-                      </div>
-                      <div class="row">
-                            <div class="col-md-12" style="text-align: center;margin-bottom: 50px;">
-                                <input type="button" class="btn btn-primary" value="Vratite se na kviz" id="back-start"/>
-                            </div>
                       </div>
 
                   </div>
@@ -151,7 +478,7 @@
                     </div>
                 </div>
                 <div class="col-md-12">
-                    <ul class="breadcrumb" style="text-align:center">
+                    <ul class="breadcrumb pagination_nr" style="text-align:center">
                         <li>
                             {% set percentage=(counttabs/total_tabs|length)*100  %}
                            Deo {{ counttabs }}/{{ total_tabs|length }} - {{ percentage|round|int }}%
@@ -212,7 +539,6 @@
                                 </div>
 
                             </div>
-
                     </div>
                  </div>
                  </div>
@@ -220,13 +546,11 @@
 
          {% endfor %}
          {% if doc|length - 2 ==counttabs  %}
-
                <div class="row">
-               <div class="col-md-12">
+               <div class="col-md-12" style="text-align: center;margin-bottom:20px;">
 
-                   <div class="col-md-offset-5 col-md-6" style="margin-bottom:40px;">
-                     <input type="submit" id="insert-user-answer" class="btn btn-primary" value="Prikaži rezultate">
-                   </div>
+                     <input type="submit" id="insert-user-answer" class="btn btn-primary btn-l-custom" value="Prikaži rezultate">
+
                </div>
 
              </div>
@@ -235,10 +559,10 @@
         </div>
         {% endfor %}
     </div>
-        <div class="row">
+        <div class="row" style="margin-bottom: 40px;">
             <ul class="nav nav-tabs nav-justified tab-bar">
-                <li><a href="#" id="wheel-left">PREVIOUS</a></li>
-                <li><a href="#" id="wheel-right">NEXT</a></li>
+                <li class="next-back"><a href="#" id="wheel-left">Prethodni</a></li>
+                <li class="next-back"><a href="#" id="wheel-right">Sledeći</a></li>
             </ul>
         </div>
     </div>
