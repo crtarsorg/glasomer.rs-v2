@@ -26,6 +26,60 @@
         .next-back{
             text-transform: uppercase;
         }
+    .show-sub-table1, .show-sub-table{
+        cursor: pointer;
+    }
+    .top-links-modal{
+        width:100%;
+        text-transform: uppercase;
+        font-size:15px;
+        font-weight: 700;
+        color:#337ab7;
+    }
+    .top-links-modal:hover{
+        background:#337ab7;
+        color:white;
+        border:0px !important;
+    }
+    #back-start{
+        float:right;
+        text-transform: uppercase;
+        font-weight: 700;
+        color:#337ab7;
+    }
+    #wheel-right, #wheel-left{
+        font-weight: 700;
+    }
+    .btn-default:hover{
+        border:none;
+    }
+    .modal-title{
+        text-transform: uppercase;
+        font-weight: bold;
+    }
+    .next-back{
+        font-size: 30px;
+    }
+    .color-next{
+        background: #337ab7;
+        color:white;
+    }
+
+     .nav-tabs>li.color-next>a:hover{
+        background: #337ab7;
+        color:white;
+    }
+     .nav-tabs>li.color-next>a:active{
+        background: #337ab7;
+        color:white;
+    }
+      .nav-tabs>li.color-next>a:focus{
+        background: #337ab7;
+        color:white;
+    }
+     .color-next i {
+         color:white;
+     }
     </style>
          <div id="answers-candidates-modal" class="modal fade" tabindex="-1">
 			<div class="modal-dialog modal-lg">
@@ -127,6 +181,7 @@
          var newRowData1="";
 
     $(document).ready(function(){
+
             var iTableCounter = 1;
             var oTable;
             var oInnerTable;
@@ -209,9 +264,9 @@
                                     {"mDataProp": "comment"},
 								],
 								"bPaginate": true,
-								"oLanguage": {
-									"sInfo": "_TOTAL_ entries"
-								},
+								"language": {
+                                    "url": "{{ url_for("static",filename="data/datatable_translate.json")}}"
+                                    },
 							});
 
 						}
@@ -266,9 +321,9 @@
                                     {"mDataProp": "comment"},
 								],
 								"bPaginate": true,
-								"oLanguage": {
-									"sInfo": "_TOTAL_ entries"
-								},
+								"language": {
+                                    "url": "{{ url_for("static",filename="data/datatable_translate.json")}}"
+                                    },
 							});
 
 						}
@@ -280,7 +335,8 @@
 		}
             function init_table(newRowData) {
 			    oTable = $('#exampleTable').dataTable({
-				"aaData": newRowData,
+                    "aaData": newRowData,
+
 				"aoColumns": [
 					{
 						"mDataProp": null,
@@ -290,9 +346,9 @@
 
                     {"mDataProp": "question_name"},
 				],
-				"oLanguage": {
-					"sInfo": "_TOTAL_ entries"
-				},
+				"language": {
+                        "url": "{{ url_for("static",filename="data/datatable_translate.json")}}"
+                    },
 				"aaSorting": [[1, 'asc']]
 			});
 
@@ -310,9 +366,9 @@
 
                     {"mDataProp": "question_name"},
 				],
-				"oLanguage": {
-					"sInfo": "_TOTAL_ entries"
-				},
+				"language": {
+                        "url": "{{ url_for("static",filename="data/datatable_translate.json")}}"
+                    },
 				"aaSorting": [[1, 'asc']]
 			});
 
@@ -351,8 +407,8 @@
                         }
 
                         $('#user-div-results').html('');
-                        $('.user_questions').hide();
-                        $('.user_results').show();
+                        $('.user_questions').hide('slow');
+                        $('.user_results').show('slow');
                         var count_questions=0;
                         candidatesarray=[];
                         $(data['all_question']).each(function(keyq,valueq){
@@ -393,8 +449,8 @@
 
         $('#back-start').on('click',function(e) {
                 e.preventDefault();
-                $('.user_results').hide();
-                $('.user_questions').show();
+                $('.user_results').hide('slow');
+                $('.user_questions').show('slow');
         });
         var $tabs = $('#wheel-tab li');
         $('#wheel-left').on('click', function () {
@@ -405,44 +461,46 @@
         });
     })
  </script>
-    <div class="container" style="margin-top:40px;">
+
+
+
+<style>
+.social-icons ul li {
+    width: 60px;
+    float: left;
+}
+.social-icons ul li a {
+    font-size: 30px;
+    color: #337ab7;
+    margin-top: 20px;
+}
+</style>
+    <div class="container" style="">
     <div class="row">
         <div class="col-md-12">
-            <div class="user_results" style="display: none;margin-top:60px;">
+            <div class="user_results" style="display: none;margin-top:30px;">
                 <div class="row" style="margin-bottom:20px;">
                     <div class="col-md-5">
-                     <input type="button" class="btn btn-default" value="Odgovori svih stranaka" id="answers-candidates" style="width:100%;text-transform: uppercase;font-size:20px;font-weight: 700">
+                        <button type="submit" class="btn btn-default top-links-modal" id="answers-candidates">
+                             <i class="icon-th-list"></i> Odgovori svih stranak
+                        </button>
                     </div>
                     <div class="col-md-7">
-                        <input type="button" class="btn btn-default" value="Uporedite svoje odgovore (sa odgovorima stranaka)" id="user_answers"style="width:100%;text-transform: uppercase;font-size:20px;font-weight: 700">
+                         <button type="submit" class="btn btn-default top-links-modal" id="user_answers">
+                             <i class="icon-th-list"></i> Uporedite svoje odgovore (sa odgovorima stranaka)
+                        </button>
                     </div>
-              {#      <div class="col-md-6 social-icons">
-                      <ul>
-                                <li>
-                                    <a href="https://www.facebook.com/sharer/sharer.php?u=&amp;t=" class="fa fa-facebook-official" target="_blank" onclick="window.open('https://www.facebook.com/sharer/sharer.php?u=' +encodeURIComponent(document.URL) + '&amp;t='+ encodeURIComponent(document.title)); return false;">
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="https://twitter.com/intent/tweet?source=&amp;text=:%20" class="fa fa-twitter-square" target="_blank" onclick="window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(document.title)+ ':%20'  + encodeURIComponent(document.URL)); return false;">
-                                    </a>
-                                </li>
-
-                            </ul>
-
-                    </div>#}
                 </div>
-
                   <div class="panel panel-default">
                         <div class="panel-heading">
                             <h3 class="panel-title">
                                 <b>Tri stranke sa kojima se najviše podudaraju vaši odgovori</b>
-                                <a href="#" id="back-start" style="float:right;text-transform: uppercase;font-weight: 700">Vratite se na kviz</a>
+                                <a href="#" id="back-start"><i class="icon-arrow-left"></i> Vratite se na kviz</a>
                             </h3>
                         </div>
                       <div class="panel-body" id="user-div-results">
 
                       </div>
-
                   </div>
             </div>
         </div>
@@ -470,6 +528,7 @@
         <div class="tab-pane {% if counttabs==1 %} active {% endif %}" id="tab-{{ counttabs }}">
         <form id="add-answers-form" name="add_group"  class="questionary-form" >
           <div class="row">
+
                 <div class="col-md-12">
                     <div class="page-header">
                         <h1>
@@ -548,11 +607,8 @@
          {% if doc|length - 2 ==counttabs  %}
                <div class="row">
                <div class="col-md-12" style="text-align: center;margin-bottom:20px;">
-
                      <input type="submit" id="insert-user-answer" class="btn btn-primary btn-l-custom" value="Prikaži rezultate">
-
                </div>
-
              </div>
         {% endif %}
         </form>
@@ -561,8 +617,8 @@
     </div>
         <div class="row" style="margin-bottom: 40px;">
             <ul class="nav nav-tabs nav-justified tab-bar">
-                <li class="next-back"><a href="#" id="wheel-left">Prethodni</a></li>
-                <li class="next-back"><a href="#" id="wheel-right">Sledeći</a></li>
+                <li class="next-back"><a href="#" id="wheel-left"><i class="icon-chevron-left"></i></a></li>
+                <li class="next-back color-next"><a href="#" id="wheel-right" ><i class="icon-chevron-right"></i></a></li>
             </ul>
         </div>
     </div>

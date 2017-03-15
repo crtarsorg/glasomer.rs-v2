@@ -1,3 +1,5 @@
+# coding=utf-8
+import pprint
 from app import mongo_utils, mongo,UPLOAD_FOLDER,ALLOWED_EXTENSIONS
 from bson import json_util, ObjectId
 from flask import Blueprint, render_template, request, Response, redirect, url_for, flash,session
@@ -86,7 +88,7 @@ def get_questions_results():
                     vazno = r_u['vazno_' + str(question_key)]
                 else:
                     vazno = "/"
-                created_array.append({'candidate_slug': 'vas odgovor', 'status': status, 'vazno': vazno,'comment': "/"})
+                created_array.append({'candidate_slug': 'Vaš odgovor', 'status': status, 'vazno': vazno,'comment': "/"})
         return Response(response=json_util.dumps(created_array), status=200, mimetype='application/json')
 
 @mod_main.route('/getallqu', methods=['GET', "POST"])
@@ -151,6 +153,6 @@ def get_answers_user_candidate():
                 vazno = r_users['vazno_' + str(question_key)]
             else:
                 vazno = "/"
-            created_array.append({'candidate_slug':"vas odgovor",'vazno':vazno,'status':status,'comment':"/"})
+            created_array.append({'candidate_slug':"Vaš odgovor",'vazno':vazno,'status':status,'comment':"/"})
         return Response(response=json_util.dumps(created_array), status=200, mimetype='application/json')
 

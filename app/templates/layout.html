@@ -6,14 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Glasomer</title>
   <!-- Meta tags for Social media networks -->
+
     <meta name="description" content="Glasomer pomaže građanima da uporede svoje političke stavove sa stavovima političkih stranaka koje se takmiče na izborima. Pitanja su u vezi sa aktuelnim temama iz ekonomije, politike, društva, obrazovanja, zdravstvene i socijalne zaštite, itd."/>
 
-
+    <!-- FB meta -->
     <meta property="og:title" content="Zanima te koliko se tvoji stavovi poklapaju sa stavovima stranaka? Proveri na Glasomeru!" />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="http://0.0.0.0:5005/" />
+    <meta property="og:url" content="http://glasomer.rs" />
     <meta property="og:image" content="{{ url_for('static', filename = 'assets/logo.png') }}" />
-    <meta property="og:description" content="Glasomer pomaže građanima da uporede svoje političke stavove sa stavovima političkih stranaka koje se takmiče na izborima. Pitanja su u vezi sa aktuelnim temama iz ekonomije, politike, društva, obrazovanja, zdravstvene i socijalne zaštite, itd." />
+    <meta property="og:description" content="Glasomer pomaže građanima da uporede svoje političke stavove sa stavovima političkih stranaka koje se takmiče na izborima. Pitanja su u vezi sa aktuelnim temama iz ekonomije, politike, društva, obrazovanja, zdravstvene i socijalne zaštite, itd."/>
 
     <!-- Twitter meta -->
     <meta name="twitter:card" content="summary_large_image">
@@ -21,13 +22,14 @@
     <meta name="twitter:creator" content="@CRTArs">
     <meta name="twitter:title" content="Zanima te koliko se tvoji stavovi poklapaju sa stavovima stranaka? Proveri na Glasomeru!">
     <meta name="twitter:description" content="Zanima te koliko se tvoji stavovi poklapaju sa stavovima stranaka? Proveri na Glasomeru! http://glasomer.rs/">
-    <meta name="twitter:image" content="{{ url_for('static', filename='assets/logo.png') }}">
+    <meta name="twitter:image" content="{{ url_for('static', filename = 'assets/logo.png') }}">
 
 
 
     <link href='//fonts.googleapis.com/css?family=Comfortaa' rel='stylesheet' type='text/css'>
     <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:600,400' rel='stylesheet' type='text/css'>
     <link href='//fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css'>
+
     <link href="{{ url_for('static', filename='font-awesome/css/font-awesome.min.css') }}" rel="stylesheet" type="text/css">
     <link href="//fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
     <link href='//fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
@@ -63,7 +65,7 @@
                       <span class="sr-only">Toggle navigation</span> Menu <i class="fa fa-bars"></i>
                   </button>
                   <a href="{{ url_for('main.index')}}">
-                      <img src="{{ url_for('static', filename='assets/logo.png') }}" alt=""class="img-responsive">
+                      <img src="{{ url_for('static', filename='assets/Glasomer-logo.svg') }}" alt=""class="img-responsive" style="width:200px">
                   </a>
               </div>
               <!-- Collect the nav links, forms, and other content for toggling -->
@@ -73,7 +75,7 @@
                           <a href="{{ url_for('whatis.index')}}" class="title-menu-text">Šta je Glasomer?</a>
                       </li>
                       <li>
-                          <a href="http://www.istinomer.rs/2016izbori/" target="_blank"><img src="{{ url_for('static', filename='assets/instinomer-logo.png') }}" alt=""class="img-responsive"></a>
+                          <a href="http://www.istinomer.rs/2016izbori/" target="_blank" class="title-menu-text">IZBORI.ISTINOMER.RS</a>
                       </li>
                   </ul>
               </div>
@@ -82,7 +84,16 @@
                 <!-- /.container-fluid -->
             </nav>
     </div>
+    <div class="col-md-12 social-icons" style="padding-top: 100px;">
+           <div class="col-md-6">
 
+           </div>
+            <div class="col-md-6" style="text-align: right;">
+
+                <a href="https://www.facebook.com/sharer/sharer.php?u=&t=" class="fa fa-facebook" target="_blank" onclick="window.open('https://www.facebook.com/sharer/sharer.php?u=' +encodeURIComponent(document.URL) + '&t='+ encodeURIComponent(document.title)); return false;"></a>
+                <a href="https://twitter.com/intent/tweet?source=&amp;text=:%20" class="fa fa-twitter-square" target="_blank" onclick="window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(document.title)+ ':%20'  + encodeURIComponent(document.URL)); return false;"></a>
+            </div>
+       </div>
 {% endblock %}
 <!-- end header -->
 {% block body %}

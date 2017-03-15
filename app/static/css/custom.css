@@ -95,9 +95,7 @@ input[type=checkbox].with-font:focus ~ label
     padding-left: 20px;
     padding-right: 20px;
 }
-.page-header{
-    padding-top: 50px;
-}
+
 form {
     border: 3px solid #f1f1f1;
 }
@@ -178,3 +176,39 @@ span.psw {
     font-size: 20px;
     text-transform: uppercase;
     }
+    	table.dataTable.no-footer{
+		border-bottom:1px solid #428bca;
+	}
+	table.dataTable.no-footer{
+		border-top:1px solid #428bca;
+	}
+	table.dataTable thead th, table.dataTable thead td{
+		border-bottom:#428bca;
+	}
+
+	.modal-open .modal{
+		margin-top:20px;
+	}
+	.modal-header{
+		background:#428bca;
+		color:#ffffff;
+	}
+	a:focus{
+		-webkit-box-shadow: 0px;
+	}
+.wp-admin select{
+	height:34px;
+}
+.close{
+    color:white;
+    opacity: 2.2;
+}
+.social-icons a{
+    text-decoration: none;
+    font-size: 30px;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+.page-header{
+    margin-top:0px;
+}

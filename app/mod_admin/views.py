@@ -5,16 +5,20 @@ from flask.ext.security import login_required, current_user
 import os, json
 from slugify import slugify
 from werkzeug.utils import secure_filename
-
+from flask.ext.security import current_user
 
 
 mod_admin = Blueprint('admin', __name__, url_prefix='/admin')
 
 @mod_admin.route('/', methods=['GET', "POST"])
-#@login_required
-def index():
-    return render_template('mod_admin/index.html')
 
+def index():
+    if current_user.is_authenticated:
+        return render_template('mod_admin/index.html')
+    else:
+        return redirect(url_for('auth.login'))
+
+@login_required
 @mod_admin.route('/candidates', methods=['GET', "POST"])
 def candidates():
     return render_template('mod_admin/candidates.html')
@@ -150,6 +154,7 @@ def remove_question():
         return Response(response=json_util.dumps(docs), status=200, mimetype='application/json')
 
 #candidates answrs
+@login_required
 @mod_admin.route('/answerscandidates', methods=['GET', "POST"])
 def answers_candidates():
     candidate_url = request.args.get('candidate')
@@ -164,6 +169,7 @@ def add_candidate_answers():
         mongo_utils.insert_candidate_answers(data)
     return redirect(url_for('admin.candidates'))
 
+@login_required
 @mod_admin.route('/getcandidateanswers', methods=['GET', "POST"])
 def get_candidate_answers():
     candidate_url = request.args.get('candidate')

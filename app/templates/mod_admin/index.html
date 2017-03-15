@@ -276,7 +276,7 @@
                     {"mDataProp": "slug"},
 					{"mDataProp": "group_name"},
 
-					{"sDefaultContent": "<a data-toggle='modal' href='#edit-group-modal' class='edit-group-modal' id='' style='padding-right:20px'><i class='fa fa-pencil-square-o fa-lg edit-group' aria-hidden='true'></i></a>" + "<a href='#' class='remove-group'><i class='fa fa-trash-o fa-lg' aria-hidden='true'></i></a>"},
+					{"sDefaultContent": "<a class='edit-group-modal' id='' style='padding-right:20px'><i class='fa fa-pencil-square-o fa-lg edit-group' aria-hidden='true'></i></a>" + "<a href='#' class='remove-group'><i class='fa fa-trash-o fa-lg' aria-hidden='true'></i></a>"},
 
 				],
 				"oLanguage": {
@@ -298,6 +298,9 @@
 			{#$('#measurement_sdg').val(sdg_id);
 			$('#measurement_indicator_id').val(indicator_id);#}
 		});
+        $('body').on('click','.edit-group-modal',function(){
+            $('#edit-group-modal').modal('show');
+        });
         $('body').on('click', '.remove-group', function (e) {
 			e.preventDefault();
 			var group_name = $($(this).parent().parent().children()[1]).text();
@@ -410,7 +413,7 @@
 
 					}
 				});
-
+                $('#edit-group-modal').modal('hide');
 				e.preventDefault();
 		});
          $('#add-question-form').on('submit', function(e){
