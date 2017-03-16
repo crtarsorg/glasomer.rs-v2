@@ -13,8 +13,10 @@ mod_admin = Blueprint('admin', __name__, url_prefix='/admin')
 @mod_admin.route('/', methods=['GET', "POST"])
 
 def index():
+
     if current_user.is_authenticated:
-        return render_template('mod_admin/index.html')
+        projects = mongo_utils.find_all_projects()
+        return render_template('mod_admin/index.html',projects=json.loads(json_util.dumps(projects)))
     else:
         return redirect(url_for('auth.login'))
 
@@ -56,7 +58,9 @@ def insert_question_group():
     if request.method == 'POST':
         data = request.form.to_dict()
         mongo_utils.insert_question(data)
-        docs = mongo_utils.find_all()
+        project_enabled = mongo_utils.get_enabled_project()
+        for project in json.loads(json_util.dumps(project_enabled)):
+            docs = mongo_utils.find_all(project['year'])
         return Response(response=json_util.dumps(docs), status=200, mimetype='application/json')
 
 @mod_admin.route('/editcandidate', methods=['GET', "POST"])
@@ -85,7 +89,9 @@ def delete_candidate():
 @mod_admin.route('/getallquestions', methods=['GET', "POST"])
 def get_all_groups():
     if request.method == 'GET':
-        docs = mongo_utils.find_all()
+        project_enabled = mongo_utils.get_enabled_project()
+        for project in json.loads(json_util.dumps(project_enabled)):
+            docs = mongo_utils.find_all(project['year'])
         return Response(response=json_util.dumps(docs), status=200, mimetype='application/json')
 
 @mod_admin.route('/getnrgroups', methods=['GET', "POST"])
@@ -104,8 +110,12 @@ def get_selected_group():
 def edit_selected_group():
     if request.method == 'POST':
         data = request.form.to_dict()
+        project_enabled = mongo_utils.get_enabled_project()
+        for project in json.loads(json_util.dumps(project_enabled)):
+            docs = mongo_utils.find_all(project['year'])
+            data['project_slug']=project['year']
         mongo_utils.update_selected_group(data)
-        docs= mongo_utils.find_all()
+
         return Response(response=json_util.dumps(docs), status=200, mimetype='application/json')
 
 @mod_admin.route('/deletegroup', methods=['GET', "POST"])
@@ -113,7 +123,9 @@ def delete_group():
     if request.method == 'POST':
         data = request.form.to_dict()
         mongo_utils.remove_group(data)
-        docs= mongo_utils.find_all()
+        project_enabled = mongo_utils.get_enabled_project()
+        for project in json.loads(json_util.dumps(project_enabled)):
+            docs = mongo_utils.find_all(project['year'])
         return Response(response=json_util.dumps(docs), status=200, mimetype='application/json')
 @mod_admin.route('/getquestions', methods=['GET', "POST"])
 def get_questions():
@@ -126,6 +138,9 @@ def get_questions():
 def add_question_group():
     if request.method == 'POST':
         data = request.form.to_dict()
+        find_prject=mongo_utils.find_group_project(data['group_name'])
+        for group in json.loads(json_util.dumps(find_prject)):
+            data['project_slug']=group['project_slug']
         mongo_utils.insert_question_group(data)
         docs = mongo_utils.find_question_group(data)
         return Response(response=json_util.dumps(docs), status=200, mimetype='application/json')
@@ -141,6 +156,9 @@ def get_selected_question():
 def edit_question_group():
     if request.method == 'POST':
         data = request.form.to_dict()
+        find_prject = mongo_utils.find_group_project(data['group_name'])
+        for group in json.loads(json_util.dumps(find_prject)):
+            data['project_slug'] = group['project_slug']
         mongo_utils.update_selected_question(data)
         docs= mongo_utils.find_question_group(data)
         return Response(response=json_util.dumps(docs), status=200, mimetype='application/json')
@@ -150,6 +168,9 @@ def remove_question():
     if request.method == 'POST':
         data = request.form.to_dict()
         mongo_utils.delete_question(data)
+        find_prject = mongo_utils.find_group_project(data['group_name'])
+        for group in json.loads(json_util.dumps(find_prject)):
+            data['project_slug'] = group['project_slug']
         docs= mongo_utils.find_question_group(data)
         return Response(response=json_util.dumps(docs), status=200, mimetype='application/json')
 
@@ -158,7 +179,9 @@ def remove_question():
 @mod_admin.route('/answerscandidates', methods=['GET', "POST"])
 def answers_candidates():
     candidate_url = request.args.get('candidate')
-    docs = mongo_utils.find_all()
+    project_enabled=mongo_utils.get_enabled_project()
+    for project in json.loads(json_util.dumps(project_enabled)):
+        docs = mongo_utils.find_all(project['year'])
     questions=mongo_utils.find_all_questions()
     return render_template('mod_admin/answers_candidates.html',docs=json.loads(json_util.dumps(docs)),questions=json.loads(json_util.dumps(questions)),candidate_url=candidate_url)
 
@@ -166,6 +189,9 @@ def answers_candidates():
 def add_candidate_answers():
     if request.method == 'POST':
         data = request.form.to_dict()
+        project_enabled = mongo_utils.get_enabled_project()
+        for project in json.loads(json_util.dumps(project_enabled)):
+            data['project_slug']=project['year']
         mongo_utils.insert_candidate_answers(data)
     return redirect(url_for('admin.candidates'))
 
@@ -175,13 +201,19 @@ def get_candidate_answers():
     candidate_url = request.args.get('candidate')
     questions=mongo_utils.find_all_questions()
     nr_questions=mongo_utils.get_nr_questions()
-    candidate_answers=mongo_utils.get_candidate_asnwers(candidate_url)
-    docs = mongo_utils.find_all()
+    project_enabled = mongo_utils.get_enabled_project()
+    for project in json.loads(json_util.dumps(project_enabled)):
+        docs = mongo_utils.find_all(project['year'])
+        candidate_answers=mongo_utils.get_candidate_asnwers(candidate_url,project['year'])
+
     return render_template('mod_admin/answers_candidate_results.html',docs=json.loads(json_util.dumps(docs)), candidates=json.loads(json_util.dumps(candidate_answers)),questions=json.loads(json_util.dumps(questions)),nr_questions=json_util.dumps(nr_questions),candidate_url=candidate_url)
 
 @mod_admin.route('/editcandidateanswers', methods=['GET', "POST"])
 def edit_candidate_answers():
     if request.method == 'POST':
         data = request.form.to_dict()
+        project_enabled = mongo_utils.get_enabled_project()
+        for project in json.loads(json_util.dumps(project_enabled)):
+            data['project_slug']=project['year']
         mongo_utils.update_candidate_answers(data)
     return redirect(url_for('admin.candidates'))

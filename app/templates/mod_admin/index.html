@@ -9,7 +9,20 @@
 						<h4 class="modal-title">Add Group</h4>
 					</div>
 					<div class="modal-body">
+
 						<form id="add-group-form" name="add_group"  method="POST">
+                            <div class="form-group">
+								<label for="project_name">Project:</label>
+                                <select id="project_name" name="project_slug" class="form-control" title="">
+									<option value="">Select Project</option>
+
+                                    {% for a in projects %}
+                                        <option value="{{ a['year'] }}">
+                                            {{ a['year'] }}
+                                        </option>
+                                    {% endfor %}
+								</select>
+							</div>
 							<div class="form-group">
 								<label for="group_name">Group Name:</label>
 								<input name="group_name" type="text" class="form-control" id="group_id" placeholder="Name">
@@ -18,14 +31,12 @@
 								<label for="order_number">Order Number:</label>
                                 <select id="order_number" name="add_order_number"  class="form-control"  title="">
 									<option value="">Select Order</option>
-
 								</select>
-
 							</div>
+
 							<div class="modal-footer">
 								<button class="btn btn-default" type="button" data-dismiss="modal">Close</button>
 								<input type="submit" value="Save changes" name="editInd" class="btn btn-primary" id="add-indicator-button" >
-
 							</div>
                         </form>
 					</div><!-- /.modal-content -->
@@ -42,6 +53,14 @@
 					<div class="modal-body">
 						<form id="edit-group-form" name="edit_group"  method="POST">
                             <input type="hidden" id="hidden_group">
+                            <select id="edit_project_name" name="project_slug" class="form-control" title="">
+                                <option value="">Select Project</option>
+                                    {% for a in projects %}
+                                        <option value="{{ a['year'] }}">
+                                            {{ a['year'] }}
+                                        </option>
+                                    {% endfor %}
+								</select>
 							<div class="form-group">
 								<label for="group_name">Group Name:</label>
 								<input name="edit_group_name" type="text" class="form-control" id="edit_group_id" placeholder="Name">
@@ -71,6 +90,7 @@
 					</div>
 					<div class="modal-body">
                         <input type="hidden" id="slug_group_question">
+                        <input type="hidden" id="slug_group_project">
 						<form id="add-question-form" name="add_question"  method="POST">
 							<div class="form-group">
 								<label for="question_name">Question:</label>
@@ -144,7 +164,10 @@
             }).responseJSON;
         var count_groups=20;
 
+
     $(document).ready(function (){
+
+
         $('#show-modal-group').click(function(e){
             e.preventDefault();
             $('#add-group-modal').modal('show');
@@ -160,6 +183,8 @@
 					data: {
 						'group_name': $('#group_id').val(),
                         'order_number': $('#order_number').val(),
+                        'order_number': $('#order_number').val(),
+                        'project_slug':$('#project_name').val()
 					},
 					success: function (data) {
                         oTable.fnClearTable(0);
@@ -239,8 +264,8 @@
 								"bSort": true, // disables sorting
 								"info": true,
 								"aoColumns": [
-
                                     {"mDataProp": "order_number"},
+
 									{"mDataProp": "question_slug"},
                                     {"mDataProp": "question_name"},
 									{"sDefaultContent": "<a class='edit-modal-question' id='' style='padding-right:20px'><i class='fa fa-pencil-square-o fa-lg edit-question' aria-hidden='true'></i></a>" + "<a href='#' class='remove-question' data-group='"+group_name+"'><i class='fa fa-trash-o fa-lg' aria-hidden='true'></i></a>"},
@@ -272,6 +297,7 @@
 						"sDefaultContent": '<img src="{{ url_for('static',filename='assets/plus.png') }}" class="show-sub-table" style="width:20px;"/>'
 					},
                     {"mDataProp": "generated_id"},
+                    {"mDataProp": "project_slug"},
                     {"mDataProp": "order_number"},
                     {"mDataProp": "slug"},
 					{"mDataProp": "group_name"},
@@ -405,6 +431,7 @@
 						'group_name': $('#edit_group_id').val(),
                         'order_number': $('#edit_order_number').val(),
                         'hidden_group': $('#hidden_group').val(),
+                        'project_slug': $('#edit_project_name').val(),
 					},
 					success: function (data) {
                         oTable.fnClearTable(0);
@@ -511,10 +538,10 @@
 						'group_name': group_name,
 					},
 					success: function (data) {
-                        console.log(data);
                         $('#edit_group_id').val(data['group_name']);
                         $('#hidden_group').val(data['generated_id']);
                         $('#edit_order_number option[value="' + data['order_number'] + '"]').attr('selected', 'selected');
+                        $('#edit_project_name option[value="' + data['project_slug'] + '"]').attr('selected', 'selected');
 					}
 				});
             })
@@ -538,6 +565,7 @@
             })
     })
 
+
 </script>
 
  <div id="wrapper">
@@ -552,6 +580,7 @@
                             <thead>
                             <tr>
                                 <th>ID</th>
+                                <th>Project</th>
                                 <th>Order</th>
                                 <th>Group Slug</th>
                                 <th>Group Name</th>
@@ -589,6 +618,7 @@
 			</div>
 		</div>
     </div>
+
 
 
 {% endblock %}

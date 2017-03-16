@@ -1,0 +1,194 @@
+{% extends 'layout_admin.html' %}
+
+{% block body %}
+    <script>
+
+    var newRowData= $.ajax({
+					url: "{{ url_for('projects.get_all_projects') }}", //this is the submit URL
+					type: 'GET', //or POST,
+					dataType: 'json',
+				    async: false,
+            }).responseJSON;
+    $(document).ready(function (){
+
+            var oTable;
+            function init_table(newRowData) {
+			    oTable = $('#exampleTable').dataTable({
+
+				"aaData": newRowData,
+				"aoColumns": [
+
+                    {"mDataProp": "generated_id"},
+                    {"mDataProp": "slug"},
+                    {"mDataProp": "project_name"},
+                    {"mDataProp": "year"},
+                      {
+                        "mData": "enabled", "aTargets": [0],
+                        "render": function (data) {
+                            return "<a href='#' class='status_enabled_disabled'>"+data+"</a>";
+                        }
+                    },
+
+					{"sDefaultContent": "<a  class='edit-project' id='' style='padding-right:20px'><i class='fa fa-pencil-square-o fa-lg edit-group' aria-hidden='true'></i></a>" + "<a href='#' class='remove-project'><i class='fa fa-trash-o fa-lg' aria-hidden='true'></i></a>"},
+
+				],
+				"oLanguage": {
+					"sInfo": "_TOTAL_ entries"
+				},
+				"aaSorting": [[1, 'asc']]
+			});
+		}
+        init_table(newRowData);
+        $('body').on('click','.status_enabled_disabled',function(){
+             var generated_id = $($(this).parent().parent().children()[0]).text();
+            console.log(generated_id);
+            $.ajax({
+                url: "{{ url_for('projects.change_status') }}", //this is the submit URL
+                type: 'POST', //or POST
+                dataType: 'json',
+                data: {'generated_id': generated_id},
+                success: function (data) {
+                    oTable.fnClearTable(0);
+                    oTable.fnAddData(data);
+                    oTable.fnDraw();
+                }
+            });
+        })
+           $('body').on('click','.edit-project',function(){
+            var project_gid = $($(this).parent().parent().children()[0]).text();
+            console.log(project_gid);
+            $("html, body").animate({ scrollTop: 0 }, "slow");
+            $.ajax({
+                url: "{{ url_for('projects.get_selected_project') }}", //this is the submit URL
+                type: 'POST', //or POST
+                dataType: 'json',
+                data: {'project_gid': project_gid},
+                success: function (data) {
+                    $('#hidden_status').val(data['enabled']);
+                    $('#project_id').val(data['project_name']);
+                    $('#hidden_generate_id').val(data['generated_id']);
+                    $('#project_year option[value="' + data['year'] + '"]').attr('selected', 'selected');
+                    $('#add-project-form').attr('action', '{{ url_for('projects.edit_project') }}');
+                }
+            });
+        });
+
+           $('body').on('click','.remove-project',function(){
+            var project_gid = $($(this).parent().parent().children()[0]).text();
+              BootstrapDialog.show({
+							message: 'Are you sure you want to delete the Project?',
+							buttons: [{
+								icon: 'glyphicon glyphicon-send',
+								label: 'OK',
+								cssClass: 'btn-primary',
+								autospin: false,
+								action: function(dialogRef){
+									$.ajax({
+										url: "{{ url_for('projects.delete_project') }}", //this is the submit URL
+										type: 'POST', //or POST
+										dataType: 'json',
+										data: {'project_gid': project_gid},
+										success: function (data) {
+											oTable.fnClearTable(0);
+											oTable.fnAddData(data);
+											oTable.fnDraw();
+
+										}
+									});
+									setTimeout(function(){
+										dialogRef.close();
+									}, 100);
+								}
+							}, {
+								label: 'Close',
+								action: function(dialogRef){
+									dialogRef.close();
+								}
+							}]
+						});
+        })
+
+
+
+    })
+
+</script>
+ <div id="wrapper">
+        <div id="page-wrapper">
+
+            <div class="container-fluid">
+                <div class="row" style="margin-top:100px">
+
+                <div class="col-md-3"></div>
+        <div class="col-md-6">
+                 <h2>Manages Projects</h2>
+            {% with messages = get_flashed_messages() %}
+  {% if messages %}
+
+    {% for message in messages %}
+        <div class="alert alert-success">
+        <strong>Success! </strong> {{ message.decode('utf-8') }}.
+        </div>
+
+    {% endfor %}
+
+  {% endif %}
+{% endwith %}
+        <div id="add-project-modal">
+						<form id="add-project-form" name="add_project"  method="POST" enctype="multipart/form-data" action="{{ url_for('projects.add_project') }}">
+                            <input name="generated_id" type="hidden" id="hidden_generate_id">
+                            <div class="form-group">
+                                <input type="hidden" name="enabled_status" id="hidden_status"/>
+								<label for="project_name">Project Name:</label>
+								<input name="project_name" type="text" class="form-control" id="project_id" placeholder="Name">
+							</div>
+                            <div class="form-group">
+								<label for="year">Year:</label>
+                                <select id="project_year" name="year"  class="form-control"  title="">
+									<option value="">Select Year</option>
+                                    <option value="2017">2017</option>
+                                    <option value="2018">2018</option>
+                                    <option value="2019">2019</option>
+                                    <option value="2020">2020</option>
+								</select>
+							</div>
+							<div class="modal-footer">
+								<button class="btn btn-default" type="button" data-dismiss="modal">Close</button>
+								<input type="submit" value="Save changes" name="editInd" class="btn btn-primary" id="add-project-button">
+							</div>
+                        </form>
+            </div>
+          </div>
+    </div>
+                <!-- Page Heading -->
+                <div class="row">
+                    <div class="col-lg-12">
+                        <table id="exampleTable" class="stripe">
+                            <thead>
+                            <tr>
+                                 <th>ID</th>
+                                <th>Slug</th>
+                                <th>Name</th>
+                                <th>Year</th>
+                                <th>Status</th>
+                                <th></th>
+
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+                <!-- /.row -->
+            </div>
+            <!-- /.container-fluid -->
+        </div>
+        <!-- /#page-wrapper -->
+
+    </div>
+
+
+{% endblock %}

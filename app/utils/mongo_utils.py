@@ -1,5 +1,7 @@
 from slugify import slugify
 from bson import json_util
+import time
+from datetime import datetime
 class MongoUtils(object):
 
 
@@ -10,17 +12,19 @@ class MongoUtils(object):
         self.candidates_collection = "candidates_collection"
         self.answers_candidates = "answers_candidates"
         self.answers_users = "answers_users"
+        self.projects_collection = "projects_collection"
+
     def insert_question(self, doc):
-        count_groups=self.mongo.db[self.group_collection].count()
-        result = self.mongo.db[self.group_collection].insert({'generated_id':str(count_groups)+"-"+slugify(doc['group_name']),'slug': slugify(doc['group_name']), 'group_name': doc['group_name'],'order_number':doc['order_number']})
+        count_groups=int(time.mktime(datetime.now().timetuple()))
+        result = self.mongo.db[self.group_collection].insert({'generated_id':str(count_groups)+"-"+slugify(doc['group_name']),'slug': slugify(doc['group_name']), 'group_name': doc['group_name'],'order_number':doc['order_number'],'project_slug':doc['project_slug']})
         return result
 
     def find_group(self, slug):
         result = self.mongo.db[self.group_collection].find_one({'slug': slug})
         return result
 
-    def find_all(self):
-        result = self.mongo.db[self.group_collection].find().sort('order_number')
+    def find_all(self,project_slug):
+        result = self.mongo.db[self.group_collection].find({'project_slug':project_slug}).sort('order_number')
         return result
 
     def find_all_questions(self):
@@ -35,8 +39,7 @@ class MongoUtils(object):
         return result
 
     def update_selected_group(self,doc):
-        print doc['hidden_group']
-        result = self.mongo.db[self.group_collection].update({'generated_id': doc['hidden_group']},{'slug': slugify(doc['group_name']),'group_name': doc['group_name'],'order_number':doc['order_number'],'generated_id': doc['hidden_group']}, upsert=False)
+        result = self.mongo.db[self.group_collection].update({'generated_id': doc['hidden_group']},{'slug': slugify(doc['group_name']),'group_name': doc['group_name'],'order_number':doc['order_number'],'generated_id': doc['hidden_group'],'project_slug':doc['project_slug']}, upsert=False)
         return result
 
     def remove_group(self,doc):
@@ -49,7 +52,7 @@ class MongoUtils(object):
 
     def insert_question_group(self, doc):
         question_name=doc['question_name']
-        self.mongo.db[self.questions_collection].insert({'group_slug': doc['group_name'],"question_name" :question_name,'question_slug':slugify(question_name),'order_number':doc['order_number']})
+        self.mongo.db[self.questions_collection].insert({'group_slug': doc['group_name'],"question_name" :question_name,'question_slug':slugify(question_name),'order_number':doc['order_number'],'project_slug':doc['project_slug']})
         result = self.mongo.db[self.group_collection].find()
         return result
 
@@ -59,11 +62,11 @@ class MongoUtils(object):
         return result
 
     def update_selected_question(self, doc):
-        result = self.mongo.db[self.questions_collection].update({'question_slug':doc['hidden_question']},{'question_slug': slugify(doc['question_name']),'question_name': doc['question_name'],'order_number': doc['order_number'],'group_slug':doc['group_name']}, upsert=False)
+        result = self.mongo.db[self.questions_collection].update({'question_slug':doc['hidden_question']},{'question_slug': slugify(doc['question_name']),'question_name': doc['question_name'],'order_number': doc['order_number'],'group_slug':doc['group_name'],'project_slug':doc['project_slug']}, upsert=False)
         return result
 
     def find_question_group(self, doc):
-        result = self.mongo.db[self.questions_collection].find({'group_slug': doc['group_name']})
+        result = self.mongo.db[self.questions_collection].find({'group_slug': doc['group_name'],'project_slug':doc['project_slug']})
         return result
 
     def delete_question(self,doc):
@@ -72,7 +75,7 @@ class MongoUtils(object):
 
 
     def insert_candidate(self, doc, filename):
-        count_groups=self.mongo.db[self.candidates_collection].count()
+        count_groups=int(time.mktime(datetime.now().timetuple()))
         result = self.mongo.db[self.candidates_collection].insert({
                                                         'generated_id':str(count_groups)+"-"+slugify(doc['candidate_name']),
                                                         'slug': slugify(doc['candidate_name']),
@@ -107,11 +110,11 @@ class MongoUtils(object):
 
     def update_candidate_answers(self, doc):
 
-        result = self.mongo.db[self.answers_candidates].remove({'candidate_slug': slugify(doc['candidate_slug'])})
+        result = self.mongo.db[self.answers_candidates].remove({'candidate_slug': slugify(doc['candidate_slug']),'project_slug':doc['project_slug']})
         result = self.mongo.db[self.answers_candidates].insert(doc)
 
-    def get_candidate_asnwers(self,candidate_url):
-        result = self.mongo.db[self.answers_candidates].find({'candidate_slug':candidate_url})
+    def get_candidate_asnwers(self,candidate_url,project_slug):
+        result = self.mongo.db[self.answers_candidates].find({'candidate_slug':candidate_url,'project_slug':project_slug})
         return result
 
     def get_nr_questions(self):
@@ -160,3 +163,54 @@ class MongoUtils(object):
     def find_all_answers_users(self,question_key,question,user_id):
         result_candidates = self.mongo.db[self.answers_users].find({'question_'+str(question_key):question,'user_id':user_id})
         return result_candidates
+
+    def find_all_projects(self):
+        result = self.mongo.db[self.projects_collection].find()
+        return result
+
+    def insert_project(self, doc):
+        count_groups=int(time.mktime(datetime.now().timetuple()))
+        result = self.mongo.db[self.projects_collection].insert({
+                                                        'generated_id':str(count_groups)+"-"+slugify(doc['project_name']),
+                                                        'slug': slugify(doc['project_name']),
+                                                        'project_name': doc['project_name'],
+                                                        'year': doc['year'],
+                                                        'enabled':"disabled"},upsert=False)
+        return result
+
+    def update_project(self, doc):
+        result = self.mongo.db[self.projects_collection].update(
+            {'generated_id': doc['generated_id']},
+            {'generated_id': doc['generated_id'],
+             'slug': slugify(doc['project_name']),
+             'project_name': doc['project_name'],
+             'enabled': doc['enabled_status'],
+             'year': doc['year']})
+        return result
+
+    def find_selected_project(self,doc):
+        result = self.mongo.db[self.projects_collection].find_one({'generated_id':doc['project_gid']})
+        return result
+
+    def remove_project(self,doc):
+        result = self.mongo.db[self.projects_collection].remove({'generated_id': doc['project_gid']})
+        return result
+
+    def get_status(self, doc):
+        result = self.mongo.db[self.projects_collection].find_one({'generated_id': doc['generated_id']})
+        return result
+
+    def edit_status(self,doc):
+        result = self.mongo.db[self.projects_collection].update(
+            {'generated_id': doc['generated_id']},
+            {"$set": {"enabled": doc['enabled']}})
+        return result
+
+    def get_enabled_project(self):
+        result= self.mongo.db[self.projects_collection].find({'enabled':'enabled'})
+        return result
+
+    def find_group_project(self,group_slug):
+        result = self.mongo.db[self.group_collection].find({'generated_id': group_slug})
+        return result
+
