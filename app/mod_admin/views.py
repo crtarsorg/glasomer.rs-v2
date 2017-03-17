@@ -182,7 +182,7 @@ def answers_candidates():
     project_enabled=mongo_utils.get_enabled_project()
     for project in json.loads(json_util.dumps(project_enabled)):
         docs = mongo_utils.find_all(project['year'])
-    questions=mongo_utils.find_all_questions()
+        questions=mongo_utils.find_all_questions(project['year'])
     return render_template('mod_admin/answers_candidates.html',docs=json.loads(json_util.dumps(docs)),questions=json.loads(json_util.dumps(questions)),candidate_url=candidate_url)
 
 @mod_admin.route('/addcandidateanswers', methods=['GET', "POST"])
@@ -199,10 +199,11 @@ def add_candidate_answers():
 @mod_admin.route('/getcandidateanswers', methods=['GET', "POST"])
 def get_candidate_answers():
     candidate_url = request.args.get('candidate')
-    questions=mongo_utils.find_all_questions()
+
     nr_questions=mongo_utils.get_nr_questions()
     project_enabled = mongo_utils.get_enabled_project()
     for project in json.loads(json_util.dumps(project_enabled)):
+        questions = mongo_utils.find_all_questions(project['year'])
         docs = mongo_utils.find_all(project['year'])
         candidate_answers=mongo_utils.get_candidate_asnwers(candidate_url,project['year'])
 

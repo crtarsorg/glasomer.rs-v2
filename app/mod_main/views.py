@@ -15,9 +15,11 @@ mod_main = Blueprint('main', __name__)
 
 @mod_main.route('/', methods=['GET'])
 def index():
-    docs = mongo_utils.find_all()
-    questions=mongo_utils.find_all_questions()
-    count_questions=mongo_utils.get_nr_questions()
+    project_enabled = mongo_utils.get_enabled_project()
+    for project in json.loads(json_util.dumps(project_enabled)):
+        docs = mongo_utils.find_all(project['year'])
+        count_questions = mongo_utils.get_nr_questions_front(project['year'])
+        questions = mongo_utils.find_all_questions(project['year'])
     return render_template('mod_main/index.html',docs=json.loads(json_util.dumps(docs)),questions=json.loads(json_util.dumps(questions)),count_questions=count_questions)
 
 @mod_main.route('/insertuseranswers', methods=['GET', "POST"])
@@ -31,11 +33,12 @@ def insert_user_answers():
             timestamp = int(time.mktime(datetime.now().timetuple()))
             session['user_id'] = timestamp
             user_id = session['user_id']
-            print "set user id"
-            print user_id
-        print "id out of loop"
-        print user_id
         data = request.form.to_dict()
+        project_enabled = mongo_utils.get_enabled_project()
+        for project in json.loads(json_util.dumps(project_enabled)):
+            docs = mongo_utils.find_all(project['year'])
+            data['project_slug']=project['year']
+            print data['project_slug']
         data['user_id'] = user_id
         result=mongo_utils.insert_users_answers(data)
     #return render_template('mod_main/user_candidate_results.html.html', docs=json.loads(json_util.dumps(docs)), questions=json.loads(json_util.dumps(questions)), count_questions=count_questions)
@@ -44,7 +47,9 @@ def insert_user_answers():
 @mod_main.route('/getallquestions', methods=['GET', "POST"])
 def get_all_questions():
     if request.method == 'GET':
-        questions = mongo_utils.find_all_questions()
+        project_enabled = mongo_utils.get_enabled_project()
+        for project in json.loads(json_util.dumps(project_enabled)):
+            questions = mongo_utils.find_all_questions(project['year'])
     return Response(response=json_util.dumps(questions), status=200, mimetype='application/json')
 
 @mod_main.route('/getquestionsresults', methods=['GET', "POST"])
@@ -53,15 +58,20 @@ def get_questions_results():
         user_id=session['user_id']
         data = request.form.to_dict()
         question= data['question_name']
-        response = mongo_utils.find_all_questions_results(user_id,question)
+        project_slug=""
+        project_enabled = mongo_utils.get_enabled_project()
+        for project in json.loads(json_util.dumps(project_enabled)):
+            project_slug=project['year']
+            questions = mongo_utils.find_all_questions(project['year'])
+            response = mongo_utils.find_all_questions_results(user_id,question,project['year'])
         count_question=0
         created_array = []
         question_key=""
         for questions in json.loads(json_util.dumps(response['all_question'])):
             count_question = count_question + 1
             question_key=count_question
-            answers = mongo_utils.find_all_answers_s(question_key,question)
-            answers_users = mongo_utils.find_all_answers_users(question_key,question,user_id)
+            answers = mongo_utils.find_all_answers_s(question_key,question,project_slug)
+            answers_users = mongo_utils.find_all_answers_users(question_key,question,user_id,project_slug)
             for r in json.loads(json_util.dumps(answers)):
                 candidate_name_result = mongo_utils.get_candidate_name(r['candidate_slug'])
                 for c_name in json.loads(json_util.dumps(candidate_name_result)):
@@ -98,14 +108,18 @@ def get_all_q_a_u():
             user_id = session['user_id']
         count_question=0
         create_question_array=[]
-        response_all_questions=mongo_utils.find_all_questions()
+        project_slug=""
+        project_enabled = mongo_utils.get_enabled_project()
+        for project in json.loads(json_util.dumps(project_enabled)):
+            response_all_questions=mongo_utils.find_all_questions(project['year'])
+            project_slug=project['year']
 
         for raq in json.loads(json_util.dumps(response_all_questions)):
             count_question=count_question+1
             question_key=count_question
-            response_user_q = mongo_utils.find_all_questions_user(user_id)
+            response_user_q = mongo_utils.find_all_questions_user(user_id,project_slug)
             for ruq in json.loads(json_util.dumps(response_user_q)):
-                if ruq['question_'+str(count_question)]==raq['question_name'] and 'vazno_'+str(count_question) in ruq and 'status_'+str(count_question) in ruq:
+                if 'vazno_'+str(count_question) in ruq and 'status_'+str(count_question) in ruq:
                     create_question_array.append({'question_name':ruq['question_'+str(count_question)]})
 
         return Response(response=json_util.dumps(create_question_array), status=200, mimetype='application/json')

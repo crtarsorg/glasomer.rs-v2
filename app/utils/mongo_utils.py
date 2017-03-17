@@ -27,9 +27,10 @@ class MongoUtils(object):
         result = self.mongo.db[self.group_collection].find({'project_slug':project_slug}).sort('order_number')
         return result
 
-    def find_all_questions(self):
-        result = self.mongo.db[self.questions_collection].find().sort('order_number')
+    def find_all_questions(self,project_slug):
+        result = self.mongo.db[self.questions_collection].find({'project_slug':project_slug}).sort('order_number')
         return result
+
 
     def count_groups(self):
         result = self.mongo.db[self.group_collection].count()
@@ -121,31 +122,38 @@ class MongoUtils(object):
         result = self.mongo.db[self.questions_collection].count()
         return result
 
+    def get_nr_questions_front(self, project_slug):
+        result = self.mongo.db[self.questions_collection].find({'project_slug': project_slug}).count()
+        return result
+
+
+
     def insert_users_answers(self, doc):
-        self.mongo.db[self.answers_users].remove({'user_id': doc['user_id']})
+        self.mongo.db[self.answers_users].remove({'user_id': doc['user_id'],'project_slug':doc['project_slug']})
         self.mongo.db[self.answers_users].insert(doc)
-        result_candidates=self.mongo.db[self.answers_candidates].find()
-        result_user=self.mongo.db[self.answers_users].find({'user_id':doc['user_id']})
+        result_candidates=self.mongo.db[self.answers_candidates].find({'project_slug':doc['project_slug']})
+        result_user=self.mongo.db[self.answers_users].find({'user_id':doc['user_id'],'project_slug':doc['project_slug']})
         candidates=self.mongo.db[self.candidates_collection].find()
-        all_question=self.mongo.db[self.questions_collection].find()
+        all_question=self.mongo.db[self.questions_collection].find({'project_slug':doc['project_slug']})
         return {'user_results':result_user, 'candidate_results':result_candidates,'candidates':candidates,'all_question':all_question}
 
-    def find_all_questions_results(self, user_id,question):
-        result_candidates=self.mongo.db[self.answers_candidates].find()
-        result_user = self.mongo.db[self.answers_users].find({'user_id':user_id})
-        all_question=self.mongo.db[self.questions_collection].find()
+    def find_all_questions_results(self, user_id,question,project_slug):
+        result_candidates=self.mongo.db[self.answers_candidates].find({'project_slug':project_slug})
+        result_user = self.mongo.db[self.answers_users].find({'user_id':user_id,'project_slug':project_slug})
+        all_question=self.mongo.db[self.questions_collection].find({'project_slug':project_slug})
         candidates = self.mongo.db[self.candidates_collection].find()
         return {'user_results':result_user, 'candidate_results':result_candidates,'candidates':candidates,'all_question':all_question}
-    def find_all_answers_s(self,question_key,question):
-        result_candidates = self.mongo.db[self.answers_candidates].find({'question_'+str(question_key):question})
+
+    def find_all_answers_s(self,question_key,question,project_slug):
+        result_candidates = self.mongo.db[self.answers_candidates].find({'question_'+str(question_key):question,'project_slug':project_slug})
         return result_candidates
 
     def get_candidate_name(self,candidate_slug):
         result_candidates_name = self.mongo.db[self.candidates_collection].find({'generated_id':candidate_slug})
         return result_candidates_name
 
-    def find_all_questions_user(self,user_id):
-        result = self.mongo.db[self.answers_users].find({'user_id':user_id})
+    def find_all_questions_user(self,user_id,project_slug):
+        result = self.mongo.db[self.answers_users].find({'user_id':user_id,'project_slug':project_slug})
         return result
 
     def find_all_questions_user_key(self,question_key):
@@ -160,8 +168,8 @@ class MongoUtils(object):
         result = self.mongo.db[self.answers_users].find({'user_id':user_id})
         return result
 
-    def find_all_answers_users(self,question_key,question,user_id):
-        result_candidates = self.mongo.db[self.answers_users].find({'question_'+str(question_key):question,'user_id':user_id})
+    def find_all_answers_users(self,question_key,question,user_id,project_slug):
+        result_candidates = self.mongo.db[self.answers_users].find({'question_'+str(question_key):question,'user_id':user_id,'project_slug':project_slug})
         return result_candidates
 
     def find_all_projects(self):
@@ -200,10 +208,9 @@ class MongoUtils(object):
         result = self.mongo.db[self.projects_collection].find_one({'generated_id': doc['generated_id']})
         return result
 
-    def edit_status(self,doc):
-        result = self.mongo.db[self.projects_collection].update(
-            {'generated_id': doc['generated_id']},
-            {"$set": {"enabled": doc['enabled']}})
+    def edit_status(self, doc):
+        self.mongo.db[self.projects_collection].update({'enabled': {'$in': ['enabled']}},{'$set': {'enabled': 'disabled'}},multi=True)
+        result = self.mongo.db[self.projects_collection].update({'generated_id': doc['generated_id']},{'$set':{'enabled':"enabled"}})
         return result
 
     def get_enabled_project(self):

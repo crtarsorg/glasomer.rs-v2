@@ -212,3 +212,80 @@ span.psw {
 .page-header{
     margin-top:0px;
 }
+         .social-icons ul {
+            list-style: none;
+            width: 200px;
+        }
+        .pagination_nr{
+            font-weight: 700;
+            font-size:20px;
+            color:#337ab7;
+        }
+        .page-header h1{
+            text-transform: uppercase;
+            color:#1A3966;
+            font-weight: 700;
+        }
+        .panel-title{
+            color:#1A3966;
+        }
+        .importance-question-labels p{
+            color:#337ab7;
+        }
+        .next-back{
+            text-transform: uppercase;
+        }
+    .show-sub-table1, .show-sub-table{
+        cursor: pointer;
+    }
+    .top-links-modal{
+        width:100%;
+        text-transform: uppercase;
+        font-size:15px;
+        font-weight: 700;
+        color:#337ab7;
+    }
+    .top-links-modal:hover{
+        background:#337ab7;
+        color:white;
+        border:0px !important;
+    }
+    #back-start{
+        float:right;
+        text-transform: uppercase;
+        font-weight: 700;
+        color:#337ab7;
+    }
+    #wheel-right, #wheel-left{
+        font-weight: 700;
+    }
+    .btn-default:hover{
+        border:none;
+    }
+    .modal-title{
+        text-transform: uppercase;
+        font-weight: bold;
+    }
+    .next-back{
+        font-size: 30px;
+    }
+    .color-next{
+        background: #337ab7;
+        color:white;
+    }
+
+     .nav-tabs>li.color-next>a:hover{
+        background: #337ab7;
+        color:white;
+    }
+     .nav-tabs>li.color-next>a:active{
+        background: #337ab7;
+        color:white;
+    }
+      .nav-tabs>li.color-next>a:focus{
+        background: #337ab7;
+        color:white;
+    }
+     .color-next i {
+         color:white;
+     }
