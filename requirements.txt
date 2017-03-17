@@ -10,3 +10,4 @@ flask-security==1.7.5
 flask-Login==0.3.2
 slugify==0.0.1
 MarkupSafe==1.0
+Flask-Principal==0.4.0
