@@ -10,7 +10,6 @@
                     <form id="add-candidate-form" name="add_group"  method="POST" enctype="multipart/form-data" action="{{ url_for('admin.edit_candidate_answers') }}">
                         <input type="hidden" name="candidate_slug" value="{{ candidate_url }}"/>
                         <ul>
-                        {% set count = 0 %}
 
                      {% for doc in docs  %}
                             <h2>{{ doc.group_name }}</h2>
@@ -19,7 +18,7 @@
                                    {% set selected="" %}
                                     {% set selected_vazno="" %}
                                     {% set selected_comment="" %}
-                                  {% set count = count + 1 %}
+                                  {% set count = loop.index %}
                                     {% if doc.generated_id==question.group_slug %}
                                         <input type="hidden" name="question_{{ count }}" value="{{ question.question_name }}"/>
                                          <li><b>{{ question.question_name }}</b></li>

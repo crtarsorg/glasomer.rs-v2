@@ -3,15 +3,11 @@ import pprint
 from app import mongo_utils, mongo,UPLOAD_FOLDER,ALLOWED_EXTENSIONS
 from bson import json_util, ObjectId
 from flask import Blueprint, render_template, request, Response, redirect, url_for, flash,session
-from flask.ext.security import login_required, current_user
 import os, json
-from slugify import slugify
-from werkzeug.utils import secure_filename
 import time
 from datetime import datetime
 
 mod_main = Blueprint('main', __name__)
-
 
 @mod_main.route('/', methods=['GET'])
 def index():
@@ -26,9 +22,8 @@ def index():
 def insert_user_answers():
     if request.method == 'POST':
         if session.get('user_id') is not None:
-            print "session exists"
             user_id=session['user_id']
-            print user_id
+
         else:
             timestamp = int(time.mktime(datetime.now().timetuple()))
             session['user_id'] = timestamp
@@ -38,7 +33,6 @@ def insert_user_answers():
         for project in json.loads(json_util.dumps(project_enabled)):
             docs = mongo_utils.find_all(project['year'])
             data['project_slug']=project['year']
-            print data['project_slug']
         data['user_id'] = user_id
         result=mongo_utils.insert_users_answers(data)
     #return render_template('mod_main/user_candidate_results.html.html', docs=json.loads(json_util.dumps(docs)), questions=json.loads(json_util.dumps(questions)), count_questions=count_questions)

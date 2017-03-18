@@ -10,12 +10,12 @@
                     <form id="add-candidate-form" name="add_group"  method="POST" enctype="multipart/form-data" action="{{ url_for('admin.add_candidate_answers') }}">
                         <input type="hidden" name="candidate_slug" value="{{ candidate_url }}"/>
                         <ul>
-                        {% set count = 0 %}
+
                      {% for doc in docs  %}
                             <h2>{{ doc.group_name }}</h2>
                             <ul>
                             {% for question in questions %}
-                                  {% set count = count + 1 %}
+                                  {% set count = loop.index %}
                                     {% if doc.generated_id==question.group_slug %}
 
                                             <li><b>{{ question.question_name }}</b></li>

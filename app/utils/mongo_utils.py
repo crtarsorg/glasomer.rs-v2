@@ -111,8 +111,9 @@ class MongoUtils(object):
 
     def update_candidate_answers(self, doc):
 
-        result = self.mongo.db[self.answers_candidates].remove({'candidate_slug': slugify(doc['candidate_slug']),'project_slug':doc['project_slug']})
+        self.mongo.db[self.answers_candidates].remove({'candidate_slug': doc['candidate_slug'],'project_slug':doc['project_slug']})
         result = self.mongo.db[self.answers_candidates].insert(doc)
+        return result
 
     def get_candidate_asnwers(self,candidate_url,project_slug):
         result = self.mongo.db[self.answers_candidates].find({'candidate_slug':candidate_url,'project_slug':project_slug})
