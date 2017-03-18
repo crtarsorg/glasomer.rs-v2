@@ -37,8 +37,8 @@ def login():
 
 
 
-@mod_auth.route('/register', methods=['GET', 'POST'])
-def register():
+#@mod_auth.route('/register', methods=['GET', 'POST'])
+#def register():
     if request.method == "GET":
         # Return the login form template
         return render_template('mod_auth/register.html')
