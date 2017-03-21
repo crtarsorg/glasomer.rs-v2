@@ -183,7 +183,9 @@ def answers_candidates():
     for project in json.loads(json_util.dumps(project_enabled)):
         docs = mongo_utils.find_all(project['year'])
         questions=mongo_utils.find_all_questions(project['year'])
-    return render_template('mod_admin/answers_candidates.html',docs=json.loads(json_util.dumps(docs)),questions=json.loads(json_util.dumps(questions)),candidate_url=candidate_url)
+    for doc in json.loads(json_util.dumps(questions)):
+        questions1=mongo_utils.update_order_by(doc)
+    return render_template('mod_admin/answers_candidates.html',docs=json.loads(json_util.dumps(docs)),questions=json.loads(json_util.dumps(questions1)),candidate_url=candidate_url)
 
 @mod_admin.route('/addcandidateanswers', methods=['GET', "POST"])
 def add_candidate_answers():

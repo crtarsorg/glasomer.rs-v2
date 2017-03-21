@@ -31,6 +31,10 @@ class MongoUtils(object):
         result = self.mongo.db[self.questions_collection].find({'project_slug':project_slug}).sort('order_number')
         return result
 
+    def update_order_by(self,doc):
+        self.mongo.db[self.questions_collection].update({'question_slug': doc['question_slug']},{'$set':{'order_number':int(doc['order_number'])}},multi=True)
+        result = self.mongo.db[self.questions_collection].find({'project_slug': doc['project_slug']}).sort('order_number')
+        return result
 
     def count_groups(self):
         result = self.mongo.db[self.group_collection].count()
