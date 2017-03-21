@@ -7,7 +7,7 @@
     padding-top: 35px;
     font-size:20px;
     text-transform: uppercase;
-    font-weight:700;
+
 }
 .navbar-nav>li>a.title-menu-text:hover{
     color:#ffffff;
@@ -239,11 +239,7 @@ span.psw {
     text-transform: uppercase;
     font-weight: bold;
 }
-.next-back
-{
-    font-size: 30px;
 
-}
 .color-next{
     background: #337ab7;
     color:white;
@@ -261,7 +257,7 @@ span.psw {
 .top-links-modal:hover{
     background:#337ab7;
     color:white;
-    border:0px !important;
+
 }
 #back-start{
     text-transform: uppercase;
@@ -281,22 +277,5 @@ span.psw {
     list-style: none;
     width: 200px;
 }
-.pagination_nr{
-    font-weight: 700;
-    font-size:20px;
-    color:#337ab7;
-}
-.page-header h1{
-    text-transform: uppercase;
-    color:#1A3966;
-    font-weight: 700;
-}
-.panel-title{
-    color:#1A3966;
-}
-.importance-question-labels p{
-    color:#337ab7;
-}
-.next-back{
-    text-transform: uppercase;
-}
+
+

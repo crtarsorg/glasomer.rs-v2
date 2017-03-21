@@ -412,7 +412,7 @@
             <div class="user_results" style="display: none;margin-top:30px;">
                 <div class="row" style="margin-bottom:20px;">
                     <div class="col-md-5">
-                        <button type="submit" class="btn btn-default top-links-modal" id="answers-candidates" style="margin-bottom:10px;">
+                        <button type="submit" class="btn btn-default top-links-modal" id="answers-candidates" style="">
                              <i class="icon-th-list"></i> Odgovori svih stranak
                         </button>
                     </div>
@@ -470,14 +470,21 @@
                         </h1>
                     </div>
                 </div>
-                <div class="col-md-12">
+              <div class="col-md-12">
+                    <ul class="breadcrumb pagination_nr">
+                        <li>
+                           Deo {{ counttabs }}/{{ total_tabs|length }}
+                        </li>
+                    </ul>
+                </div>
+               {# <div class="col-md-12">
                     <ul class="breadcrumb pagination_nr" style="text-align:center">
                         <li>
                             {% set percentage=(counttabs/total_tabs|length)*100  %}
                            Deo {{ counttabs }}/{{ total_tabs|length }} - {{ percentage|round|int }}%
                         </li>
                     </ul>
-                </div>
+                </div>#}
             </div>
          {% for question in questions %}
             {% if question['project_slug']==doc['project_slug'] %}
@@ -553,8 +560,8 @@
     </div>
         <div class="row" style="margin-bottom: 40px;">
             <ul class="nav nav-tabs nav-justified tab-bar">
-                <li class="next-back"><a href="#" id="wheel-left"><i class="icon-chevron-left"></i></a></li>
-                <li class="next-back color-next"><a href="#" id="wheel-right" ><i class="icon-chevron-right"></i></a></li>
+                <li class="next-back"><a href="#" id="wheel-left">Prethodni</a></li>
+                <li class="next-back color-next"><a href="#" id="wheel-right" style="color:white;">Sledeći</a></li>
             </ul>
         </div>
     </div>
