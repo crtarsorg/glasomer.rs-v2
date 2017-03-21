@@ -13,7 +13,6 @@ mod_admin = Blueprint('admin', __name__, url_prefix='/admin')
 @mod_admin.route('/', methods=['GET', "POST"])
 
 def index():
-
     if current_user.is_authenticated:
         projects = mongo_utils.find_all_projects()
         return render_template('mod_admin/index.html',projects=json.loads(json_util.dumps(projects)))
@@ -92,7 +91,10 @@ def get_all_groups():
         project_enabled = mongo_utils.get_enabled_project()
         for project in json.loads(json_util.dumps(project_enabled)):
             docs = mongo_utils.find_all(project['year'])
-        return Response(response=json_util.dumps(docs), status=200, mimetype='application/json')
+        for doc in json.loads(json_util.dumps(docs)):
+
+            result=mongo_utils.update_order_by_grop(doc)
+        return Response(response=json_util.dumps(result), status=200, mimetype='application/json')
 
 @mod_admin.route('/getnrgroups', methods=['GET', "POST"])
 def get_nr_groups():
@@ -103,6 +105,7 @@ def get_nr_groups():
 def get_selected_group():
     if request.method == 'POST':
         data = request.form.to_dict()
+        print data
         docs = mongo_utils.find_selected_group(data)
         return Response(response=json_util.dumps(docs), status=200, mimetype='application/json')
 
@@ -114,6 +117,8 @@ def edit_selected_group():
         for project in json.loads(json_util.dumps(project_enabled)):
             docs = mongo_utils.find_all(project['year'])
             data['project_slug']=project['year']
+
+
         mongo_utils.update_selected_group(data)
 
         return Response(response=json_util.dumps(docs), status=200, mimetype='application/json')

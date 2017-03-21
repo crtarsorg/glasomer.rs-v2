@@ -31,8 +31,13 @@ class MongoUtils(object):
         result = self.mongo.db[self.questions_collection].find({'project_slug':project_slug}).sort('order_number')
         return result
 
+    def update_order_by_grop(self,doc):
+        self.mongo.db[self.group_collection].update({'slug': doc['slug']},{'$set':{'order_number':int(doc['order_number'])}},multi=True)
+        result = self.mongo.db[self.group_collection].find({'project_slug': doc['project_slug']}).sort('order_number')
+        return result
+
     def update_order_by(self,doc):
-        self.mongo.db[self.questions_collection].update({'question_slug': doc['question_slug']},{'$set':{'order_number':int(doc['order_number'])}},multi=True)
+        self.mongo.db[self.questions_collection].update({'question_slug': doc['question_slug']},{'$set': {'order_number': int(doc['order_number'])}},multi=True)
         result = self.mongo.db[self.questions_collection].find({'project_slug': doc['project_slug']}).sort('order_number')
         return result
 
@@ -44,10 +49,11 @@ class MongoUtils(object):
         return result
 
     def update_selected_group(self,doc):
-        result = self.mongo.db[self.group_collection].update({'generated_id': doc['hidden_group']},{'slug': slugify(doc['group_name']),'group_name': doc['group_name'],'order_number':doc['order_number'],'generated_id': doc['hidden_group'],'project_slug':doc['project_slug']}, upsert=False)
+        result = self.mongo.db[self.group_collection].update({'generated_id': doc['hidden_group']},{'slug': slugify(doc['group_name']),'group_name': doc['group_name'],'order_number':int(doc['order_number']),'generated_id': doc['hidden_group'],'project_slug':doc['project_slug']}, upsert=False)
         return result
 
     def remove_group(self,doc):
+        self.mongo.db[self.questions_collection].remove({'group_slug':doc['group_name']})
         result = self.mongo.db[self.group_collection].remove({'generated_id': slugify(doc['group_name'])})
         return result
 
