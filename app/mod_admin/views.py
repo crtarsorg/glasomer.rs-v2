@@ -92,7 +92,6 @@ def get_all_groups():
         for project in json.loads(json_util.dumps(project_enabled)):
             docs = mongo_utils.find_all(project['year'])
         for doc in json.loads(json_util.dumps(docs)):
-
             result=mongo_utils.update_order_by_grop(doc)
         return Response(response=json_util.dumps(result), status=200, mimetype='application/json')
 
@@ -117,10 +116,7 @@ def edit_selected_group():
         for project in json.loads(json_util.dumps(project_enabled)):
             docs = mongo_utils.find_all(project['year'])
             data['project_slug']=project['year']
-
-
         mongo_utils.update_selected_group(data)
-
         return Response(response=json_util.dumps(docs), status=200, mimetype='application/json')
 
 @mod_admin.route('/deletegroup', methods=['GET', "POST"])
@@ -225,3 +221,32 @@ def edit_candidate_answers():
             data['project_slug']=project['year']
         mongo_utils.update_candidate_answers(data)
     return redirect(url_for('admin.candidates'))
+
+@mod_admin.route('/updateordergroup', methods=['GET', "POST"])
+def update_order_group():
+    if request.method == 'POST':
+        data= request.form.to_dict()
+        json_data = None
+        for element in data:
+            json_data = json.loads(element)
+        mongo_utils.update_order(json_data)
+    project_enabled = mongo_utils.get_enabled_project()
+    for project in json.loads(json_util.dumps(project_enabled)):
+        docs = mongo_utils.find_all(project['year'])
+
+    return Response(response=json_util.dumps(docs), status=200, mimetype='application/json')
+
+@mod_admin.route('/updateorderquestion', methods=['GET', "POST"])
+def update_order_question():
+    if request.method == 'POST':
+        data= request.form.to_dict()
+    json_data = None
+    for element in data:
+        json_data = json.loads(element)
+    mongo_utils.update_order_questions(json_data)
+    for element in data:
+        json_data = json.loads(element)
+    docs = mongo_utils.find_question_group_ordered(json_data)
+    return Response(response=json_util.dumps(docs), status=200, mimetype='application/json')
+
+
