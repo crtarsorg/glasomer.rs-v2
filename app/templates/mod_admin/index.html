@@ -269,7 +269,7 @@
                                         data: JSON.stringify(obj_sub),
                                         success: function (data) {
                                             obj_sub = [];
-                                            console.log(data);
+
                                             $('#exampleTable_' + group_name).dataTable().fnDestroy();
                                             oInnerTable = $("#exampleTable_" + group_name).dataTable({
                                             "bJQueryUI": true,

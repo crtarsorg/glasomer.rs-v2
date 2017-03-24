@@ -45,10 +45,17 @@ def insert_user_answers():
 @mod_main.route('/getallquestions', methods=['GET', "POST"])
 def get_all_questions():
     if request.method == 'GET':
+        array_questions=[]
         project_enabled = mongo_utils.get_enabled_project()
         for project in json.loads(json_util.dumps(project_enabled)):
-            questions = mongo_utils.find_all_questions(project['year'])
-    return Response(response=json_util.dumps(questions), status=200, mimetype='application/json')
+            groups=mongo_utils.find_all(project['year'])
+
+        for group in json.loads(json_util.dumps(groups)):
+            questions = mongo_utils.find_all_questions_ordered(group['generated_id'])
+            for question in questions:
+                array_questions.append(question)
+
+    return Response(response=json_util.dumps(array_questions), status=200, mimetype='application/json')
 
 @mod_main.route('/getquestionsresults', methods=['GET', "POST"])
 def get_questions_results():

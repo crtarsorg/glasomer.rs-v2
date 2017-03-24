@@ -30,7 +30,11 @@ class MongoUtils(object):
         return result
 
     def find_all_questions(self,project_slug):
-        result = self.mongo.db[self.questions_collection].find({'project_slug':project_slug}).sort('order_number')
+        result = self.mongo.db[self.questions_collection].find({'project_slug':project_slug}).sort('order_number',1)
+        return result
+
+    def find_all_questions_ordered(self, group_slug):
+        result = self.mongo.db[self.questions_collection].find({'group_slug': group_slug}).sort('order_number', 1)
         return result
 
     def update_order_by_grop(self,doc):
@@ -150,12 +154,13 @@ class MongoUtils(object):
         result_user=self.mongo.db[self.answers_users].find({'user_id':doc['user_id'],'project_slug':doc['project_slug']})
         candidates=self.mongo.db[self.candidates_collection].find()
         all_question=self.mongo.db[self.questions_collection].find({'project_slug':doc['project_slug']})
+
         return {'user_results':result_user, 'candidate_results':result_candidates,'candidates':candidates,'all_question':all_question}
 
     def find_all_questions_results(self, user_id,question,project_slug):
         result_candidates=self.mongo.db[self.answers_candidates].find({'project_slug':project_slug})
         result_user = self.mongo.db[self.answers_users].find({'user_id':user_id,'project_slug':project_slug})
-        all_question=self.mongo.db[self.questions_collection].find({'project_slug':project_slug})
+        all_question=self.mongo.db[self.questions_collection].find({'project_slug':project_slug}).sort('order_number')
         candidates = self.mongo.db[self.candidates_collection].find()
         return {'user_results':result_user, 'candidate_results':result_candidates,'candidates':candidates,'all_question':all_question}
 

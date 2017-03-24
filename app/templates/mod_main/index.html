@@ -24,6 +24,19 @@
     #exampleTable_next{
         display: none;
     }
+     #exampleTable1_previous{
+        display:none;
+    }
+    #exampleTable1_next{
+        display: none;
+    }
+    .details ul.pagination li.previous{
+        display: none;
+    }
+     .details ul.pagination li.next{
+        display: none;
+    }
+
     </style>
 
          <div id="answers-candidates-modal" class="modal fade" tabindex="-1">
@@ -200,6 +213,7 @@
                             this.src = '{{ url_for('static',filename='assets/minus.png') }}';
                             oTable.fnOpen(nTr, fnFormatDetails(group_name, detailsTableHtml), 'details');
                             oInnerTable = $("#exampleTable_" + group_name).dataTable({
+
                                 "aaData": data,
                                 "bSort": true, // disables sorting
                                 "info": true,
@@ -298,7 +312,7 @@
                 "language": {
                     "url": "{{ url_for("static",filename="data/datatable_translate.json")}}"
                 },
-                "aaSorting": [[1, 'asc']]
+
             });
 
         }
@@ -308,7 +322,9 @@
                 "aaData": newRowData1,
                 "aoColumns": [
                     {
+
                         "mDataProp": null,
+                        "bSortable": false ,
                         "sClass": "control center",
                         "sDefaultContent": '<img src="{{ url_for('static',filename='assets/plus.png') }}" class="show-sub-table1" style="width:20px;"/>'
                     },
@@ -318,7 +334,7 @@
                 "language": {
                     "url": "{{ url_for("static",filename="data/datatable_translate.json")}}"
                 },
-                "aaSorting": [[1, 'asc']]
+                "aaSorting": [[1, 'desc']]
             });
 
         }
