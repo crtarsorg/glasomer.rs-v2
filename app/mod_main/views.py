@@ -32,10 +32,13 @@ def insert_user_answers():
             user_id = session['user_id']
         data = request.form.to_dict()
         project_enabled = mongo_utils.get_enabled_project()
+
         for project in json.loads(json_util.dumps(project_enabled)):
             docs = mongo_utils.find_all(project['year'])
             data['project_slug']=project['year']
+
         data['user_id'] = user_id
+        data['timestamp'] = datetime.datetime.utcnow()
         result=mongo_utils.insert_users_answers(data)
     #return render_template('mod_main/user_candidate_results.html.html', docs=json.loads(json_util.dumps(docs)), questions=json.loads(json_util.dumps(questions)), count_questions=count_questions)
     return Response(response=json_util.dumps(result), status=200, mimetype='application/json')
