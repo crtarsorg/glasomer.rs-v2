@@ -13,7 +13,7 @@
 Glasomer pomaže građanima da uporede svoje političke stavove sa stavovima kandidata koji se takmiče na predstojećim predsedničkim izborima. Izabrani stavovi su u vezi sa aktuelnim društveno-političkim dešavanjima u Srbiji" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="http://glasomer.rs" />
-    <meta property="og:image" content="http://glasomer.rs/static/assets/instinomer-logo.png" />
+    <meta property="og:image:url" content="{{ url_for('static', filename =assets/instinomer-logo.png) }}" />
     <meta property="og:description" content="Glasomer pomaže građanima da uporede svoje političke stavove sa stavovima političkih stranaka koje se takmiče na izborima. Pitanja su u vezi sa aktuelnim temama iz ekonomije, politike, društva, obrazovanja, zdravstvene i socijalne zaštite, itd."/>
 
     <!-- Twitter meta -->
@@ -97,7 +97,7 @@ Glasomer pomaže građanima da uporede svoje političke stavove sa stavovima kan
            </div>
             <div class="col-md-6" style="text-align: right;">
 
-                <a href="https://www.facebook.com/sharer/sharer.php?u=&t=" class="fa fa-facebook" target="_blank" onclick="window.open('https://www.facebook.com/sharer/sharer.php?u=' +encodeURIComponent(document.URL) + '&t='+ encodeURIComponent(document.title),'facebook-share-dialog','width=626,height=436'); return false;"></a>
+                <a href="https://www.facebook.com/sharer/sharer.php?u=&t=" class="fa fa-facebook" target="_blank" onclick="window.open('https://www.facebook.com/sharer/sharer.php?u=' +encodeURIComponent(document.URL) + '&t='+ encodeURIComponent(document.title)); return false;"></a>
 
                 <a href="https://twitter.com/intent/tweet?source=&amp;text=:%20" class="fa fa-twitter-square" target="_blank" onclick="window.open('https://twitter.com/intent/tweet?text=&hashtags=Glasomer Proveri koliko se tvoji stavovi poklapaju sa stavovima predsedničkih kandidata. ' + encodeURIComponent(document.title)+ ':%20'  + encodeURIComponent(document.URL)); return false;"></a>
 
