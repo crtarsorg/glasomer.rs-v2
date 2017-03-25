@@ -12,15 +12,13 @@ mod_main = Blueprint('main', __name__)
 
 @mod_main.route('/', methods=['GET'])
 def index():
-    if current_user.is_authenticated:
-        project_enabled = mongo_utils.get_enabled_project()
-        for project in json.loads(json_util.dumps(project_enabled)):
-            docs = mongo_utils.find_all(project['year'])
-            count_questions = mongo_utils.get_nr_questions_front(project['year'])
-            questions = mongo_utils.find_all_questions(project['year'])
-        return render_template('mod_main/index.html', docs=json.loads(json_util.dumps(docs)),questions=json.loads(json_util.dumps(questions)), count_questions=count_questions)
-    else:
-        return render_template('mod_main/under_construction.html')
+    project_enabled = mongo_utils.get_enabled_project()
+    for project in json.loads(json_util.dumps(project_enabled)):
+        docs = mongo_utils.find_all(project['year'])
+        count_questions = mongo_utils.get_nr_questions_front(project['year'])
+        questions = mongo_utils.find_all_questions(project['year'])
+    return render_template('mod_main/index.html', docs=json.loads(json_util.dumps(docs)),questions=json.loads(json_util.dumps(questions)), count_questions=count_questions)
+
 
 @mod_main.route('/insertuseranswers', methods=['GET', "POST"])
 def insert_user_answers():
