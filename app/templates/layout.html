@@ -95,7 +95,7 @@
 
            </div>
             <div class="col-md-6" style="text-align: right;">
-                <a class="fa fa-facebook" target="_blank" href="https://www.facebook.com/sharer/sharer.php"></a>
+                <a href="#" class="fa fa-facebook" id="fb-share-link"></a>
                 <a class="fa fa-twitter-square" target="_blank" href="https://twitter.com/intent/tweet?text=%23Glasomer%20Proveri%20koliko%20se%20tvoji%20stavovi%20poklapaju%20sa%20stavovima%20predsedni%C4%8Dkih%20kandidata.%20http%3A%2F%2Fglasomer.rs"></a>
             </div>
        </div>
@@ -113,6 +113,12 @@
 {% endblock %}
 <!-- end block footer -->
 </div>
+<script>
+    $("#fb-share-link").on("click",function(){
+        var fbPopup = window.open("https://www.facebook.com/sharer/sharer.php?u=http://glasomer.rs", "pop", "width=600, height=400, scrollbars=no");
+        return false;
+    });
+</script>
 </body>
 
 </html>
