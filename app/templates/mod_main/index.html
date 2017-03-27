@@ -185,10 +185,10 @@
                 e.preventDefault();
                 var question_name = $($(this).parent().parent().children()[1]).text();
                 var group_name = count_rows;
-                console.log(group_name);
+
                 var s_id = $($(this).parent().parent().children()[3]).text();
                 var nTr = $(this).parents('tr')[0];
-                console.log(nTr);
+
                 var nTds = this;
                 if (oTable.fnIsOpen(nTr)) {
                     /* This row is already open - close it */
@@ -245,7 +245,7 @@
                 e.preventDefault();
                 var question_name = $($(this).parent().parent().children()[1]).text();
                 var group_name = count_user_question;
-                console.log(group_name);
+
                 var s_id = $($(this).parent().parent().children()[3]).text();
                 var nTr1 = $(this).parents('tr')[0];
 
@@ -377,13 +377,13 @@
                     var count_questions = 0;
                     candidatesarray = [];
                     $(data['all_question']).each(function (keyq, valueq) {
-                        console.log(valueq);
+
                         var match = 0;
                         count_questions = count_questions + 1;
                         $(data['candidate_results']).each(function (keyc, valuek) {
-                            console.log(valuek);
+
                             $(data['user_results']).each(function (keyu, valueu) {
-                                console.log(valueu);
+
                                 if (valuek['status_' + count_questions] == valueu['status_' + count_questions] && valuek['vazno_' + count_questions] == valueu['vazno_' + count_questions] && valuek['question_' + count_questions] == valueu['question_' + count_questions]) {
                                     match = match + 1;
                                     candidatesarray.push({
@@ -414,8 +414,6 @@
                             'image': value['image']
                         });
 
-
-                        //console.log(count_match);
                     })
 
                     candidates_percentages.sort(function (a, b) {
@@ -429,7 +427,7 @@
                                     '<div class="col-md-8 candidate-biography candidate-biography_'+i+'" data-id='+i+'>' + b['candidate_biography'] + '</div><div class="show_more" style="float:right;margin-right:100px"><a href="#" class="show_more_'+i+'" id='+i+'>Prikaži više</a></div></div>');
 
                             var candidate_length=$('.candidate-biography_'+i).height();
-                            console.log(candidate_length);
+
                             if (candidate_length<1440){
                                 var data_id=$('.candidate-biography_'+i).attr('data-id');
                                 $('#'+data_id).css('display','none');
@@ -480,34 +478,43 @@
             $('.user_results').hide('slow');
             $('.user_questions').show('slow');
         });
-        $( "#mydiv" ).hasClass( "bar" )
+        $( "#mydiv" ).hasClass( "bar" );
         $('.back-btn').css('display','none');
         if ($('#tab-1').hasClass('active')) {
             $('.back-btn').css('display','none');
         }
         var $tabs = $('#wheel-tab li');
-
         $('#wheel-left').on('click', function () {
             $tabs.filter('.active').prev('li').find('a[data-toggle="tab"]').tab('show');
              if ($('.btn-vote').is(':hidden')) {
-                 $('.color-next').css('display', 'table-cell');
+                 if ($(window).width() < 960) {
+                     $('.color-next').css('display', 'block');
+                     $('.color-next').css('width', '100%');
+                 }else{
+                    $('.color-next').css('display', 'table-cell');
+                     $('.color-next').css('width', '1%');
+                 }
              }
 
              if ($('#tab-1').hasClass('active')) {
                  $('.back-btn').css('display','none');
+
              }
         });
 
-        $('.tab-pane:last .btn-vote').css('display', 'block');
-         $('#wheel-right').on('click', function () {
-        $('.back-btn').css('display','table-cell');
-            $tabs.filter('.active').next('li').find('a[data-toggle="tab"]').tab('show');
-             if ($('.btn-vote').is(':visible')) {
-                 console.log('showen');
-            $('.color-next').css('display', 'none');
-                }else{
-
-             }
+                $('.tab-pane:last .btn-vote').css('display', 'block');
+                $('#wheel-right').on('click', function () {
+                     if ($(window).width() < 960) {
+                     $('.back-btn').css('display', 'block');
+                     $('.back-btn').css('width', '100%');
+                 }else{
+                    $('.back-btn').css('display', 'table-cell');
+                     $('.back-btn').css('width', '1%');
+                 }
+                $tabs.filter('.active').next('li').find('a[data-toggle="tab"]').tab('show');
+                if ($('.btn-vote').is(':visible')) {
+                    $('.color-next').css('display', 'none');
+                }
 
         });
 

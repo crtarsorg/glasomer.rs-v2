@@ -153,7 +153,13 @@ span.psw {
     .cancelbtn {
        width: 100%;
     }
+    .back-btn{
+        float:left;
+        width: 50%;
+    }
+
 }
+
 #login-form{
     padding: 20px;
 }
@@ -161,8 +167,7 @@ span.psw {
     border:0px;
 }
 
-    .social-icons ul li {
-    width: 60px;
+.social-icons ul li {  width: 60px;
     float: left;
 }
     .social-icons ul li a {
