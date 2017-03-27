@@ -13,6 +13,7 @@ class MongoUtils(object):
         self.answers_candidates = "answers_candidates"
         self.answers_users = "answers_users"
         self.projects_collection = "projects_collection"
+        self.glasomer_text_collection = "glasomer_text_collection"
 
     def insert_question(self, doc):
         count_groups=int(time.mktime(datetime.now().timetuple()))
@@ -278,4 +279,16 @@ class MongoUtils(object):
     def find_question_group_ordered(self, doc):
         for element in doc:
             result = self.mongo.db[self.questions_collection].find({'group_slug': element['group_name']})
+        return result
+
+    def edit_glasomer_text(self, doc, enabled_year):
+        result = self.mongo.db[self.glasomer_text_collection].insert({'glasomer_text':doc['editor1'],'year':enabled_year})
+        return result
+
+    def find_glasomer_text(self,enabled_year):
+        result = self.mongo.db[self.glasomer_text_collection].find({'year': enabled_year})
+        return result
+
+    def delete_glasomer_text(self,enabled_year):
+        result = self.mongo.db[self.glasomer_text_collection].remove({'year': enabled_year})
         return result
