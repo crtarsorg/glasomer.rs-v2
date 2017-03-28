@@ -322,7 +322,6 @@
                 "aaData": newRowData1,
                 "aoColumns": [
                     {
-
                         "mDataProp": null,
                         "bSortable": false ,
                         "sClass": "control center",
@@ -359,6 +358,7 @@
                 dataType: 'json',
                 data: $("form").serialize(),
                 success: function (data) {
+                    user_id=data['user_results'][0]['user_id'];
                     newRowData1 = $.ajax({
                         url: "{{ url_for('main.get_all_q_a_u') }}", //this is the submit URL
                         type: 'GET', //or POST,
@@ -467,12 +467,13 @@
 
                         }
 
-
                     })
 
                 }
             });
         });
+
+
         $('#back-start').on('click', function (e) {
             e.preventDefault();
             $('.user_results').hide('slow');
@@ -523,6 +524,7 @@
 </script>
 
     <div class="container" style="">
+
     <div class="row">
         <div class="col-md-12">
             <div class="user_results" style="display: none;margin-top:30px;">
@@ -664,13 +666,11 @@
              {% endif %}
             {% endif %}
          {% endfor %}
-
                <div class="row btn-vote" style="display: none">
-               <div class="col-md-12" style="text-align: center;margin-bottom:20px;">
-                     <input type="submit" id="insert-user-answer" class="btn btn-primary btn-l-custom" value="Prikaži rezultate">
-               </div>
+                   <div class="col-md-12" style="text-align: center;margin-bottom:20px;">
+                         <input type="submit" id="insert-user-answer" class="btn btn-primary btn-l-custom" value="Prikaži rezultate">
+                   </div>
              </div>
-
         </form>
         </div>
         {% endfor %}
@@ -678,8 +678,6 @@
             <ul class="nav nav-tabs nav-justified tab-bar">
                 <li class="next-back back-btn"><a href="#" id="wheel-left">Prethodna</a></li>
                 <li class="next-back color-next"><a href="#" id="wheel-right" style="color:white;">Sledeća</a></li>
-
-
             </ul>
         </div>
     </div>

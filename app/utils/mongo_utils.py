@@ -155,8 +155,15 @@ class MongoUtils(object):
         result_user=self.mongo.db[self.answers_users].find({'user_id':doc['user_id'],'project_slug':doc['project_slug']})
         candidates=self.mongo.db[self.candidates_collection].find()
         all_question=self.mongo.db[self.questions_collection].find({'project_slug':doc['project_slug']})
-
         return {'user_results':result_user, 'candidate_results':result_candidates,'candidates':candidates,'all_question':all_question}
+
+    def find_user_session_answers(self, doc):
+        result_candidates=self.mongo.db[self.answers_candidates].find({'project_slug':doc['project_slug']})
+        result_user=self.mongo.db[self.answers_users].find({'user_id':doc['user_id'],'project_slug':doc['project_slug']})
+        candidates=self.mongo.db[self.candidates_collection].find()
+        all_question=self.mongo.db[self.questions_collection].find({'project_slug':doc['project_slug']})
+        return {'user_results':result_user, 'candidate_results':result_candidates,'candidates':candidates,'all_question':all_question}
+
 
     def find_all_questions_results(self, user_id,question,project_slug):
         result_candidates=self.mongo.db[self.answers_candidates].find({'project_slug':project_slug})
@@ -292,3 +299,5 @@ class MongoUtils(object):
     def delete_glasomer_text(self,enabled_year):
         result = self.mongo.db[self.glasomer_text_collection].remove({'year': enabled_year})
         return result
+
+

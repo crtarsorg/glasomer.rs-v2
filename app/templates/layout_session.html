@@ -32,7 +32,13 @@
     <script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
       <!-- Meta tags for Social media networks -->
 
-    <meta property="og:url" content="http://glasomer.rs/"/>
+
+
+    <meta name="description" content="Glasomer pomaže građanima da uporede svoje političke stavove sa stavovima kandidata koji se takmiče na predstojećim predsedničkim izborima. Izabrani stavovi su u vezi sa aktuelnim društveno-političkim dešavanjima u Srbiji."/>
+    <!-- FB meta -->
+    <meta property="og:title" content="Zanima te koliko se tvoji stavovi poklapaju sa stavovima predsedničkih kandidata? Proveri na Glasomeru."/>
+    <meta property="og:url" content="http://glasomer.rs" />
+    <meta property="og:description" content="Glasomer pomaže građanima da uporede svoje političke stavove sa stavovima kandidata koji se takmiče na predstojećim predsedničkim izborima. Izabrani stavovi su u vezi sa aktuelnim društveno-političkim dešavanjima u Srbiji."/>
     <meta property="og:image" content="{{ url_for('static', filename = 'assets/instinomer_logo.png') }}" />
 
     <!-- Twitter meta -->
@@ -42,100 +48,6 @@
     <meta name="twitter:title" content="Zanima te koliko se tvoji stavovi poklapaju sa stavovima stranaka? Proveri na Glasomeru.">
     <meta name="twitter:description" content="Zanima te koliko se tvoji stavovi poklapaju sa stavovima stranaka? Proveri na Glasomeru! http://glasomer.rs/">
     <meta name="twitter:image" content="{{ url_for('static', filename = 'assets/instinomer_logo.png') }} "/>
-    <script>
-        $(document).ready(function(){
-            function setMetaTag(metaName, name, value) {
-        var meta = '<meta '+metaName+'="'+name+'" content="'+value+'"/>';
-        $(meta).insertAfter('title');
-}
-
-            var user_id="";
-            $("#fb-share-link").on("click",function(){
-
-                  $.ajax({
-                      url: "{{ url_for('main.get_user_session_id_results') }}", //this is the submit URL
-                      type: 'POST', //or POST,
-                      dataType: 'json',
-                      data: $("form").serialize(),
-                      success: function (data) {
-                          console.log(data);
-                          if (data['user_results']!=""){
-                              user_id=data['user_results'][0]['user_id'];
-
-                          }
-
-                         if (user_id==""){
-                                 setMetaTag('property', 'og:title', "Zanima te koliko se tvoji stavovi poklapaju sa stavovima predsedničkih kandidata? Proveri na Glasomeru.");
-                                setMetaTag('property', 'og:description', 'Glasomer pomaže građanima da uporede svoje političke stavove sa stavovima kandidata koji se takmiče na predstojećim predsedničkim izborima. Izabrani stavovi su u vezi sa aktuelnim društveno-političkim dešavanjima u Srbiji.');
-                                  window.open("https://www.facebook.com/sharer/sharer.php?u=http://glasomer.rs/", "pop", "width=600, height=400, scrollbars=no");
-                                return false;
-                         }else{
-                               var count_questions = 0;
-                    candidatesarray = [];
-                    $(data['all_question']).each(function (keyq, valueq) {
-
-                        var match = 0;
-                        count_questions = count_questions + 1;
-                        $(data['candidate_results']).each(function (keyc, valuek) {
-
-                            $(data['user_results']).each(function (keyu, valueu) {
-
-                                if (valuek['status_' + count_questions] == valueu['status_' + count_questions] && valuek['vazno_' + count_questions] == valueu['vazno_' + count_questions] && valuek['question_' + count_questions] == valueu['question_' + count_questions]) {
-                                    match = match + 1;
-                                    candidatesarray.push({
-                                        "candidate_slug": valuek['candidate_slug'],
-                                        'question': valuek['question_' + count_questions],
-                                        'status': valuek['status_' + count_questions],
-                                        'vazno': valuek['vazno_' + count_questions],
-                                        "matchcount": match,
-                                    });
-                                }
-                            })
-                        })
-                    })
-                    var candidates_percentages = []
-                    $(data['candidates']).each(function (key, value) {
-                        var percentage = 0;
-                        var count_match = 0;
-                        $(candidatesarray).each(function (key1, value1) {
-                            if (value['generated_id'] == value1['candidate_slug']) {
-                                count_match = count_match + 1;
-                                percentage = (count_match / count_questions) * 100;
-                            }
-                        })
-                        candidates_percentages.push({
-                            "candidate_name": value['candidate_name'],
-                            'percentage': percentage,
-                            'candidate_biography': value['candidate_biography'],
-                            'image': value['image']
-                        });
-
-                    })
-
-                    candidates_percentages.sort(function (a, b) {
-                        return b.percentage - a.percentage;
-                    });
-                    var i = 0;
-                    $(candidates_percentages).each(function (a, b) {
-                          i = i + 1;
-                        if (i <= 3) {
-                            setMetaTag('property', 'og:title', "Check my matchings");
-                            setMetaTag('property', 'og:description', b['candidate_name']+":"+b['percentage']);
-                        }
-                    })
-
-
-                             window.open("https://www.facebook.com/sharer/sharer.php?u=http://glasomer.rs/", "pop", "width=600, height=400, scrollbars=no");
-                return false;
-                         }
-                      }
-                  });
-
-            });
-        })
-    </script>
-
-
     <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
