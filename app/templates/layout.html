@@ -4,137 +4,49 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Glasomer</title>
+    <!-- Meta tags for Social media networks -->
 
+    <meta name="description" content="Glasomer pomaže građanima da uporede svoje političke stavove sa stavovima kandidata koji se takmiče na predstojećim predsedničkim izborima. Izabrani stavovi su u vezi sa aktuelnim društveno-političkim dešavanjima u Srbiji."/>
 
-    <link rel="shortcut icon" href="{{ url_for('static',filename='assets/favicon.ico') }}" />
-    <!--CSS-->
-    <link href='//fonts.googleapis.com/css?family=Comfortaa' rel='stylesheet' type='text/css'>
-    <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:600,400' rel='stylesheet' type='text/css'>
-    <link href='//fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css'>
-    <link href="{{ url_for('static', filename='font-awesome/css/font-awesome.min.css') }}" rel="stylesheet" type="text/css">
-    <link href="//fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
-    <link href='//fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
-    <link href="//fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic" rel='stylesheet' type='text/css'>
-    <link href='//fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
+    <!-- FB meta -->
+    <meta property="og:title" content="Zanima te koliko se tvoji stavovi poklapaju sa stavovima predsedničkih kandidata? Proveri na Glasomeru."/>
+    <meta property="og:url" content="http://glasomer.rs" />
 
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}" type="text/css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css"/>
-    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
-    <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <link rel="stylesheet" href="{{ url_for('static',filename='css/custom.css') }}" type="text/css">
-    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-    <script src="//code.jquery.com/ui/1.11.2/jquery-ui.min.js"></script>
-
-    <!-- JS -->
-    <script type="text/javascript" src="https://cdn.datatables.net/r/bs-3.3.5/jqc-1.11.3,dt-1.10.8/datatables.min.js"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
-      <!-- Meta tags for Social media networks -->
-
-    <meta property="og:url" content="http://glasomer.rs/"/>
+    <meta property="og:description" content="Glasomer pomaže građanima da uporede svoje političke stavove sa stavovima kandidata koji se takmiče na predstojećim predsedničkim izborima. Izabrani stavovi su u vezi sa aktuelnim društveno-političkim dešavanjima u Srbiji."/>
     <meta property="og:image" content="{{ url_for('static', filename = 'assets/instinomer_logo.png') }}" />
 
     <!-- Twitter meta -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:site" content="@CRTArs">
     <meta name="twitter:creator" content="@CRTArs">
-    <meta name="twitter:title" content="Zanima te koliko se tvoji stavovi poklapaju sa stavovima stranaka? Proveri na Glasomeru.">
+    <meta name="twitter:title" content="Zanima te koliko se tvoji stavovi poklapaju sa stavovima stranaka? Proveri na Glasomeru!">
     <meta name="twitter:description" content="Zanima te koliko se tvoji stavovi poklapaju sa stavovima stranaka? Proveri na Glasomeru! http://glasomer.rs/">
+
     <meta name="twitter:image" content="{{ url_for('static', filename = 'assets/instinomer_logo.png') }} "/>
-    <script>
-        $(document).ready(function(){
-            function setMetaTag(metaName, name, value) {
-        var meta = '<meta '+metaName+'="'+name+'" content="'+value+'"/>';
-        $(meta).insertAfter('title');
-}
 
-            var user_id="";
-            $("#fb-share-link").on("click",function(){
+    <link rel="shortcut icon" href="{{ url_for('static',filename='assets/favicon.ico') }}" />
+    <link href='//fonts.googleapis.com/css?family=Comfortaa' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:600,400' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css'>
 
-                  $.ajax({
-                      url: "{{ url_for('main.get_user_session_id_results') }}", //this is the submit URL
-                      type: 'POST', //or POST,
-                      dataType: 'json',
-                      data: $("form").serialize(),
-                      success: function (data) {
-                          console.log(data);
-                          if (data['user_results']!=""){
-                              user_id=data['user_results'][0]['user_id'];
+    <link href="{{ url_for('static', filename='font-awesome/css/font-awesome.min.css') }}" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
+    <link href="//fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic" rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
+    <!--CSS-->
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}" type="text/css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css"/>
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
+    <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="//code.jquery.com/ui/1.11.2/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/r/bs-3.3.5/jqc-1.11.3,dt-1.10.8/datatables.min.js"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
 
-                          }
-
-                         if (user_id==""){
-                                 setMetaTag('property', 'og:title', "Zanima te koliko se tvoji stavovi poklapaju sa stavovima predsedničkih kandidata? Proveri na Glasomeru.");
-                                setMetaTag('property', 'og:description', 'Glasomer pomaže građanima da uporede svoje političke stavove sa stavovima kandidata koji se takmiče na predstojećim predsedničkim izborima. Izabrani stavovi su u vezi sa aktuelnim društveno-političkim dešavanjima u Srbiji.');
-
-                         }else{
-                               var count_questions = 0;
-                    candidatesarray = [];
-                    $(data['all_question']).each(function (keyq, valueq) {
-
-                        var match = 0;
-                        count_questions = count_questions + 1;
-                        $(data['candidate_results']).each(function (keyc, valuek) {
-
-                            $(data['user_results']).each(function (keyu, valueu) {
-
-                                if (valuek['status_' + count_questions] == valueu['status_' + count_questions] && valuek['vazno_' + count_questions] == valueu['vazno_' + count_questions] && valuek['question_' + count_questions] == valueu['question_' + count_questions]) {
-                                    match = match + 1;
-                                    candidatesarray.push({
-                                        "candidate_slug": valuek['candidate_slug'],
-                                        'question': valuek['question_' + count_questions],
-                                        'status': valuek['status_' + count_questions],
-                                        'vazno': valuek['vazno_' + count_questions],
-                                        "matchcount": match,
-                                    });
-                                }
-                            })
-                        })
-                    })
-                    var candidates_percentages = []
-                    $(data['candidates']).each(function (key, value) {
-                        var percentage = 0;
-                        var count_match = 0;
-                        $(candidatesarray).each(function (key1, value1) {
-                            if (value['generated_id'] == value1['candidate_slug']) {
-                                count_match = count_match + 1;
-                                percentage = (count_match / count_questions) * 100;
-                            }
-                        })
-                        candidates_percentages.push({
-                            "candidate_name": value['candidate_name'],
-                            'percentage': percentage,
-                            'candidate_biography': value['candidate_biography'],
-                            'image': value['image']
-                        });
-
-                    })
-
-                    candidates_percentages.sort(function (a, b) {
-                        return b.percentage - a.percentage;
-                    });
-                    var i = 0;
-                    $(candidates_percentages).each(function (a, b) {
-                          i = i + 1;
-                        if (i <= 3) {
-                            setMetaTag('property', 'og:title', "Check my matchings");
-                            setMetaTag('property', 'og:description', b['candidate_name']+":"+b['percentage']);
-                        }
-                    })
-
-
-                         }
-                      }
-
-                  });
-
-                window.open("https://www.facebook.com/sharer/sharer.php?u=http://glasomer.rs/", "pop", "width=600, height=400, scrollbars=no");
-                return false;
-            });
-        })
-    </script>
-
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/custom.css') }}" type="text/css">
 
     <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -150,6 +62,7 @@
 <!-- Navigation -->
 <!-- Header -->
     <div class="container-fluid">
+
       <nav id="mainNav" class="navbar navbar-default navbar-fixed-top">
           <div class="bg-primary bg-header">
               <!-- Brand and toggle get grouped for better mobile display -->
@@ -200,7 +113,12 @@
 {% endblock %}
 <!-- end block footer -->
 </div>
-
+<script>
+    $("#fb-share-link").on("click",function(){
+        var fbPopup = window.open("https://www.facebook.com/sharer/sharer.php?u=http://glasomer.rs", "pop", "width=600, height=400, scrollbars=no");
+        return false;
+    });
+</script>
 </body>
 
 </html>
