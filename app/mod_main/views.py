@@ -7,7 +7,7 @@ import os, json
 import time
 from datetime import datetime
 from flask.ext.security import current_user
-
+from operator import itemgetter
 mod_main = Blueprint('main', __name__)
 
 @mod_main.route('/', methods=['GET'])
@@ -77,6 +77,7 @@ def results(user_id):
             'image':candidate['image']
         })
     title=""
+    sorted(candidates_percentages, key=itemgetter('percentage'))
     return render_template('mod_main/results.html', docs=json.loads(json_util.dumps(results)),title=title,results=json.loads(json_util.dumps(candidates_percentages)),user_id=user_id)
 
 

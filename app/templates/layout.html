@@ -117,7 +117,9 @@
 </div>
 <script>
     $("#fb-share-link").on("click",function(){
+
          if ($('.user_questions').is(':hidden')) {
+             httpGet("https://www.facebook.com/sharer/sharer.php?u=http://glasomer.rs/results/{{ user_id }}");
              var fbPopup = window.open("https://www.facebook.com/sharer/sharer.php?u=http://glasomer.rs/results/{{ user_id }}", "pop", "width=600, height=400, scrollbars=no");
              return false;
          }
@@ -126,6 +128,12 @@
              return false;
          }
     });
+    function httpGet(theUrl)
+{
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open( "GET", theUrl, false ); // false for synchronous request
+    return xmlHttp.responseText;
+}
 </script>
 </body>
 
