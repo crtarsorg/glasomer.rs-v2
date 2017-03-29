@@ -26,7 +26,7 @@ def login():
                 # If the password matches log in the user.
                 login_user(user)
                 # Return user to the index page after successful login
-                return redirect(url_for('main.index'))
+                return redirect(url_for('admin.index'))
             else:
                 # Return an error message
                 error = "Password doesn't match."
