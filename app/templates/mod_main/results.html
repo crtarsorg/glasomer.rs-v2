@@ -4,7 +4,7 @@
     <!-- FB meta -->
     <meta property="og:title" content="Tri kandidata sa kojima se najviše podudaraju moji odgovori?"/>
     <meta property="og:url" content="http://glasomer.rs/results/{{ user_id }}" />
-    <meta property="og:description" content="{% for result in results %} {{ result['candidate_name'] }}: {{ "{:.2f}".format(result['percentage']) }}%{% endfor %}"/>
+    <meta property="og:description" content=" {% set i =0 %} {% for result in results %} {% set i=loop.index  %} {% if i<=3 %}{{ result['candidate_name'] }}: {{ "{:.2f}".format(result['percentage']) }}%{% endif %}{% endfor %}"/>
     <meta property="og:image" content="{{ url_for('static', filename = 'assets/instinomer_logo.png') }}" />
 
     <!-- Twitter meta -->

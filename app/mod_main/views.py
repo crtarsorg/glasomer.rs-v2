@@ -77,8 +77,8 @@ def results(user_id):
             'image':candidate['image']
         })
     title=""
-    sorted(candidates_percentages, key=itemgetter('percentage'))
-    return render_template('mod_main/results.html', docs=json.loads(json_util.dumps(results)),title=title,results=json.loads(json_util.dumps(candidates_percentages)),user_id=user_id)
+    sorted_c_array=sorted(candidates_percentages, key=itemgetter('percentage'),reverse=True)
+    return render_template('mod_main/results.html', docs=json.loads(json_util.dumps(results)),title=title,results=json.loads(json_util.dumps(sorted_c_array)),user_id=user_id)
 
 
 
