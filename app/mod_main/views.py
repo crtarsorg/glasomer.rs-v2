@@ -17,9 +17,6 @@ def index():
         docs = mongo_utils.find_all(project['year'])
         count_questions = mongo_utils.get_nr_questions_front(project['year'])
         questions = mongo_utils.find_all_questions(project['year'])
-    if session.get('user_id') is not None:
-        user_id = session['user_id']
-    else:
         timestamp = int(time.mktime(datetime.now().timetuple()))
         session['user_id'] = timestamp
         user_id = session['user_id']
