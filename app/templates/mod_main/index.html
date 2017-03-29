@@ -368,12 +368,13 @@
         $('body').on('click', '#insert-user-answer', function (e) {
             e.preventDefault();
             $.ajax({
+                  beforeSend: function(){
+                    $('.ajax-loader').css("visibility", "visible");
+                  },
                 url: "{{ url_for('main.insert_user_answers') }}", //this is the submit URL
                 type: 'POST', //or POST,
                 dataType: 'json',
-                beforeSend: function(){
-                    $('.ajax-loader').css("visibility", "visible");
-                  },
+
                 data: $("form").serialize(),
                 success: function (data) {
                     console.log(data);
@@ -545,12 +546,12 @@
 </script>
 
     <div class="container" style="">
-
+ <div class="ajax-loader">
+       <img src="{{ url_for('static', filename = 'assets/loading2.gif') }}" class="img-responsive" />
+</div>
     <div class="row">
         <div class="col-md-12">
-             <div class="ajax-loader">
-                              <img src="{{ url_for('static', filename = 'assets/loading2.gif') }}" class="img-responsive" />
-                      </div>
+
             <div class="user_results" style="display: none;margin-top:30px;">
                 <div class="row" style="margin-bottom:20px;">
                     <div class="col-md-5">
