@@ -158,7 +158,7 @@ class MongoUtils(object):
 
     def find_user_session_answers(self, project_slug,user_id):
         result_candidates=self.mongo.db[self.answers_candidates].find({'project_slug':project_slug})
-        result_user=self.mongo.db[self.answers_users].find({'user_id':user_id,'project_slug':project_slug})
+        result_user=self.mongo.db[self.answers_users].find({'user_id':int(user_id),'project_slug':project_slug})
         candidates=self.mongo.db[self.candidates_collection].find()
         all_question=self.mongo.db[self.questions_collection].find({'project_slug':project_slug})
         return {'user_results':result_user, 'candidate_results':result_candidates,'candidates':candidates,'all_question':all_question}
@@ -180,7 +180,7 @@ class MongoUtils(object):
         return result_candidates_name
 
     def find_all_questions_user(self,user_id,project_slug):
-        result = self.mongo.db[self.answers_users].find({'user_id':user_id,'project_slug':project_slug})
+        result = self.mongo.db[self.answers_users].find({'user_id':int(user_id),'project_slug':project_slug})
         return result
 
     def find_all_questions_user_key(self,question_key):
@@ -196,7 +196,7 @@ class MongoUtils(object):
         return result
 
     def find_all_answers_users(self,question_key,question,user_id,project_slug):
-        result_candidates = self.mongo.db[self.answers_users].find({'question_'+str(question_key):question,'user_id':user_id,'project_slug':project_slug})
+        result_candidates = self.mongo.db[self.answers_users].find({'question_'+str(question_key):question,'user_id':int(user_id),'project_slug':project_slug})
         return result_candidates
 
     def find_all_projects(self):

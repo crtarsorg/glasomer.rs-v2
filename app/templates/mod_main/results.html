@@ -56,18 +56,351 @@
 
     </style>
 
-<script>
+         <div id="answers-candidates-modal" class="modal fade" tabindex="-1">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button class="close" type="button" data-dismiss="modal">x</button>
+						<h4 class="modal-title">Uporedite odgovore</h4>
+					</div>
+					<div class="modal-body">
+                           <table id="exampleTable" class="stripe">
+                            <thead>
+                            <tr>
+                                <th></th>
 
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+
+                        <div style="display:none" id="div-sub-table" style="background:#337ab7;height:auto;">
+                            <table id="detailsTable">
+                                <thead>
+                                    <tr>
+                                        <th>Ime stranke</th>
+                                        <th>Odgovor</th>
+                                        <th>Koliko je pitanje važno</th>
+                                        <th>Komentar</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+					</div><!-- /.modal-content -->
+				</div>
+			</div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->
+
+    <div id="answers-users-modal" class="modal fade" tabindex="-1">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button class="close" type="button" data-dismiss="modal">x</button>
+						<h4 class="modal-title">Uporedite odgovore</h4>
+					</div>
+					<div class="modal-body">
+                           <table id="exampleTable1" class="stripe">
+                            <thead>
+                            <tr>
+                                <th></th>
+
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+
+                        <div style="display:none" id="div-sub-table" style="background:#337ab7;height:auto;">
+                            <table id="detailsTable1">
+                                <thead>
+                                    <tr>
+                                        <th>Ime stranke</th>
+                                        <th>Odgovor</th>
+                                        <th>Koliko je pitanje važno</th>
+                                        <th>Komentar</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+					</div><!-- /.modal-content -->
+				</div>
+			</div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->
+
+<script>
+        var user_id="";
+        function fnFormatDetails(table_id, html) {
+            var sOut = "<table id=\"exampleTable_" + table_id + "\">";
+            sOut += html;
+            sOut += "</table>";
+            return sOut;
+        }
+        function fnFormatDetails1(table_id, html) {
+            var sOut = "<table id=\"exampleTable1_" + table_id + "\">";
+            sOut += html;
+            sOut += "</table>";
+            return sOut;
+        }
+
+        var newRowData= $.ajax({
+					url: "{{ url_for('main.get_all_questions') }}", //this is the submit URL
+					type: 'GET', //or POST,
+					dataType: 'json',
+				    async: false,
+            }).responseJSON;
+
+         var newRowData1="";
 
     $(document).ready(function() {
+
+        var iTableCounter = 1;
+        var oTable;
+        var oInnerTable;
+        var detailsTableHtml;
+        var oTable;
+
+        var iTableCounter1 = 1;
+        var oTable1;
+        var oInnerTable1;
+        var detailsTableHtml1;
+        var oTable1;
+        // you would probably be using templates here
+        detailsTableHtml = $("#detailsTable").html();
+        //Insert a 'details' column to the table
+        var nCloneTh = document.createElement('th');
+        var nCloneTd = document.createElement('td');
+        nCloneTd.innerHTML = '<img src="{{ url_for('static',filename='assets/plus.png') }}" class="show-sub-table" style="width:20px"/>';
+        nCloneTd.className = "center";
+        $('#exampleTable thead tr').each(function () {
+            this.insertBefore(nCloneTh, this.childNodes[0]);
+        });
+        $('#exampleTable tbody tr').each(function () {
+            this.insertBefore(nCloneTd.cloneNode(true), this.childNodes[0]);
+        });
+
+        detailsTableHtml1 = $("#detailsTable1").html();
+        //Insert a 'details' column to the table
+        var nCloneTh1 = document.createElement('th');
+        var nCloneTd1 = document.createElement('td');
+        nCloneTd1.innerHTML = '<img src="{{ url_for('static',filename='assets/plus.png') }}" class="show-sub-table1" style="width:20px"/>';
+        nCloneTd1.className = "center";
+        $('#exampleTable1 thead tr').each(function () {
+            this.insertBefore(nCloneTh1, this.childNodes[0]);
+        });
+        $('#exampleTable1 tbody tr').each(function () {
+            this.insertBefore(nCloneTd1.cloneNode(true), this.childNodes[0]);
+        });
+        var count_rows = 0;
+
+        function init_sub_table() {
+            $('body').on('click', '.show-sub-table', function (e) {
+                count_rows = count_rows + 1;
+                e.preventDefault();
+                var question_name = $($(this).parent().parent().children()[1]).text();
+                var group_name = count_rows;
+
+                var s_id = $($(this).parent().parent().children()[3]).text();
+                var nTr = $(this).parents('tr')[0];
+
+                var nTds = this;
+                if (oTable.fnIsOpen(nTr)) {
+                    /* This row is already open - close it */
+                    this.src = '{{ url_for('static',filename='assets/plus.png') }}';
+                }
+                else {
+                    this.src = '{{ url_for('static',filename='assets/minus.png') }}';
+                }
+                $.ajax({
+                    url: "{{ url_for('main.get_questions_results_shared') }}",
+                    type: 'POST', //or POST
+                    dataType: 'json',
+                    data: {'question_name': question_name,'user_id':{{ user_id }}},
+                    success: function (data) {
+                        console.log(data);
+                        if (oTable.fnIsOpen(nTr)) {
+                            /* This row is already open - close it */
+                            this.src = '{{ url_for('static',filename='assets/minus.png') }}';
+                            this.id = group_name;
+                            oTable.fnClose(nTr);
+                        }
+                        else {
+                            this.src = '{{ url_for('static',filename='assets/minus.png') }}';
+                            oTable.fnOpen(nTr, fnFormatDetails(group_name, detailsTableHtml), 'details');
+                            oInnerTable = $("#exampleTable_" + group_name).dataTable({
+
+                                "aaData": data,
+                                "bSort": true, // disables sorting
+                                "info": true,
+                                "aoColumns": [
+                                    {"mDataProp": "candidate_slug"},
+                                    {"mDataProp": "status"},
+                                    {"mDataProp": "vazno"},
+                                    {"mDataProp": "comment"},
+                                ],
+                                "bPaginate": true,
+                                "language": {
+                                    "url": "{{ url_for("static",filename="data/datatable_translate.json")}}"
+                                },
+                            });
+
+                        }
+
+                    }
+                });
+
+            });
+        }
+
         var count_user_question = 0;
+
+        function init_sub_table_user() {
+            $('body').on('click', '.show-sub-table1', function (e) {
+                count_user_question = count_user_question + 1;
+                e.preventDefault();
+                var question_name = $($(this).parent().parent().children()[1]).text();
+                var group_name = count_user_question;
+
+                var s_id = $($(this).parent().parent().children()[3]).text();
+                var nTr1 = $(this).parents('tr')[0];
+
+                var nTds1 = this;
+                if (oTable1.fnIsOpen(nTr1)) {
+                    /* This row is already open - close it */
+                    this.src = '{{ url_for('static',filename='assets/plus.png') }}';
+                }
+                else {
+                    this.src = '{{ url_for('static',filename='assets/minus.png') }}';
+                }
+                $.ajax({
+                    url: "{{ url_for('main.get_questions_results_shared') }}",
+                    type: 'POST', //or POST
+                    dataType: 'json',
+                    data: {
+                        'question_name': question_name,
+                        'user_id':{{ user_id }}
+                    },
+                    success: function (data) {
+                        if (oTable1.fnIsOpen(nTr1)) {
+                            /* This row is already open - close it */
+                            this.src = '{{ url_for('static',filename='assets/minus.png') }}';
+                            this.id = group_name;
+                            oTable1.fnClose(nTr1);
+                        }
+                        else {
+                            this.src = '{{ url_for('static',filename='assets/minus.png') }}';
+                            oTable1.fnOpen(nTr1, fnFormatDetails1(group_name, detailsTableHtml1), 'details');
+                            oInnerTable1 = $("#exampleTable1_" + group_name).dataTable({
+                                "aaData": data,
+                                "bSort": true, // disables sorting
+                                "info": true,
+                                "aoColumns": [
+                                    {"mDataProp": "candidate_slug"},
+                                    {"mDataProp": "status"},
+                                    {"mDataProp": "vazno"},
+                                    {"mDataProp": "comment"},
+                                ],
+                                "bPaginate": true,
+                                "language": {
+                                    "url": "{{ url_for("static",filename="data/datatable_translate.json")}}"
+                                },
+                            });
+
+                        }
+
+                    }
+                });
+
+            });
+        }
+
+        function init_table(newRowData) {
+            oTable = $('#exampleTable').dataTable({
+                "aaData": newRowData,
+
+                "aoColumns": [
+                    {
+                        "mDataProp": null,
+                        "sClass": "control center",
+                        "sDefaultContent": '<img src="{{ url_for('static',filename='assets/plus.png') }}" class="show-sub-table" style="width:20px;"/>'
+                    },
+
+                    {"mDataProp": "question_name"},
+                ],
+                "language": {
+                    "url": "{{ url_for("static",filename="data/datatable_translate.json")}}"
+                },
+
+            });
+
+        }
+
+        function init_table_users(newRowData1) {
+            oTable1 = $('#exampleTable1').dataTable({
+                "aaData": newRowData1,
+                "aoColumns": [
+                    {
+
+                        "mDataProp": null,
+                        "bSortable": false ,
+                        "sClass": "control center",
+                        "sDefaultContent": '<img src="{{ url_for('static',filename='assets/plus.png') }}" class="show-sub-table1" style="width:20px;"/>'
+                    },
+
+                    {"mDataProp": "question_name"},
+                ],
+                "language": {
+                    "url": "{{ url_for("static",filename="data/datatable_translate.json")}}"
+                },
+                "aaSorting": [[1, 'desc']]
+            });
+
+        }
+
+        init_table(newRowData);
+        init_sub_table();
+        init_table_users(newRowData1);
+        init_sub_table_user();
+        $('body').on('click', '#answers-candidates', function (e) {
+            $('#answers-candidates-modal').modal('show');
+        });
+        $('body').on('click', '#user_answers', function (e) {
+
+            $('#answers-users-modal').modal('show');
+        });
+
+
             $.ajax({
-                url: "{{ url_for('main.get_user_answers_session') }}",
+                url: "{{ url_for('main.get_user_answers_results') }}", //this is the submit URL
                 type: 'POST', //or POST,
                 dataType: 'json',
-                data: $("form").serialize(),
+                data:{
+                    'user_id':{{ user_id }}
+                },
                 success: function (data) {
 
+                    newRowData1 = $.ajax({
+                        url: "{{ url_for('main.get_all_q_a_u_result') }}", //this is the submit URL
+                        type: 'POST', //or POST,
+                        dataType: 'json',
+                         data:{
+                             'user_id':{{ user_id }}
+                            },
+                        async: false,
+                    }).responseJSON;
+                    if (newRowData1 != "") {
+                        oTable1.fnClearTable(0);
+                        oTable1.fnAddData(newRowData1);
+                        oTable1.fnDraw();
+                    }
+
+                    $('#user-div-results').html('');
+                    $('.user_questions').hide('slow');
+                    $('.user_results').show('slow');
                     var count_questions = 0;
                     candidatesarray = [];
                     $(data['all_question']).each(function (keyq, valueq) {
@@ -107,9 +440,7 @@
                             'candidate_biography': value['candidate_biography'],
                             'image': value['image']
                         });
-
                     })
-
                     candidates_percentages.sort(function (a, b) {
                         return b.percentage - a.percentage;
                     });
@@ -142,8 +473,6 @@
                                 $(this).text('Prikaži manje');
                                 $(this).removeClass("show_more_"+id);
                                 $(this).addClass("show_less_"+id);
-
-
                             });
 
 
@@ -167,12 +496,75 @@
                 }
             });
 
+        $('#back-start').on('click', function (e) {
+            e.preventDefault();
+            $('.user_results').hide('slow');
+            $('.user_questions').show('slow');
+        });
+        $( "#mydiv" ).hasClass( "bar" );
+        $('.back-btn').css('display','none');
+        if ($('#tab-1').hasClass('active')) {
+            $('.back-btn').css('display','none');
+        }
+        var $tabs = $('#wheel-tab li');
+        $('#wheel-left').on('click', function () {
+            $tabs.filter('.active').prev('li').find('a[data-toggle="tab"]').tab('show');
+             if ($('.btn-vote').is(':hidden')) {
+                 if ($(window).width() < 960) {
+                     $('.color-next').css('display', 'block');
+                     $('.color-next').css('width', '100%');
+                 }else{
+                    $('.color-next').css('display', 'table-cell');
+                     $('.color-next').css('width', '1%');
+                 }
+             }
+
+             if ($('#tab-1').hasClass('active')) {
+                 $('.back-btn').css('display','none');
+
+             }
+        });
+
+                $('.tab-pane:last .btn-vote').css('display', 'block');
+                $('#wheel-right').on('click', function () {
+                     if ($(window).width() < 960) {
+                     $('.back-btn').css('display', 'block');
+                     $('.back-btn').css('width', '100%');
+                 }else{
+                    $('.back-btn').css('display', 'table-cell');
+                     $('.back-btn').css('width', '1%');
+                 }
+                $tabs.filter('.active').next('li').find('a[data-toggle="tab"]').tab('show');
+                if ($('.btn-vote').is(':visible')) {
+                    $('.color-next').css('display', 'none');
+                }
+
+        });
 
     })
 
 </script>
 
     <div class="container">
+     <div class="row">
+        <div class="col-md-12">
+            <div class="user_results" style="display: none;margin-top:30px;">
+                <div class="row" style="margin-bottom:20px;">
+                    <div class="col-md-5">
+                        <button type="submit" class="btn btn-default top-links-modal" id="answers-candidates" style="">
+                             <i class="icon-th-list"></i> Odgovori predsedničkih kandidata
+                        </button>
+                    </div>
+                    <div class="col-md-7">
+                         <button type="submit" class="btn btn-default top-links-modal" id="user_answers">
+                             <i class="icon-th-list"></i> Uporedite moji odgovore
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
         <div class="row">
             <div class="col-md-12">
                 <div class="user_results">

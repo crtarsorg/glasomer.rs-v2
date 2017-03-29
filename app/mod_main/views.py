@@ -98,17 +98,18 @@ def insert_user_answers():
     return Response(response=json_util.dumps(result), status=200, mimetype='application/json')
 
 
-@mod_main.route('/getuseranswerssession', methods=['GET', "POST"])
-def get_user_answers_session():
+@mod_main.route('/getuseranswerresults', methods=['GET', "POST"])
+def get_user_answers_results():
     if request.method == 'POST':
         data = request.form.to_dict()
-        data['user_id'] = session['user_id']
+        user_id = data['user_id']
+        project_year=""
         project_enabled = mongo_utils.get_enabled_project()
         for project in json.loads(json_util.dumps(project_enabled)):
             docs = mongo_utils.find_all(project['year'])
-            data['project_slug']=project['year']
-            result = mongo_utils.find_user_session_answers(data['project_slug'],data['user_id'])
-    #return render_template('mod_main/user_candidate_results.html.html', docs=json.loads(json_util.dumps(docs)), questions=json.loads(json_util.dumps(questions)), count_questions=count_questions)
+            project_year=project['year']
+
+    result = mongo_utils.find_user_session_answers(project_year,user_id)
     return Response(response=json_util.dumps(result), status=200, mimetype='application/json')
 
 
@@ -194,11 +195,89 @@ def get_questions_results():
                 created_array.append({'candidate_slug': 'Vaš odgovor', 'status': status, 'vazno': vazno,'comment': "/"})
         return Response(response=json_util.dumps(created_array), status=200, mimetype='application/json')
 
+
+
+
+@mod_main.route('/getquestionsresultsshared', methods=['GET', "POST"])
+def get_questions_results_shared():
+    if request.method == 'POST':
+        data = request.form.to_dict()
+        question= data['question_name']
+        user_id=data['user_id']
+
+        project_slug=""
+        project_enabled = mongo_utils.get_enabled_project()
+        for project in json.loads(json_util.dumps(project_enabled)):
+            project_slug=project['year']
+            questions = mongo_utils.find_all_questions(project['year'])
+            response = mongo_utils.find_all_questions_results(user_id,question,project['year'])
+        count_question=0
+        created_array = []
+        question_key=""
+        for questions in json.loads(json_util.dumps(response['all_question'])):
+            count_question = count_question + 1
+            question_key=count_question
+            answers = mongo_utils.find_all_answers_s(question_key,question,project_slug)
+            answers_users = mongo_utils.find_all_answers_users(question_key,question,user_id,project_slug)
+            for r in json.loads(json_util.dumps(answers)):
+                candidate_name_result = mongo_utils.get_candidate_name(r['candidate_slug'])
+                for c_name in json.loads(json_util.dumps(candidate_name_result)):
+                    candidate_name=c_name['candidate_name']
+                    if 'status_'+str(question_key) in r:
+                        status=r['status_'+str(question_key)]
+                    else:
+                        status="/"
+                    if 'vazno_'+str(question_key) in r:
+                        vazno=r['vazno_'+str(question_key)]
+                    else:
+                        vazno="/"
+                    if 'comment_' + str(question_key) in r:
+                        comment = r['comment_' + str(question_key)]
+                    else:
+                        comment = "/"
+                    created_array.append({'candidate_slug':candidate_name,'status':status,'vazno':vazno,'comment':comment})
+
+            for r_u in json.loads(json_util.dumps(answers_users)):
+                if 'status_' + str(question_key) in r_u:
+                    status = r_u['status_' + str(question_key)]
+                else:
+                    status = "/"
+                if 'vazno_' + str(question_key) in r_u:
+                    vazno = r_u['vazno_' + str(question_key)]
+                else:
+                    vazno = "/"
+                created_array.append({'candidate_slug': 'Moj odgovor', 'status': status, 'vazno': vazno,'comment': "/"})
+        return Response(response=json_util.dumps(created_array), status=200, mimetype='application/json')
+
 @mod_main.route('/getallqu', methods=['GET', "POST"])
 def get_all_q_a_u():
     if request.method == 'GET':
         if session.get('user_id') is not None:
             user_id = session['user_id']
+        count_question=0
+        create_question_array=[]
+        project_slug=""
+        project_enabled = mongo_utils.get_enabled_project()
+        for project in json.loads(json_util.dumps(project_enabled)):
+            response_all_questions=mongo_utils.find_all_questions(project['year'])
+            project_slug=project['year']
+
+        for raq in json.loads(json_util.dumps(response_all_questions)):
+            count_question=count_question+1
+            question_key=count_question
+            response_user_q = mongo_utils.find_all_questions_user(user_id,project_slug)
+            for ruq in json.loads(json_util.dumps(response_user_q)):
+                if 'vazno_'+str(count_question) in ruq and 'status_'+str(count_question) in ruq:
+                    create_question_array.append({'question_name':ruq['question_'+str(count_question)]})
+
+        return Response(response=json_util.dumps(create_question_array), status=200, mimetype='application/json')
+
+
+@mod_main.route('/getallquresults', methods=['GET', "POST"])
+def get_all_q_a_u_result():
+    if request.method == 'POST':
+        data = request.form.to_dict()
+        user_id=data['user_id']
         count_question=0
         create_question_array=[]
         project_slug=""
