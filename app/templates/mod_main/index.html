@@ -548,6 +548,9 @@
 
     <div class="row">
         <div class="col-md-12">
+             <div class="ajax-loader">
+                              <img src="{{ url_for('static', filename = 'assets/loading2.gif') }}" class="img-responsive" />
+                      </div>
             <div class="user_results" style="display: none;margin-top:30px;">
                 <div class="row" style="margin-bottom:20px;">
                     <div class="col-md-5">
@@ -571,9 +574,7 @@
                       <div class="panel-body" id="user-div-results">
 
                       </div>
-                      <div class="ajax-loader">
-                              <img src="{{ url_for('static', filename = 'assets/loading2.gif') }}" class="img-responsive" />
-                      </div>
+
                   </div>
             </div>
         </div>
