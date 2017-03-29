@@ -465,18 +465,23 @@
                         i = i + 1;
                         if (i <= 3) {
                             $('#user-div-results').append('<div class="row" style="margin-bottom:20px"><div class="col-md-4" style="text-align:center"><img style="width:200px;margin:0 auto;" src="{{ url_for('static', filename='uploads/') }}' + b['image'] + '" class="img-responsive"/><p style="font-size:15px;color:#1A3966;font-weight:bold;text-transform:uppercase">' + b['candidate_name'] + '</p><h2 style="color:#337ab7;margin-top:0px;">' + b['percentage'].toFixed(2) + '%</h2></div>' +
-                                    '<div style="height:200px" class="col-md-8 candidate-biography candidate-biography_'+i+'" data-id='+i+'>' + b['candidate_biography'] + '</div><div class="show_more" style="float:right;margin-right:100px"><a href="#" class="show_more_'+i+'" id='+i+'>Prikaži više</a></div></div>');
+                                    '<div class="col-md-8 candidate-biography candidate-biography_'+i+'" data-id='+i+'>' + b['candidate_biography'] + '</div><div class="show_more" style="float:right;margin-right:100px"><a href="#" class="show_more_'+i+'" id='+i+'>Prikaži više</a></div></div>');
+                        $('.candidate-biography').css({
+                                'height': '100px',
 
+                                'overflow':'hidden'
+                            })
                             var candidate_length=$('.candidate-biography_'+i).height();
                             console.log(candidate_length);
-                            if (candidate_length>200){
+                            if (candidate_length>60){
                                 var data_id=$('.candidate-biography_'+i).attr('data-id');
+                                $('#'+data_id).css('display','block');
+                            }else{
+                                 var data_id=$('.candidate-biography_'+i).attr('data-id');
                                 $('#'+data_id).css('display','none');
                             }
 
-                            $('.candidate-biography').css({
-                                'overflow':'hidden'
-                            })
+
                             $("body").on('click',".show_more_"+i, function(e){
                                 var id=$(this).attr('id');
                                 e.preventDefault();
