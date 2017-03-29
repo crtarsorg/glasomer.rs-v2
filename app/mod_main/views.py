@@ -12,43 +12,42 @@ mod_main = Blueprint('main', __name__)
 
 @mod_main.route('/', methods=['GET'])
 def index():
-    if session.get('user_id') is not None:
-        session.clear
+
     project_enabled = mongo_utils.get_enabled_project()
     for project in json.loads(json_util.dumps(project_enabled)):
         docs = mongo_utils.find_all(project['year'])
         count_questions = mongo_utils.get_nr_questions_front(project['year'])
         questions = mongo_utils.find_all_questions(project['year'])
-
-    return render_template('mod_main/index.html', docs=json.loads(json_util.dumps(docs)),questions=json.loads(json_util.dumps(questions)), count_questions=count_questions)
+        if session.get('user_id') is not None:
+            user_id = session['user_id']
+    else:
+        timestamp = int(time.mktime(datetime.now().timetuple()))
+        session['user_id'] = timestamp
+        user_id = session['user_id']
+    return render_template('mod_main/index.html', docs=json.loads(json_util.dumps(docs)),questions=json.loads(json_util.dumps(questions)), count_questions=count_questions,user_id=user_id)
 
 
 @mod_main.route('/insertuseranswers', methods=['GET', "POST"])
 def insert_user_answers():
     if request.method == 'POST':
         if session.get('user_id') is not None:
-            user_id=session['user_id']
-        else:
-            timestamp = int(time.mktime(datetime.now().timetuple()))
-            session['user_id'] = timestamp
             user_id = session['user_id']
         data = request.form.to_dict()
         project_enabled = mongo_utils.get_enabled_project()
         for project in json.loads(json_util.dumps(project_enabled)):
             docs = mongo_utils.find_all(project['year'])
             data['project_slug']=project['year']
-
         data['user_id'] = user_id
         data['timestamp'] = datetime.utcnow()
         result=mongo_utils.insert_users_answers(data)
+        result_session = mongo_utils.find_user_session_answers(data)
     #return render_template('mod_main/user_candidate_results.html.html', docs=json.loads(json_util.dumps(docs)), questions=json.loads(json_util.dumps(questions)), count_questions=count_questions)
     return Response(response=json_util.dumps(result), status=200, mimetype='application/json')
 
 @mod_main.route('/getusersessionidresults', methods=['GET', "POST"])
 def get_user_session_id_results():
     if request.method == 'POST':
-        if session.get('user_id') is not None:
-            session.clear
+
         if session.get('user_id') is not None:
             user_id=session['user_id']
         else:
