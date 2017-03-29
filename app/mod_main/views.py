@@ -12,14 +12,13 @@ mod_main = Blueprint('main', __name__)
 
 @mod_main.route('/', methods=['GET'])
 def index():
-
     project_enabled = mongo_utils.get_enabled_project()
     for project in json.loads(json_util.dumps(project_enabled)):
         docs = mongo_utils.find_all(project['year'])
         count_questions = mongo_utils.get_nr_questions_front(project['year'])
         questions = mongo_utils.find_all_questions(project['year'])
-        if session.get('user_id') is not None:
-            user_id = session['user_id']
+    if session.get('user_id') is not None:
+        user_id = session['user_id']
     else:
         timestamp = int(time.mktime(datetime.now().timetuple()))
         session['user_id'] = timestamp
@@ -27,22 +26,90 @@ def index():
     return render_template('mod_main/index.html', docs=json.loads(json_util.dumps(docs)),questions=json.loads(json_util.dumps(questions)), count_questions=count_questions,user_id=user_id)
 
 
+@mod_main.route('/results/<int:user_id>', methods=['GET'])
+def results(user_id):
+    project_enabled = mongo_utils.get_enabled_project()
+    for project in json.loads(json_util.dumps(project_enabled)):
+        docs = mongo_utils.find_all(project['year'])
+        results=mongo_utils.find_user_session_answers(project['year'],user_id)
+
+    countquestions=0
+    number_of_questions = len(json.loads(json_util.dumps(results['all_question'])))
+    candidates = json.loads(json_util.dumps(results['candidate_results']))
+    users = json.loads(json_util.dumps(results['user_results']))
+    # print json.loads(json_util.dumps(results['candidate_results']))
+    candidates_array = []
+    while countquestions <= number_of_questions:
+        for candidate in candidates:
+            candidate_match = 0
+            for user in users:
+                if 'question_'+str(countquestions) in candidate and 'question_'+str(countquestions) in user:
+                    if 'vazno_' + str(countquestions) in candidate and 'vazno_' + str(countquestions) in user:
+                        candidate_question_value = candidate['question_' + str(countquestions)]
+                        candidate_status_value = candidate['status_' + str(countquestions)]
+                        candidate_vazno_value = candidate['vazno_' + str(countquestions)]
+                        user_question_value = user['question_' + str(countquestions)]
+                        user_status_value = user['status_' + str(countquestions)]
+                        user_vazno_value = user['vazno_' + str(countquestions)]
+                        if candidate_vazno_value == user_vazno_value and candidate_status_value == user_status_value and candidate_question_value == user_question_value:
+                            candidate_match += 1
+                            candidates_array.append({
+                                "candidate_slug": candidate['candidate_slug'],
+                                'question': candidate_question_value,
+                                'status': candidate_status_value,
+                                'vazno': candidate_vazno_value,
+                                "matchcount": candidate_match,
+                            })
+        countquestions += 1
+    candidates_percentages = []
+    for candidate in json.loads(json_util.dumps(results['candidates'])):
+        percentage = 0
+        count_match=0
+        for c_a in candidates_array:
+            if candidate['generated_id']==c_a['candidate_slug']:
+                count_match += 1
+
+                percentage = (float(count_match)/ number_of_questions) * 100
+        candidates_percentages.append({
+            'candidate_name':candidate['candidate_name'],
+            'percentage':percentage,
+            'candidate_biography':candidate['candidate_biography'],
+            'image':candidate['image']
+        })
+    title=""
+    return render_template('mod_main/results.html', docs=json.loads(json_util.dumps(results)),title=title,results=json.loads(json_util.dumps(candidates_percentages)),user_id=user_id)
+
+
+
 @mod_main.route('/insertuseranswers', methods=['GET', "POST"])
 def insert_user_answers():
     if request.method == 'POST':
-        if session.get('user_id') is not None:
-            user_id = session['user_id']
         data = request.form.to_dict()
         project_enabled = mongo_utils.get_enabled_project()
         for project in json.loads(json_util.dumps(project_enabled)):
             docs = mongo_utils.find_all(project['year'])
             data['project_slug']=project['year']
-        data['user_id'] = user_id
+
+        data['user_id'] =session['user_id']
         data['timestamp'] = datetime.utcnow()
         result=mongo_utils.insert_users_answers(data)
-        result_session = mongo_utils.find_user_session_answers(data)
     #return render_template('mod_main/user_candidate_results.html.html', docs=json.loads(json_util.dumps(docs)), questions=json.loads(json_util.dumps(questions)), count_questions=count_questions)
     return Response(response=json_util.dumps(result), status=200, mimetype='application/json')
+
+
+@mod_main.route('/getuseranswerssession', methods=['GET', "POST"])
+def get_user_answers_session():
+    if request.method == 'POST':
+        data = request.form.to_dict()
+        data['user_id'] = session['user_id']
+        project_enabled = mongo_utils.get_enabled_project()
+        for project in json.loads(json_util.dumps(project_enabled)):
+            docs = mongo_utils.find_all(project['year'])
+            data['project_slug']=project['year']
+            result = mongo_utils.find_user_session_answers(data['project_slug'],data['user_id'])
+    #return render_template('mod_main/user_candidate_results.html.html', docs=json.loads(json_util.dumps(docs)), questions=json.loads(json_util.dumps(questions)), count_questions=count_questions)
+    return Response(response=json_util.dumps(result), status=200, mimetype='application/json')
+
 
 @mod_main.route('/getusersessionidresults', methods=['GET', "POST"])
 def get_user_session_id_results():

@@ -1,10 +1,195 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends 'layout_results.html' %}
+ {% block meta %}
+    <meta name="description" content="Glasomer pomaže građanima da uporede svoje političke stavove sa stavovima kandidata koji se takmiče na predstojećim predsedničkim izborima. Izabrani stavovi su u vezi sa aktuelnim društveno-političkim dešavanjima u Srbiji."/>
+    <!-- FB meta -->
+    <meta property="og:title" content="Tri kandidata sa kojima se najviše podudaraju moji odgovori?"/>
+    <meta property="og:url" content="http://glasomer.rs/results/{{ user_id }}" />
+    <meta property="og:description" content="{% for result in results %} {{ result['candidate_name'] }}: {{ "{:.2f}".format(result['percentage']) }}%{% endfor %}"/>
+    <meta property="og:image" content="{{ url_for('static', filename = 'assets/instinomer_logo.png') }}" />
+
+    <!-- Twitter meta -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@CRTArs">
+    <meta name="twitter:creator" content="@CRTArs">
+    <meta name="twitter:title" content="Tri kandidata sa kojima se najviše podudaraju moji odgovori?">
+    <meta name="twitter:description" content="Zanima te koliko se tvoji stavovi poklapaju sa stavovima stranaka? Proveri na Glasomeru! http://glasomer.rs/results/{{ user_id }}">
+    <meta name="twitter:image" content="{{ url_for('static', filename = 'assets/instinomer_logo.png') }} "/>
+    {% endblock %}
+{% block body %}
+    <style>
+        #wheel-tab {
+             display: none;
+        }
+    #wheel-right, #wheel-left{
+        font-weight: 700;
+        }
+     .nav-tabs>li.color-next>a:hover{
+        background: #337ab7;
+        color:white;
+     }
+     .nav-tabs>li.color-next>a:active{
+        background: #337ab7;
+        color:white;
+    }
+      .nav-tabs>li.color-next>a:focus{
+        background: #337ab7;
+        color:white;
+    }
+    #exampleTable_previous{
+        display:none;
+    }
+    #exampleTable_next{
+        display: none;
+    }
+     #exampleTable1_previous{
+        display:none;
+    }
+    #exampleTable1_next{
+        display: none;
+    }
+    .details ul.pagination li.previous{
+        display: none;
+    }
+     .details ul.pagination li.next{
+        display: none;
+    }
+
+    </style>
+
+<script>
+
+
+    $(document).ready(function() {
+        var count_user_question = 0;
+            $.ajax({
+                url: "{{ url_for('main.get_user_answers_session') }}",
+                type: 'POST', //or POST,
+                dataType: 'json',
+                data: $("form").serialize(),
+                success: function (data) {
+
+                    var count_questions = 0;
+                    candidatesarray = [];
+                    $(data['all_question']).each(function (keyq, valueq) {
+
+                        var match = 0;
+                        count_questions = count_questions + 1;
+                        $(data['candidate_results']).each(function (keyc, valuek) {
+
+                            $(data['user_results']).each(function (keyu, valueu) {
+
+                                if (valuek['status_' + count_questions] == valueu['status_' + count_questions] && valuek['vazno_' + count_questions] == valueu['vazno_' + count_questions] && valuek['question_' + count_questions] == valueu['question_' + count_questions]) {
+                                    match = match + 1;
+                                    candidatesarray.push({
+                                        "candidate_slug": valuek['candidate_slug'],
+                                        'question': valuek['question_' + count_questions],
+                                        'status': valuek['status_' + count_questions],
+                                        'vazno': valuek['vazno_' + count_questions],
+                                        "matchcount": match,
+                                    });
+                                }
+                            })
+                        })
+                    })
+                    var candidates_percentages = []
+                    $(data['candidates']).each(function (key, value) {
+                        var percentage = 0;
+                        var count_match = 0;
+                        $(candidatesarray).each(function (key1, value1) {
+                            if (value['generated_id'] == value1['candidate_slug']) {
+                                count_match = count_match + 1;
+                                percentage = (count_match / count_questions) * 100;
+                            }
+                        })
+                        candidates_percentages.push({
+                            "candidate_name": value['candidate_name'],
+                            'percentage': percentage,
+                            'candidate_biography': value['candidate_biography'],
+                            'image': value['image']
+                        });
+
+                    })
+
+                    candidates_percentages.sort(function (a, b) {
+                        return b.percentage - a.percentage;
+                    });
+                    var i = 0;
+                    $(candidates_percentages).each(function (a, b) {
+                        i = i + 1;
+                        if (i <= 3) {
+                            $('#user-div-results').append('<div class="row" style="margin-bottom:20px"><div class="col-md-4" style="text-align:center"><img style="width:200px;margin:0 auto;" src="{{ url_for('static', filename='uploads/') }}' + b['image'] + '" class="img-responsive"/><p style="font-size:15px;color:#1A3966;font-weight:bold;text-transform:uppercase">' + b['candidate_name'] + '</p><h2 style="color:#337ab7;margin-top:0px;">' + b['percentage'].toFixed(2) + '%</h2></div>' +
+                                    '<div class="col-md-8 candidate-biography candidate-biography_'+i+'" data-id='+i+'>' + b['candidate_biography'] + '</div><div class="show_more" style="float:right;margin-right:100px"><a href="#" class="show_more_'+i+'" id='+i+'>Prikaži više</a></div></div>');
+
+                            var candidate_length=$('.candidate-biography_'+i).height();
+
+                            if (candidate_length<1440){
+                                var data_id=$('.candidate-biography_'+i).attr('data-id');
+                                $('#'+data_id).css('display','none');
+                            }
+
+                            $('.candidate-biography').css({
+                                'height': '60px',
+                                'overflow':'hidden'
+                            })
+                            $("body").on('click',".show_more_"+i, function(e){
+                                var id=$(this).attr('id');
+                                e.preventDefault();
+
+                                 $('.candidate-biography_'+id).css({
+                                'height': 'auto',
+                                'overflow':'auto'
+                            });
+                                $(this).text('Prikaži manje');
+                                $(this).removeClass("show_more_"+id);
+                                $(this).addClass("show_less_"+id);
+
+
+                            });
+
+
+                                 $("body").on('click',".show_less_"+i, function(e){
+                                    var id=$(this).attr('id');
+                                     e.preventDefault();
+                                    $('.candidate-biography_'+id).css({
+                                        'height': '60px',
+                                        'overflow':'hidden'
+                                    });
+                                $(this).text('Prikaži više');
+                                $(this).removeClass("show_less_"+id);
+                                $(this).addClass("show_more_"+id);
+                            })
+
+                        }
+
+
+                    })
+
+                }
+            });
+
+
+    })
+
+</script>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="user_results">
+                      <div class="panel panel-default">
+                            <div class="panel-heading" style="overflow: auto;">
+                                <h3 class="panel-title">
+                                    <div class="col-md-8" style="padding:10px;"><b>Tri kandidata sa kojima se najviše podudaraju moji odgovori</b></div>
+
+                                </h3>
+                            </div>
+                          <div class="panel-body" id="user-div-results">
+
+                          </div>
+                      </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

@@ -146,8 +146,6 @@ class MongoUtils(object):
         result = self.mongo.db[self.questions_collection].find({'project_slug': project_slug}).count()
         return result
 
-
-
     def insert_users_answers(self, doc):
         self.mongo.db[self.answers_users].remove({'user_id': doc['user_id'],'project_slug':doc['project_slug']})
         self.mongo.db[self.answers_users].insert(doc)
@@ -155,13 +153,14 @@ class MongoUtils(object):
         result_user=self.mongo.db[self.answers_users].find({'user_id':doc['user_id'],'project_slug':doc['project_slug']})
         candidates=self.mongo.db[self.candidates_collection].find()
         all_question=self.mongo.db[self.questions_collection].find({'project_slug':doc['project_slug']})
+
         return {'user_results':result_user, 'candidate_results':result_candidates,'candidates':candidates,'all_question':all_question}
 
-    def find_user_session_answers(self, doc):
-        result_candidates=self.mongo.db[self.answers_candidates].find({'project_slug':doc['project_slug']})
-        result_user=self.mongo.db[self.answers_users].find({'user_id':doc['user_id'],'project_slug':doc['project_slug']})
+    def find_user_session_answers(self, project_slug,user_id):
+        result_candidates=self.mongo.db[self.answers_candidates].find({'project_slug':project_slug})
+        result_user=self.mongo.db[self.answers_users].find({'user_id':user_id,'project_slug':project_slug})
         candidates=self.mongo.db[self.candidates_collection].find()
-        all_question=self.mongo.db[self.questions_collection].find({'project_slug':doc['project_slug']})
+        all_question=self.mongo.db[self.questions_collection].find({'project_slug':project_slug})
         return {'user_results':result_user, 'candidate_results':result_candidates,'candidates':candidates,'all_question':all_question}
 
 
