@@ -16,15 +16,14 @@
     <meta property="og:description" content="Glasomer pomaže građanima da uporede svoje političke stavove sa stavovima kandidata koji se takmiče na predstojećim predsedničkim izborima. Izabrani stavovi su u vezi sa aktuelnim društveno-političkim dešavanjima u Srbiji."/>
     <meta property="og:image" content="{{ url_for('static', filename = 'assets/instinomer_logo.png') }}" />
 
-
     <!-- Twitter meta -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:site" content="@CRTArs">
     <meta name="twitter:creator" content="@CRTArs">
     <meta name="twitter:title" content="Zanima te koliko se tvoji stavovi poklapaju sa stavovima stranaka? Proveri na Glasomeru!">
     <meta name="twitter:description" content="Zanima te koliko se tvoji stavovi poklapaju sa stavovima stranaka? Proveri na Glasomeru! http://glasomer.rs/">
-
     <meta name="twitter:image" content="{{ url_for('static', filename = 'assets/instinomer_logo.png') }} "/>
+
     {% endblock %}
     <link rel="shortcut icon" href="{{ url_for('static',filename='assets/favicon.ico') }}" />
     <link href='//fonts.googleapis.com/css?family=Comfortaa' rel='stylesheet' type='text/css'>
@@ -118,7 +117,7 @@
 <script>
   $("#twitter-results").on("click",function() {
       if ($('.user_questions').is(':hidden')) {
-          $("#twitter-results").attr("href", "https://twitter.com/intent/tweet?text=%23Glasomer%20Proveri%20koliko%20se%moji%20stavovi%20poklapaju%20sa%20stavovima%20predsedni%C4%8Dkih%20kandidata.%20http%3A%2F%2Fglasomer.rs/results/1490803478");
+          $("#twitter-results").attr("href", "https://twitter.com/intent/tweet?text=%23Glasomer%20Proveri%20koliko%20se%20moji%20stavovi%20poklapaju%20sa%20stavovima%20predsedni%C4%8Dkih%20kandidata.%20http%3A%2F%2Fglasomer.rs/results/{{ user_id }}");
       }else{
          $("#twitter-results").attr("href", "https://twitter.com/intent/tweet?text=%23Glasomer%20Proveri%20koliko%20se%20tvoji%20stavovi%20poklapaju%20sa%20stavovima%20predsedni%C4%8Dkih%20kandidata.%20http%3A%2F%2Fglasomer.rs");
       }
