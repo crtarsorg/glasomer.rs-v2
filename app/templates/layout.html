@@ -22,7 +22,7 @@
     <meta name="twitter:creator" content="@CRTArs">
     <meta name="twitter:title" content="Zanima te koliko se tvoji stavovi poklapaju sa stavovima stranaka? Proveri na Glasomeru!">
     <meta name="twitter:description" content="Zanima te koliko se tvoji stavovi poklapaju sa stavovima stranaka? Proveri na Glasomeru! http://glasomer.rs/">
-    <meta name="twitter:image" content="{{ url_for('static', filename = 'assets/instinomer_logo.png') }} "/>
+    <meta name="twitter:image" content="http://glasomer.rs/static/assets/instinomer_logo.png"/>
 
     {% endblock %}
     <link rel="shortcut icon" href="{{ url_for('static',filename='assets/favicon.ico') }}" />
@@ -117,9 +117,9 @@
 <script>
   $("#twitter-results").on("click",function() {
       if ($('.user_questions').is(':hidden')) {
-          $("#twitter-results").attr("href", "https://twitter.com/intent/tweet?text=%23Glasomer%20Proveri%20koliko%20se%20moji%20stavovi%20poklapaju%20sa%20stavovima%20predsedni%C4%8Dkih%20kandidata.%20http%3A%2F%2Fglasomer.rs/results/{{ user_id }}");
+          $("#twitter-results").attr("href", "https://twitter.com/intent/tweet?text=%23Glasomer%20Proveri%20koliko%20se%20moji%20stavovi%20poklapaju%20sa%20stavovima%20predsedni%C4%8Dkih%20kandidata.%20http%3A%2F%2Fglasomer.rs/results/{{ user_id }}&&image='{{ url_for("static", filename = "assets/instinomer_logo.png") }}'");
       }else{
-         $("#twitter-results").attr("href", "https://twitter.com/intent/tweet?text=%23Glasomer%20Proveri%20koliko%20se%20tvoji%20stavovi%20poklapaju%20sa%20stavovima%20predsedni%C4%8Dkih%20kandidata.%20http%3A%2F%2Fglasomer.rs");
+             $("#twitter-results").attr("href", "https://twitter.com/intent/tweet?text=%23Glasomer%20Proveri%20koliko%20se%20tvoji%20stavovi%20poklapaju%20sa%20stavovima%20predsedni%C4%8Dkih%20kandidata.%20http%3A%2F%2Fglasomer.rs");
       }
   });
     $("#fb-share-link").on("click",function(){
@@ -137,12 +137,13 @@
              return false;
          }
     });
+
     function httpGet(theUrl)
-{
-    var xmlHttp = new XMLHttpRequest();
-    xmlHttp.open( "GET", theUrl, false ); // false for synchronous request
-    return xmlHttp.responseText;
-}
+    {
+        var xmlHttp = new XMLHttpRequest();
+        xmlHttp.open( "GET", theUrl, false ); // false for synchronous request
+        return xmlHttp.responseText;
+    }
 </script>
 </body>
 
