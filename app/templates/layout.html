@@ -98,7 +98,7 @@
            </div>
             <div class="col-md-6" style="text-align: right;">
                 <a href="#" class="fa fa-facebook" id="fb-share-link"></a>
-                <a class="fa fa-twitter-square" target="_blank" href="https://twitter.com/intent/tweet?text=%23Glasomer%20Proveri%20koliko%20se%20tvoji%20stavovi%20poklapaju%20sa%20stavovima%20predsedni%C4%8Dkih%20kandidata.%20http%3A%2F%2Fglasomer.rs"></a>
+                <a class="fa fa-twitter-square" id="twitter-results" target="_blank" href="#"></a>
             </div>
        </div>
 {% endblock %}
@@ -116,14 +116,24 @@
 <!-- end block footer -->
 </div>
 <script>
+  $("#twitter-results").on("click",function() {
+      if ($('.user_questions').is(':hidden')) {
+          $("#twitter-results").attr("href", "https://twitter.com/intent/tweet?text=%23Glasomer%20Proveri%20koliko%20se%moji%20stavovi%20poklapaju%20sa%20stavovima%20predsedni%C4%8Dkih%20kandidata.%20http%3A%2F%2Fglasomer.rs/results/1490803478");
+      }else{
+         $("#twitter-results").attr("href", "https://twitter.com/intent/tweet?text=%23Glasomer%20Proveri%20koliko%20se%20tvoji%20stavovi%20poklapaju%20sa%20stavovima%20predsedni%C4%8Dkih%20kandidata.%20http%3A%2F%2Fglasomer.rs");
+      }
+  });
     $("#fb-share-link").on("click",function(){
 
          if ($('.user_questions').is(':hidden')) {
+
+
              httpGet("https://www.facebook.com/sharer/sharer.php?u=http://glasomer.rs/results/{{ user_id }}");
              var fbPopup = window.open("https://www.facebook.com/sharer/sharer.php?u=http://glasomer.rs/results/{{ user_id }}", "pop", "width=600, height=400, scrollbars=no");
              return false;
          }
          else{
+
              var fbPopup = window.open("https://www.facebook.com/sharer/sharer.php?u=http://glasomer.rs", "pop", "width=600, height=400, scrollbars=no");
              return false;
          }

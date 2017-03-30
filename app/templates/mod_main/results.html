@@ -12,7 +12,7 @@
     <meta name="twitter:site" content="@CRTArs">
     <meta name="twitter:creator" content="@CRTArs">
     <meta name="twitter:title" content="Tri kandidata sa kojima se najviše podudaraju moji odgovori?">
-    <meta name="twitter:description" content="Zanima te koliko se tvoji stavovi poklapaju sa stavovima stranaka? Proveri na Glasomeru! http://glasomer.rs/results/{{ user_id }}">
+    <meta name="twitter:description" content="{% set i =0 %} {% for result in results %} {% set i=loop.index  %} {% if i<=3 %}{{ result['candidate_name'] }}: {{ "{:.2f}".format(result['percentage']) }}%{% endif %}{% endfor %}">
     <meta name="twitter:image" content="{{ url_for('static', filename = 'assets/instinomer_logo.png') }} "/>
     {% endblock %}
 {% block body %}
