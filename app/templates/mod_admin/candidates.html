@@ -1,187 +1,175 @@
 {% extends 'layout_admin.html' %}
 
 {% block body %}
-
-
-
     <script>
-{#
-
-    var newRowData= $.ajax({
-					url: "{{ url_for('admin.get_all_candidates') }}", //this is the submit URL
-					type: 'GET', //or POST,
-					dataType: 'json',
-				    async: false,
-            }).responseJSON;
-        var count_groups=20;
-#}
-    var newRowData= $.ajax({
-					url: "{{ url_for('admin.get_all_candidates') }}", //this is the submit URL
-					type: 'GET', //or POST,
-					dataType: 'json',
-				    async: false,
-            }).responseJSON;
-    $(document).ready(function (){
+        var newRowData = $.ajax({
+            url: "{{ url_for('admin.get_all_candidates') }}", //this is the submit URL
+            type: 'GET', //or POST,
+            dataType: 'json',
+            async: false,
+        }).responseJSON;
+        $(document).ready(function () {
             var oTable;
+
             function init_table(newRowData) {
-			    oTable = $('#exampleTable').dataTable({
+                oTable = $('#exampleTable').dataTable({
 
-				"aaData": newRowData,
-				"aoColumns": [
+                    "aaData": newRowData,
+                    "aoColumns": [
 
-                    {"mDataProp": "generated_id"},
-                    {"mDataProp": "slug"},
-                    {"mDataProp": "candidate_name"},
-                    {"mDataProp": "candidate_biography"},
-                    {
-                        "mData": "image", "aTargets": [0],
-                        "render": function (data) {
-                            return '<img class="img-responsive" height="100" width="100" src="{{ url_for('static',filename='uploads/')}}' + data + '" />';
-                        }
-                    },
+                        {"mDataProp": "generated_id"},
+                        {"mDataProp": "slug"},
+                        {"mDataProp": "candidate_name"},
+                        {"mDataProp": "candidate_biography"},
                         {
-                        "mData": "generated_id", "aTargets": [0],
-                        "render": function (data) {
-                            return "<a href='{{ url_for('admin.answers_candidates') }}?candidate="+data+"'>Assign Answers</a>";
-                        }
+                            "mData": "image", "aTargets": [0],
+                            "render": function (data) {
+                                return '<img class="img-responsive" height="100" width="100" src="{{ url_for('static',filename='uploads/')}}' + data + '" />';
+                            }
+                        },
+                        {
+                            "mData": "generated_id", "aTargets": [0],
+                            "render": function (data) {
+                                return "<a href='{{ url_for('admin.answers_candidates') }}?candidate=" + data + "'>Assign Answers</a>";
+                            }
+                        },
+                        {
+                            "mData": "generated_id", "aTargets": [0],
+                            "render": function (data) {
+                                return "<a href='{{ url_for('admin.get_candidate_answers') }}?candidate=" + data + "'>Edit Answers</a>";
+                            }
+                        },
+
+                        {"sDefaultContent": "<a  class='edit-candidate' id='' style='padding-right:20px;'><i class='fa fa-pencil-square-o fa-lg edit-group' aria-hidden='true' style='padding-bottom:20px;'></i></a>" + "<a href='#' class='remove-candidate'><i class='fa fa-trash-o fa-lg' aria-hidden='true'></i></a>"},
+
+                    ],
+                    "oLanguage": {
+                        "sInfo": "_TOTAL_ entries"
                     },
-                    {
-                        "mData": "generated_id", "aTargets": [0],
-                        "render": function (data) {
-                            return "<a href='{{ url_for('admin.get_candidate_answers') }}?candidate="+data+"'>Edit Answers</a>";
-                        }
-                    },
+                    "aaSorting": [[1, 'asc']]
+                });
+            }
 
-					{"sDefaultContent": "<a  class='edit-candidate' id='' style='padding-right:20px'><i class='fa fa-pencil-square-o fa-lg edit-group' aria-hidden='true'></i></a>" + "<a href='#' class='remove-candidate'><i class='fa fa-trash-o fa-lg' aria-hidden='true'></i></a>"},
+            init_table(newRowData);
+            $('body').on('click', '.edit-candidate', function () {
+                var candidate_gid = $($(this).parent().parent().children()[0]).text();
+                $("html, body").animate({scrollTop: 0}, "slow");
+                $.ajax({
+                    url: "{{ url_for('admin.get_selected_candidate') }}", //this is the submit URL
+                    type: 'POST', //or POST
+                    dataType: 'json',
+                    data: {'candidate_gid': candidate_gid},
+                    success: function (data) {
+                        $('#candidate_id').val(data['candidate_name']);
+                        $('#candidate_biography').val(data['candidate_biography']);
+                        $('#hidden_generate_id').val(data['generated_id']);
+                        $('#hidden_image_id').val(data['image']);
 
-				],
-				"oLanguage": {
-					"sInfo": "_TOTAL_ entries"
-				},
-				"aaSorting": [[1, 'asc']]
-			});
-		}
-        init_table(newRowData);
-        $('body').on('click','.edit-candidate',function(){
-            var candidate_gid = $($(this).parent().parent().children()[0]).text();
-            console.log(candidate_gid);
-            $("html, body").animate({ scrollTop: 0 }, "slow");
-            $.ajax({
-                url: "{{ url_for('admin.get_selected_candidate') }}", //this is the submit URL
-                type: 'POST', //or POST
-                dataType: 'json',
-                data: {'candidate_gid': candidate_gid},
-                success: function (data) {
-                    console.log(data);
-                    $('#candidate_id').val(data['candidate_name']);
-                    $('#candidate_biography').val(data['candidate_biography']);
-                    $('#hidden_generate_id').val(data['generated_id']);
-                    $('#hidden_image_id').val(data['image']);
-
-                    $('.candidate_image').attr('src',"{{ url_for('static',filename='uploads/') }}"+data['image']+"");
-                    $('.candidate_image').css('width','100px');
-                    $('.candidate_image').css('height','100px');
-                     $('#quoteForm').attr('action', 'workspaceURL');
-                    $('#add-candidate-form').attr('action', '{{ url_for('admin.edit_candidate') }}');
-                }
+                        $('.candidate_image').attr('src', "{{ url_for('static',filename='uploads/') }}" + data['image'] + "");
+                        $('.candidate_image').css('width', '100px');
+                        $('.candidate_image').css('height', '100px');
+                        $('#quoteForm').attr('action', 'workspaceURL');
+                        $('#add-candidate-form').attr('action', '{{ url_for('admin.edit_candidate') }}');
+                    }
+                });
             });
-        });
 
-          $('body').on('click','.remove-candidate',function(){
-            var candidate_gid = $($(this).parent().parent().children()[0]).text();
-              BootstrapDialog.show({
-							message: 'Are you sure you want to delete the Candidate?',
-							buttons: [{
-								icon: 'glyphicon glyphicon-send',
-								label: 'OK',
-								cssClass: 'btn-primary',
-								autospin: false,
-								action: function(dialogRef){
-									$.ajax({
-										url: "{{ url_for('admin.delete_candidate') }}", //this is the submit URL
-										type: 'POST', //or POST
-										dataType: 'json',
-										data: {'candidate_gid': candidate_gid},
-										success: function (data) {
-											oTable.fnClearTable(0);
-											oTable.fnAddData(data);
-											oTable.fnDraw();
-
-										}
-									});
-									setTimeout(function(){
-										dialogRef.close();
-									}, 100);
-								}
-							}, {
-								label: 'Close',
-								action: function(dialogRef){
-									dialogRef.close();
-								}
-							}]
-						});
+            $('body').on('click', '.remove-candidate', function () {
+                var candidate_gid = $($(this).parent().parent().children()[0]).text();
+                BootstrapDialog.show({
+                    message: 'Are you sure you want to delete the Candidate?',
+                    buttons: [{
+                        icon: 'glyphicon glyphicon-send',
+                        label: 'OK',
+                        cssClass: 'btn-primary',
+                        autospin: false,
+                        action: function (dialogRef) {
+                            $.ajax({
+                                url: "{{ url_for('admin.delete_candidate') }}", //this is the submit URL
+                                type: 'POST', //or POST
+                                dataType: 'json',
+                                data: {'candidate_gid': candidate_gid},
+                                success: function (data) {
+                                    oTable.fnClearTable(0);
+                                    oTable.fnAddData(data);
+                                    oTable.fnDraw();
+                                }
+                            });
+                            setTimeout(function () {
+                                dialogRef.close();
+                            }, 100);
+                        }
+                    }, {
+                        label: 'Close',
+                        action: function (dialogRef) {
+                            dialogRef.close();
+                        }
+                    }]
+                });
+            })
         })
-
-
-    })
-
-</script>
- <div id="wrapper">
+    </script>
+    <div id="wrapper">
         <div id="page-wrapper">
 
             <div class="container-fluid">
                 <div class="row" style="margin-top:100px">
 
-                <div class="col-md-3"></div>
-        <div class="col-md-6">
-                 <h2>Manages Candidates</h2>
-            {% with messages = get_flashed_messages() %}
-  {% if messages %}
+                    <div class="col-md-3"></div>
+                    <div class="col-md-6">
+                        <h2>Manages Candidates</h2>
+                        {% with messages = get_flashed_messages() %}
+                            {% if messages %}
 
-    {% for message in messages %}
-        <div class="alert alert-success">
-        <strong>Success! </strong> {{ message.decode('utf-8') }}.
-        </div>
+                                {% for message in messages %}
+                                    <div class="alert alert-success">
+                                        <strong>Success! </strong> {{ message.decode('utf-8') }}.
+                                    </div>
 
-    {% endfor %}
+                                {% endfor %}
 
-  {% endif %}
-{% endwith %}
-        <div id="add-candidate-modal">
-						<form id="add-candidate-form" name="add_group"  method="POST" enctype="multipart/form-data" action="{{ url_for('admin.add_candidate') }}">
-                            <input name="generated_id" type="hidden" id="hidden_generate_id">
-                            <input name="image_hidden" type="hidden" id="hidden_image_id">
-                            <div class="form-group">
-								<label for="candidate_name">Candidate Name:</label>
-								<input name="candidate_name" type="text" class="form-control" id="candidate_id" placeholder="Name">
-							</div>
-                            <div class="form-group">
-								<label for="candidate_biography">Biography:</label>
-								<textarea name="candidate_biography" type="text" class="form-control" id="candidate_biography" placeholder="Biography"></textarea>
-							</div>
-                            <div class="form-group">
-                                <label for="candidate_biography">Image:</label>
-                                <input type="file" name="fileupload" value="" id="fileupload">
-                            </div>
-                            <div id="image-edit">
-                                <img src="" class="candidate_image"/>
-                            </div>
-							<div class="modal-footer">
-								<button class="btn btn-default" type="button" data-dismiss="modal">Close</button>
-								<input type="submit" value="Save changes" name="editInd" class="btn btn-primary" id="add-indicator-button">
+                            {% endif %}
+                        {% endwith %}
+                        <div id="add-candidate-modal">
+                            <form id="add-candidate-form" name="add_group" method="POST" enctype="multipart/form-data"
+                                  action="{{ url_for('admin.add_candidate') }}">
+                                <input name="generated_id" type="hidden" id="hidden_generate_id">
+                                <input name="image_hidden" type="hidden" id="hidden_image_id">
+                                <div class="form-group">
+                                    <label for="candidate_name">Candidate Name:</label>
+                                    <input name="candidate_name" type="text" class="form-control" id="candidate_id"
+                                           placeholder="Name">
+                                </div>
+                                <div class="form-group">
+                                    <label for="candidate_biography">Biography:</label>
+                                    <textarea name="candidate_biography" type="text" class="form-control"
+                                              id="candidate_biography" placeholder="Biography" rows="4"
+                                              cols="50"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="candidate_biography">Image:</label>
+                                    <input type="file" name="fileupload" value="" id="fileupload">
+                                </div>
+                                <div id="image-edit">
+                                    <img src="" class="candidate_image"/>
+                                </div>
+                                <div class="modal-footer">
 
-							</div>
-                        </form>
-            </div>
-          </div>
-    </div>
+                                    <input type="submit" value="Save changes" name="editInd" class="btn btn-primary"
+                                           id="add-indicator-button">
+
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
                 <!-- Page Heading -->
                 <div class="row">
                     <div class="col-lg-12">
                         <table id="exampleTable" class="stripe">
                             <thead>
                             <tr>
-                                 <th>ID</th>
+                                <th>ID</th>
                                 <th>Slug</th>
                                 <th>Name</th>
                                 <th>Biography</th>
@@ -203,8 +191,5 @@
             <!-- /.container-fluid -->
         </div>
         <!-- /#page-wrapper -->
-
     </div>
-
-
 {% endblock %}

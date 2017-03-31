@@ -42,7 +42,7 @@
 	color:white;
 }
 	.modal-open .modal{
-		margin-top:20px;
+		margin-top:50px;
 	}
 	.modal-header{
 		background:#428bca;
@@ -53,4 +53,46 @@
 	}
 .wp-admin select{
 	height:34px;
+}
+.selected_link{
+	color:#428bca !important;
+	font-weight: bold;
+}
+.modal-content{
+	border:0px;
+	border-radius: 0px;
+}
+h2{
+	margin-bottom: 40px;
+	color:#2e6da4 !important;
+}
+.ui-widget-header a{
+	color:white;
+}
+.btn-primary:hover{
+	border-color: #286090;
+}
+.navbar-inverse{
+	background: #efefef;
+	border:0px;
+}
+.navbar-inverse .navbar-nav>li>a{
+	color:black;
+}
+.navbar-inverse .navbar-nav>li>a:focus, .navbar-inverse .navbar-nav>li>a:hover{
+	color:black;
+}
+.body-question{
+	padding: 20px;
+}
+.panel{
+	border-radius:0px;
+}
+.body-question{
+	padding:20px;
+}
+input[type=radio] {
+    margin: 8px 10px 0;
+    margin-top: 1px\9;
+    line-height: normal;
 }

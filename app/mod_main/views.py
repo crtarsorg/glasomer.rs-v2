@@ -1,12 +1,11 @@
 # coding=utf-8
-import pprint
-from app import mongo_utils, mongo,UPLOAD_FOLDER,ALLOWED_EXTENSIONS
-from bson import json_util, ObjectId
-from flask import Blueprint, render_template, request, Response, redirect, url_for, flash,session
-import os, json
+from app import mongo_utils
+from bson import json_util
+from flask import Blueprint, render_template, request, Response,session
+import json
 import time
 from datetime import datetime
-from flask.ext.security import current_user
+
 from operator import itemgetter
 mod_main = Blueprint('main', __name__)
 
@@ -34,7 +33,6 @@ def results(user_id):
     number_of_questions = len(json.loads(json_util.dumps(results['all_question'])))
     candidates = json.loads(json_util.dumps(results['candidate_results']))
     users = json.loads(json_util.dumps(results['user_results']))
-    # print json.loads(json_util.dumps(results['candidate_results']))
     candidates_array = []
     while countquestions <= number_of_questions:
         for candidate in candidates:

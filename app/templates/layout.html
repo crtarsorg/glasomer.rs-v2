@@ -5,143 +5,142 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Glasomer</title>
     <!-- Meta tags for Social media networks -->
+    {% block metatags %}
+        <meta name="description" content="Glasomer pomaže građanima da uporede svoje političke stavove sa stavovima kandidata koji se takmiče na predstojećim predsedničkim izborima. Izabrani stavovi su u vezi sa aktuelnim društveno-političkim dešavanjima u Srbiji."/>
 
-    {%  block metatags %}
-    <meta name="description" content="Glasomer pomaže građanima da uporede svoje političke stavove sa stavovima kandidata koji se takmiče na predstojećim predsedničkim izborima. Izabrani stavovi su u vezi sa aktuelnim društveno-političkim dešavanjima u Srbiji."/>
+        <!-- FB meta -->
+        <meta property="og:title" content="Zanima te koliko se tvoji stavovi poklapaju sa stavovima predsedničkih kandidata? Proveri na Glasomeru."/>
+        <meta property="og:url" content="http://glasomer.rs"/>
+        <meta property="og:description" content="Glasomer pomaže građanima da uporede svoje političke stavove sa stavovima kandidata koji se takmiče na predstojećim predsedničkim izborima. Izabrani stavovi su u vezi sa aktuelnim društveno-političkim dešavanjima u Srbiji."/>
+        <meta property="og:image" content="{{ url_for('static', filename = 'assets/instinomer_logo.png') }}"/>
 
-    <!-- FB meta -->
-    <meta property="og:title" content="Zanima te koliko se tvoji stavovi poklapaju sa stavovima predsedničkih kandidata? Proveri na Glasomeru."/>
-    <meta property="og:url" content="http://glasomer.rs" />
-
-    <meta property="og:description" content="Glasomer pomaže građanima da uporede svoje političke stavove sa stavovima kandidata koji se takmiče na predstojećim predsedničkim izborima. Izabrani stavovi su u vezi sa aktuelnim društveno-političkim dešavanjima u Srbiji."/>
-    <meta property="og:image" content="{{ url_for('static', filename = 'assets/instinomer_logo.png') }}" />
-
-    <!-- Twitter meta -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:site" content="@CRTArs">
-    <meta name="twitter:creator" content="@CRTArs">
-    <meta name="twitter:title" content="Zanima te koliko se tvoji stavovi poklapaju sa stavovima stranaka? Proveri na Glasomeru!">
-    <meta name="twitter:description" content="Zanima te koliko se tvoji stavovi poklapaju sa stavovima stranaka? Proveri na Glasomeru! http://glasomer.rs/">
-    <meta name="twitter:image" content="http://glasomer.rs/static/assets/instinomer_logo.png"/>
+        <!-- Twitter meta -->
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:site" content="@CRTArs">
+        <meta name="twitter:creator" content="@CRTArs">
+        <meta name="twitter:title" content="Zanima te koliko se tvoji stavovi poklapaju sa stavovima stranaka? Proveri na Glasomeru!">
+        <meta name="twitter:description" content="Zanima te koliko se tvoji stavovi poklapaju sa stavovima stranaka? Proveri na Glasomeru! http://glasomer.rs/">
+        <meta name="twitter:image" content="http://glasomer.rs/static/assets/instinomer_logo.png"/>
 
     {% endblock %}
-    <link rel="shortcut icon" href="{{ url_for('static',filename='assets/favicon.ico') }}" />
+    <!--CSS-->
+    <link rel="shortcut icon" href="{{ url_for('static',filename='assets/favicon.png') }}"/>
     <link href='//fonts.googleapis.com/css?family=Comfortaa' rel='stylesheet' type='text/css'>
     <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:600,400' rel='stylesheet' type='text/css'>
     <link href='//fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css'>
-
     <link href="{{ url_for('static', filename='font-awesome/css/font-awesome.min.css') }}" rel="stylesheet" type="text/css">
     <link href="//fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
     <link href='//fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
     <link href="//fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic" rel='stylesheet' type='text/css'>
     <link href='//fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
-    <!--CSS-->
+
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}" type="text/css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css"/>
-    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css"/>
     <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+    <!-- JS -->
     <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
     <script src="//code.jquery.com/ui/1.11.2/jquery-ui.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/r/bs-3.3.5/jqc-1.11.3,dt-1.10.8/datatables.min.js"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
-
+    <script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="{{ url_for('static',filename='css/custom.css') }}" type="text/css">
 
     <script>
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r;
+            i[r] = i[r] || function () {
+                        (i[r].q = i[r].q || []).push(arguments)
+                    }, i[r].l = 1 * new Date();
+            a = s.createElement(o),
+                    m = s.getElementsByTagName(o)[0];
+            a.async = 1;
+            a.src = g;
+            m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
 
-    ga('create', 'UA-76259345-1', 'auto');
-    ga('send', 'pageview');
+        ga('create', 'UA-76259345-1', 'auto');
+        ga('send', 'pageview');
     </script>
 </head>
 {% block header %}
-<!-- Navigation -->
-<!-- Header -->
+    <!-- Navigation -->
+    <!-- Header -->
     <div class="container-fluid">
-
-      <nav id="mainNav" class="navbar navbar-default navbar-fixed-top">
-          <div class="bg-primary bg-header">
-              <!-- Brand and toggle get grouped for better mobile display -->
-              <div class="navbar-header">
-                  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" style="margin-top:25px;">
-                      <span class="sr-only">Toggle navigation</span> Menu <i class="fa fa-bars"></i>
-                  </button>
-                  <a href="{{ url_for('main.index')}}">
-                      <img src="{{ url_for('static', filename='assets/Glasomer-logo.svg') }}" alt=""class="img-responsive" style="width:200px">
-                  </a>
-              </div>
-              <!-- Collect the nav links, forms, and other content for toggling -->
-              <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                  <ul class="nav navbar-nav navbar-right">
-                      <li>
-                          <a href="{{ url_for('whatis.index')}}" class="title-menu-text">Šta je Glasomer?</a>
-                      </li>
-                      <li>
-                          <a href="http://izbori.istinomer.rs" target="_blank" class="title-menu-text">IZBORI.ISTINOMER.RS</a>
-                      </li>
-                  </ul>
-              </div>
-              <!-- /.navbar-collapse -->
-          </div>
-                <!-- /.container-fluid -->
-            </nav>
+        <nav id="mainNav" class="navbar navbar-default navbar-fixed-top">
+            <div class="bg-primary bg-header">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                            data-target="#bs-example-navbar-collapse-1" style="margin-top:25px;">
+                        <span class="sr-only">Toggle navigation</span> Menu <i class="fa fa-bars"></i>
+                    </button>
+                    <a href="{{ url_for('main.index') }}">
+                        <img src="{{ url_for('static', filename='assets/Glasomer-logo.svg') }}" alt=""
+                             class="img-responsive" style="width:200px">
+                    </a>
+                </div>
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a href="{{ url_for('whatis.index') }}" class="title-menu-text">Šta je Glasomer?</a>
+                        </li>
+                        <li>
+                            <a href="http://izbori.istinomer.rs" target="_blank" class="title-menu-text">IZBORI.ISTINOMER.RS</a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- /.navbar-collapse -->
+            </div>
+            <!-- /.container-fluid -->
+        </nav>
     </div>
     <div class="col-md-12 social-icons" style="padding-top: 100px;">
-           <div class="col-md-6">
-
-           </div>
-            <div class="col-md-6" style="text-align: right;">
-                <a href="#" class="fa fa-facebook" id="fb-share-link"></a>
-                <a class="fa fa-twitter-square" id="twitter-results" target="_blank" href="#"></a>
-            </div>
-       </div>
+        <div class="col-md-6">
+        </div>
+        <div class="col-md-6" style="text-align: right;">
+            <a href="#" class="fa fa-facebook" id="fb-share-link"></a>
+            <a class="fa fa-twitter-square" id="twitter-results" target="_blank" href="#"></a>
+        </div>
+    </div>
 {% endblock %}
 <!-- end header -->
 {% block body %}
-
 {% endblock %}
-
 {% block footer %}
-<!-- Footer -->
+    <!-- Footer -->
     <div class="container-fluid">
-
     </div>
 {% endblock %}
 <!-- end block footer -->
 </div>
 <script>
-  $("#twitter-results").on("click",function() {
-      if ($('.user_questions').is(':hidden')) {
-          $("#twitter-results").attr("href", "https://twitter.com/intent/tweet?text=%23Glasomer%20Proveri%20koliko%20se%20moji%20stavovi%20poklapaju%20sa%20stavovima%20predsedni%C4%8Dkih%20kandidata.%20http%3A%2F%2Fglasomer.rs/results/{{ user_id }}%20pic.twitter.com/dkylq8LOdE");
-      }else{
-             $("#twitter-results").attr("href", "https://twitter.com/intent/tweet?text=%23Glasomer%20Proveri%20koliko%20se%20tvoji%20stavovi%20poklapaju%20sa%20stavovima%20predsedni%C4%8Dkih%20kandidata.%20http%3A%2F%2Fglasomer.rs%20pic.twitter.com/dkylq8LOdE");
-      }
-  });
-    $("#fb-share-link").on("click",function(){
-
-         if ($('.user_questions').is(':hidden')) {
-
-
-             httpGet("https://www.facebook.com/sharer/sharer.php?u=http://glasomer.rs/results/{{ user_id }}");
-             var fbPopup = window.open("https://www.facebook.com/sharer/sharer.php?u=http://glasomer.rs/results/{{ user_id }}", "pop", "width=600, height=400, scrollbars=no");
-             return false;
-         }
-         else{
-
-             var fbPopup = window.open("https://www.facebook.com/sharer/sharer.php?u=http://glasomer.rs", "pop", "width=600, height=400, scrollbars=no");
-             return false;
-         }
+    $("#twitter-results").on("click", function () {
+        if ($('.user_questions').is(':hidden')) {
+            $("#twitter-results").attr("href", "https://twitter.com/intent/tweet?text=%23Glasomer%20Proveri%20koliko%20se%20moji%20stavovi%20poklapaju%20sa%20stavovima%20predsedni%C4%8Dkih%20kandidata.%20http%3A%2F%2Fglasomer.rs/results/{{ user_id }}%20pic.twitter.com/dkylq8LOdE");
+        } else {
+            $("#twitter-results").attr("href", "https://twitter.com/intent/tweet?text=%23Glasomer%20Proveri%20koliko%20se%20tvoji%20stavovi%20poklapaju%20sa%20stavovima%20predsedni%C4%8Dkih%20kandidata.%20http%3A%2F%2Fglasomer.rs%20pic.twitter.com/dkylq8LOdE");
+        }
     });
+    $("#fb-share-link").on("click", function () {
+        if ($('.user_questions').is(':hidden')) {
 
-    function httpGet(theUrl)
-    {
+            httpGet("https://www.facebook.com/sharer/sharer.php?u=http://glasomer.rs/results/{{ user_id }}");
+            var fbPopup = window.open("https://www.facebook.com/sharer/sharer.php?u=http://glasomer.rs/results/{{ user_id }}", "pop", "width=600, height=400, scrollbars=no");
+            return false;
+        }
+        else {
+
+            var fbPopup = window.open("https://www.facebook.com/sharer/sharer.php?u=http://glasomer.rs", "pop", "width=600, height=400, scrollbars=no");
+            return false;
+        }
+    });
+    function httpGet(theUrl) {
         var xmlHttp = new XMLHttpRequest();
-        xmlHttp.open( "GET", theUrl, false ); // false for synchronous request
+        xmlHttp.open("GET", theUrl, false); // false for synchronous request
         return xmlHttp.responseText;
     }
 </script>

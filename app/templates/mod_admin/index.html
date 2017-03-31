@@ -1,640 +1,589 @@
 {% extends 'layout_admin.html' %}
-
 {% block body %}
-     <div id="add-group-modal" class="modal fade" tabindex="-1">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header">
-						<button class="close" type="button" data-dismiss="modal">x</button>
-						<h4 class="modal-title">Add Group</h4>
-					</div>
-					<div class="modal-body">
-
-						<form id="add-group-form" name="add_group"  method="POST">
-                            <div class="form-group">
-								<label for="project_name">Project:</label>
-                                <select id="project_name" name="project_slug" class="form-control" title="">
-									<option value="">Select Project</option>
-
-                                    {% for a in projects %}
-                                        <option value="{{ a['year'] }}">
-                                            {{ a['year'] }}
-                                        </option>
-                                    {% endfor %}
-								</select>
-							</div>
-							<div class="form-group">
-								<label for="group_name">Group Name:</label>
-								<input name="group_name" type="text" class="form-control" id="group_id" placeholder="Name">
-							</div>
-
-							<div class="modal-footer">
-								<button class="btn btn-default" type="button" data-dismiss="modal">Close</button>
-								<input type="submit" value="Save changes" name="editInd" class="btn btn-primary" id="add-indicator-button" >
-							</div>
-                        </form>
-					</div><!-- /.modal-content -->
-				</div>
-			</div><!-- /.modal-dialog -->
-		</div><!-- /.modal -->
-         <div id="edit-group-modal" class="modal fade" tabindex="-1">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header">
-						<button class="close" type="button" data-dismiss="modal">x</button>
-						<h4 class="modal-title">Edit Group</h4>
-					</div>
-					<div class="modal-body">
-						<form id="edit-group-form" name="edit_group"  method="POST">
-                            <input type="hidden" id="hidden_group">
-                            <select id="edit_project_name" name="project_slug" class="form-control" title="">
+    <div id="add-group-modal" class="modal fade" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button class="close" type="button" data-dismiss="modal">x</button>
+                    <h4 class="modal-title">Add Group</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="add-group-form" name="add_group" method="POST">
+                        <div class="form-group">
+                            <label for="project_name">Project:</label>
+                            <select id="project_name" name="project_slug" class="form-control" title="">
                                 <option value="">Select Project</option>
-                                    {% for a in projects %}
-                                        <option value="{{ a['year'] }}">
-                                            {{ a['year'] }}
-                                        </option>
-                                    {% endfor %}
-								</select>
-							<div class="form-group">
-								<label for="group_name">Group Name:</label>
-								<input name="edit_group_name" type="text" class="form-control" id="edit_group_id" placeholder="Name">
-							</div>
-
-							<div class="modal-footer">
-								<button class="btn btn-default" type="button" data-dismiss="modal">Close</button>
-								<input type="submit" value="Save changes" name="createInd" class="btn btn-primary" id="edit-indicator-button">
-
-							</div>
-                        </form>
-					</div><!-- /.modal-content -->
-				</div>
-			</div><!-- /.modal-dialog -->
-		</div><!-- /.modal -->
-          <div id="add-question-modal" class="modal fade" tabindex="-1">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header">
-						<button class="close" type="button" data-dismiss="modal">x</button>
-						<h4 class="modal-title">Add Question</h4>
-					</div>
-					<div class="modal-body">
-                        <input type="hidden" id="slug_group_question">
-                        <input type="hidden" id="slug_group_project">
-						<form id="add-question-form" name="add_question"  method="POST">
-							<div class="form-group">
-								<label for="question_name">Question:</label>
-								<input name="question_name" type="text" class="form-control" id="question_name" placeholder="Question">
-							</div>
-							<div class="modal-footer">
-								<button class="btn btn-default" type="button" data-dismiss="modal">Close</button>
-								<input type="submit" value="Save changes" name="addquestion" class="btn btn-primary" id="add-question-button">
-
-							</div>
-                        </form>
-					</div><!-- /.modal-content -->
-				</div>
-			</div><!-- /.modal-dialog -->
-		</div><!-- /.modal -->
-
-      <div id="edit-question-modal" class="modal fade" tabindex="-1">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header">
-						<button class="close" type="button" data-dismiss="modal">x</button>
-						<h4 class="modal-title">Edit Question</h4>
-					</div>
-					<div class="modal-body">
-
-						<form id="edit-question-form" name="edit_question"  method="POST">
-                                  <input type="hidden" id="edit_slug_group">
-                                    <input type="hidden" id="edit_slug_group_question">
-							<div class="form-group">
-								<label for="edit_question_name">Question:</label>
-								<input name="edit_question_name" type="text" class="form-control" id="edit_question_name" placeholder="Question">
-							</div>
-
-							<div class="modal-footer">
-								<button class="btn btn-default" type="button" data-dismiss="modal">Close</button>
-								<input type="submit" value="Save changes" name="editquestion" class="btn btn-primary" id="edit-question-button">
-							</div>
-                        </form>
-					</div><!-- /.modal-content -->
-				</div>
-			</div><!-- /.modal-dialog -->
-		</div><!-- /.modal -->
+                                {% for a in projects %}
+                                    <option value="{{ a['year'] }}">
+                                        {{ a['year'] }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="group_name">Group Name:</label>
+                            <input name="group_name" type="text" class="form-control" id="group_id" placeholder="Name">
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-default" type="button" data-dismiss="modal">Close</button>
+                            <input type="submit" value="Save changes" name="editInd" class="btn btn-primary"
+                                   id="add-indicator-button">
+                        </div>
+                    </form>
+                </div><!-- /.modal-content -->
+            </div>
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+    <div id="edit-group-modal" class="modal fade" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button class="close" type="button" data-dismiss="modal">x</button>
+                    <h4 class="modal-title">Edit Group</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="edit-group-form" name="edit_group" method="POST">
+                        <input type="hidden" id="hidden_group">
+                        <select id="edit_project_name" name="project_slug" class="form-control" title="">
+                            <option value="">Select Project</option>
+                            {% for a in projects %}
+                                <option value="{{ a['year'] }}">
+                                    {{ a['year'] }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                        <div class="form-group">
+                            <label for="group_name">Group Name:</label>
+                            <input name="edit_group_name" type="text" class="form-control" id="edit_group_id"
+                                   placeholder="Name">
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-default" type="button" data-dismiss="modal">Close</button>
+                            <input type="submit" value="Save changes" name="createInd" class="btn btn-primary"
+                                   id="edit-indicator-button">
+                        </div>
+                    </form>
+                </div><!-- /.modal-content -->
+            </div>
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+    <div id="add-question-modal" class="modal fade" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button class="close" type="button" data-dismiss="modal">x</button>
+                    <h4 class="modal-title">Add Question</h4>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="slug_group_question">
+                    <input type="hidden" id="slug_group_project">
+                    <form id="add-question-form" name="add_question" method="POST">
+                        <div class="form-group">
+                            <label for="question_name">Question:</label>
+                            <input name="question_name" type="text" class="form-control" id="question_name"
+                                   placeholder="Question">
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-default" type="button" data-dismiss="modal">Close</button>
+                            <input type="submit" value="Save changes" name="addquestion" class="btn btn-primary"
+                                   id="add-question-button">
+                        </div>
+                    </form>
+                </div><!-- /.modal-content -->
+            </div>
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+    <div id="edit-question-modal" class="modal fade" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button class="close" type="button" data-dismiss="modal">x</button>
+                    <h4 class="modal-title">Edit Question</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="edit-question-form" name="edit_question" method="POST">
+                        <input type="hidden" id="edit_slug_group">
+                        <input type="hidden" id="edit_slug_group_question">
+                        <div class="form-group">
+                            <label for="edit_question_name">Question:</label>
+                            <input name="edit_question_name" type="text" class="form-control" id="edit_question_name"
+                                   placeholder="Question">
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-default" type="button" data-dismiss="modal">Close</button>
+                            <input type="submit" value="Save changes" name="editquestion" class="btn btn-primary"
+                                   id="edit-question-button">
+                        </div>
+                    </form>
+                </div><!-- /.modal-content -->
+            </div>
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
     </div>
 
     <script>
- function fnFormatDetails(table_id, html) {
+        function fnFormatDetails(table_id, html) {
             var sOut = "<table id=\"exampleTable_" + table_id + "\">";
             sOut += html;
             sOut += "</table>";
             return sOut;
         }
-
-    var newRowData= $.ajax({
-					url: "{{ url_for('admin.get_all_groups') }}", //this is the submit URL
-					type: 'GET', //or POST,
-					dataType: 'json',
-				    async: false,
-            }).responseJSON;
-        var count_groups=40;
-        console.log(newRowData);
-
-    $(document).ready(function () {
-        $('#show-modal-group').click(function (e) {
-            e.preventDefault();
-            $('#add-group-modal').modal('show');
-        });
-
-        $('#add-group-form').on('submit', function (e) {
-            e.preventDefault();
-            $.ajax({
-                url: "{{ url_for('admin.insert_question_group') }}", //this is the submit URL
-                type: 'POST', //or POST,
-                dataType: 'json',
-                data: {
-                    'group_name': $('#group_id').val(),
-                    'project_slug': $('#project_name').val()
-                },
-                success: function (data) {
-                    oTable.fnClearTable(0);
-                    oTable.fnAddData(data);
-                    oTable.fnDraw();
-
-                }
-            });
-            $('#add-group-modal').modal('hide');
-
-        });
-
-        var iTableCounter = 1;
-        var oTable;
-
-        var oInnerTable;
-        var detailsTableHtml;
-        var oTable;
-        // you would probably be using templates here
-        detailsTableHtml = $("#detailsTable").html();
-        //Insert a 'details' column to the table
-        var nCloneTh = document.createElement('th');
-        var nCloneTd = document.createElement('td');
-        nCloneTd.innerHTML = '<img src="{{ url_for('static',filename='assets/plus.png') }}" class="show-sub-table" style="width:20px"/>';
-        nCloneTd.className = "center";
-        $('#exampleTable thead tr').each(function () {
-            this.insertBefore(nCloneTh, this.childNodes[0]);
-        });
-        $('#exampleTable tbody tr').each(function () {
-            this.insertBefore(nCloneTd.cloneNode(true), this.childNodes[0]);
-        });
-
-        function init_sub_table() {
-            $('body').on('click', '.show-sub-table', function (e) {
+        var newRowData = $.ajax({
+            url: "{{ url_for('admin.get_all_groups') }}", //this is the submit URL
+            type: 'GET',
+            dataType: 'json',
+            async: false,
+        }).responseJSON;
+        $(document).ready(function () {
+            $('#show-modal-group').click(function (e) {
                 e.preventDefault();
-                var group_name = $($(this).parent().parent().children()[1]).text();
-
-                var s_id = $($(this).parent().parent().children()[3]).text();
-                var nTr = $(this).parents('tr')[0];
-                var nTds = this;
-                     if (oTable.fnIsOpen(nTr)) {
-                    /* This row is already open - close it */
-                    this.src = '{{ url_for('static',filename='assets/plus.png') }}';
-                }
-                else {
-                    this.src = '{{ url_for('static',filename='assets/minus.png') }}';
-                }
+                $('#add-group-modal').modal('show');
+            });
+            $('#add-group-form').on('submit', function (e) {
+                e.preventDefault();
                 $.ajax({
-                    url: "{{ url_for('admin.get_questions') }}",
-                    type: 'POST', //or POST
+                    url: "{{ url_for('admin.insert_question_group') }}", //this is the submit URL
+                    type: 'POST',
                     dataType: 'json',
-                    data: {'group_name': group_name},
+                    data: {
+                        'group_name': $('#group_id').val(),
+                        'project_slug': $('#project_name').val()
+                    },
                     success: function (data) {
-                        if (oTable.fnIsOpen(nTr)) {
-                            /* This row is already open - close it */
-                            this.src = '{{ url_for('static',filename='assets/minus.png') }}';
-                            this.id = group_name;
-                            oTable.fnClose(nTr);
-                        }
-                        else {
-                            this.src = '{{ url_for('static',filename='assets/minus.png') }}';
-                            oTable.fnOpen(nTr, fnFormatDetails(group_name, detailsTableHtml), 'details');
-                            oInnerTable = $("#exampleTable_" + group_name).dataTable({
-                                "aaData": data,
-                                "bSort": true, // disables sorting
-                                "info": true,
-                                "aoColumns": [
-                                    {"mDataProp": "order_number"},
-
-                                    {"mDataProp": "question_slug"},
-                                    {"mDataProp": "question_name"},
-                                    {"sDefaultContent": "<a class='edit-modal-question' id='' style='padding-right:20px'><i class='fa fa-pencil-square-o fa-lg edit-question' aria-hidden='true'></i></a>" + "<a href='#' class='remove-question' data-group='" + group_name + "'><i class='fa fa-trash-o fa-lg' aria-hidden='true'></i></a>"},
-                                ],
-                                "bPaginate": true,
-                                "oLanguage": {
-                                    "sInfo": "_TOTAL_ entries"
-                                },
-                            });
-                            $(this).attr('id', group_name);
-                            $('tr.details .dataTables_info').html('');
-                            $('tr.details .dataTables_info').append("<a  id='" + group_name + "' data-sdg='" + s_id + "' href='' class='add-question btn btn-primary'>+ Add Question</a>");
-                            $('#exampleTable_' + group_name+' tbody').addClass("DragMeSub");
-
-                            var obj_sub = [];
-                             $('.DragMeSub').sortable({
-                                 disabled: false,
-                                 axis: 'y',
-                                 forceHelperSize: true,
-                                 update: function (event, ui) {
-
-                                     var Newpos_sub = ui.item.index();
-                                     var RefID_sub= $('tr').find('td:first').html();
-                                     //alert("Position " + Newpos + "..... RefID: " + RefID);
-                                     $("#exampleTable_"+ group_name+ " tr:has(td)").each(function () {
-                                         var RefID = $(this).find("td:eq(0)").html();
-                                         var RefName_sub = $(this).find("td:eq(1)").html();
-
-                                         var NewPosition_sub = $(this).index()+1;
-                                         tmp = {
-                                                'question_slug': RefName_sub,
-                                                'order_number': NewPosition_sub,
-                                                'group_name': group_name
-                                            };
-                                            obj_sub.push(tmp);
-
-                                     });
-                                     $.ajax({
-                                        url: "{{ url_for('admin.update_order_question') }}", //this is the submit URL
-                                        type: 'POST', //or POST,
-                                        dataType: 'json',
-                                        data: JSON.stringify(obj_sub),
-                                        success: function (data) {
-                                            obj_sub = [];
-
-                                            $('#exampleTable_' + group_name).dataTable().fnDestroy();
-                                            oInnerTable = $("#exampleTable_" + group_name).dataTable({
-                                            "bJQueryUI": true,
-                                            "bFilter": false,
-
-                                            "aaData": data,
-                                            "bSort": true, // disables sorting
-                                            "info": true,
-                                            "aoColumns": [
-                                                {"mDataProp": "order_number"},
-                                                {"mDataProp": "question_slug"},
-                                                {"mDataProp": "question_name"},
-                                                {"sDefaultContent": "<a href='' class='edit-modal-question' id='' style='padding-right:20px'><i class='fa fa-pencil-square-o fa-lg edit-question' aria-hidden='true'></i></a>" + "<a href='#' class='remove-question' data-group='" + group_name + "'><i class='fa fa-trash-o fa-lg' aria-hidden='true'></i></a>"},
-                                                ],
-                                                "bPaginate": true,
-                                                "oLanguage": {
-                                                    "sInfo": "_TOTAL_ entries"
-                                                },
-                                            });
-                                            $(this).attr('id', group_name)
-                                            $('tr.details .dataTables_info').html('');
-                                            $('tr.details .dataTables_info').append("<a  id='" + group_name + "' data-sdg='" + group_name + "' href='' class='add-question btn btn-primary'>+ Add Question</a>");
-
-                                        }
-                                    });
-
-                                 }
-                             }).disableSelection();
-                        }
-
+                        oTable.fnClearTable(0);
+                        oTable.fnAddData(data);
+                        oTable.fnDraw();
                     }
                 });
-
+                $('#add-group-modal').modal('hide');
+                $('.form-control').val('');
 
             });
-        }
-
-        function init_table(newRowData) {
-            oTable = $('#exampleTable').dataTable({
-
-                "aaData": newRowData,
-                 "order": [[ 3, "asc" ]],
-                "aoColumns": [
-                    {
-                        "mDataProp": null,
-                        "sClass": "control center",
-                        "sDefaultContent": '<img src="{{ url_for('static',filename='assets/plus.png') }}" class="show-sub-table" style="width:20px;"/>'
-                    },
-                    {"mDataProp": "generated_id"},
-                    {"mDataProp": "project_slug"},
-                    {"mDataProp": "order_number"},
-                    {"mDataProp": "slug"},
-                    {"mDataProp": "group_name"},
-
-                    {"sDefaultContent": "<a class='edit-group-modal' id='' style='padding-right:20px'><i class='fa fa-pencil-square-o fa-lg edit-group' aria-hidden='true'></i></a>" + "<a href='#' class='remove-group'><i class='fa fa-trash-o fa-lg' aria-hidden='true'></i></a>"},
-
-                ],
-
-                "oLanguage": {
-                    "sInfo": "_TOTAL_ entries"
-                },
-                "aaSorting": [[1, 'asc']]
+            var iTableCounter = 1;
+            var oTable;
+            var oInnerTable;
+            var detailsTableHtml;
+            var oTable;
+            // you would probably be using templates here
+            detailsTableHtml = $("#detailsTable").html();
+            //Insert a 'details' column to the table
+            var nCloneTh = document.createElement('th');
+            var nCloneTd = document.createElement('td');
+            nCloneTd.innerHTML = '<img src="{{ url_for('static',filename='assets/plus.png') }}" class="show-sub-table" style="width:20px"/>';
+            nCloneTd.className = "center";
+            $('#exampleTable thead tr').each(function () {
+                this.insertBefore(nCloneTh, this.childNodes[0]);
             });
-
-
-        }
-
-
-        init_table(newRowData);
-        init_sub_table();
-        $('body').on('click', '.add-question ', function (e) {
-            e.preventDefault();
-
-            $('#add-question-modal').modal('show');
-            var groupe_name = $(this).attr('id');
-            $('#slug_group_question').val(groupe_name);
-            {#$('#measurement_sdg').val(sdg_id);
-			$('#measurement_indicator_id').val(indicator_id);#}
-        });
-        $('body').on('click', '.edit-group-modal', function () {
-            $('#edit-group-modal').modal('show');
-        });
-        $('body').on('click', '.remove-group', function (e) {
-            e.preventDefault();
-            var group_name = $($(this).parent().parent().children()[1]).text();
-            BootstrapDialog.show({
-                message: 'Are you sure you want to delete the Group?',
-                buttons: [{
-                    icon: 'glyphicon glyphicon-send',
-                    label: 'OK',
-                    cssClass: 'btn-primary',
-                    autospin: false,
-                    action: function (dialogRef) {
-                        $.ajax({
-                            url: "{{ url_for('admin.delete_group') }}", //this is the submit URL
-                            type: 'POST', //or POST
-                            dataType: 'json',
-                            data: {'group_name': group_name},
-                            success: function (data) {
-                                oTable.fnClearTable(0);
-                                oTable.fnAddData(data);
-                                oTable.fnDraw();
-
+            $('#exampleTable tbody tr').each(function () {
+                this.insertBefore(nCloneTd.cloneNode(true), this.childNodes[0]);
+            });
+            function init_sub_table() {
+                $('body').on('click', '.show-sub-table', function (e) {
+                    e.preventDefault();
+                    var group_name = $($(this).parent().parent().children()[1]).text();
+                    var s_id = $($(this).parent().parent().children()[3]).text();
+                    var nTr = $(this).parents('tr')[0];
+                    var nTds = this;
+                    if (oTable.fnIsOpen(nTr)) {
+                        /* This row is already open - close it */
+                        this.src = '{{ url_for('static',filename='assets/plus.png') }}';
+                    }
+                    else {
+                        this.src = '{{ url_for('static',filename='assets/minus.png') }}';
+                    }
+                    $.ajax({
+                        url: "{{ url_for('admin.get_questions') }}",
+                        type: 'POST', //or POST
+                        dataType: 'json',
+                        data: {'group_name': group_name},
+                        success: function (data) {
+                            if (oTable.fnIsOpen(nTr)) {
+                                /* This row is already open - close it */
+                                this.src = '{{ url_for('static',filename='assets/minus.png') }}';
+                                this.id = group_name;
+                                oTable.fnClose(nTr);
                             }
-                        });
-                        setTimeout(function () {
-                            dialogRef.close();
-                        }, 100);
-                    }
-                }, {
-                    label: 'Close',
-                    action: function (dialogRef) {
-                        dialogRef.close();
-                    }
-                }]
-            });
-
-        });
-        $('body').on('click', '.remove-question', function (e) {
-            e.preventDefault();
-            var question_slug = $($(this).parent().parent().children()[1]).text();
-            var group_slug = $(this).attr('data-group');
-            console.log(group_slug);
-
-            BootstrapDialog.show({
-                message: 'Are you sure you want to delete the Question?',
-                buttons: [{
-                    icon: 'glyphicon glyphicon-send',
-                    label: 'OK',
-                    cssClass: 'btn-primary',
-                    autospin: false,
-                    action: function (dialogRef) {
-                        $.ajax({
-                            url: "{{ url_for('admin.remove_question') }}", //this is the submit URL
-                            type: 'POST', //or POST
-                            dataType: 'json',
-                            data: {'question_slug': question_slug, 'group_name': group_slug},
-                            success: function (data) {
-                                $('#exampleTable_' + group_slug).dataTable().fnDestroy();
-                                oInnerTable = $("#exampleTable_" + group_slug).dataTable({
-                                    "bJQueryUI": true,
-                                    "bFilter": false,
+                            else {
+                                this.src = '{{ url_for('static',filename='assets/minus.png') }}';
+                                oTable.fnOpen(nTr, fnFormatDetails(group_name, detailsTableHtml), 'details');
+                                oInnerTable = $("#exampleTable_" + group_name).dataTable({
                                     "aaData": data,
                                     "bSort": true, // disables sorting
                                     "info": true,
                                     "aoColumns": [
                                         {"mDataProp": "order_number"},
+
                                         {"mDataProp": "question_slug"},
                                         {"mDataProp": "question_name"},
-                                        {"sDefaultContent": "<a href='' class='edit-modal-question' id='' style='padding-right:20px'><i class='fa fa-pencil-square-o fa-lg edit-question' aria-hidden='true'></i></a>" + "<a href='#' class='remove-question' data-group='" + group_slug + "'><i class='fa fa-trash-o fa-lg' aria-hidden='true'></i></a>"},
+                                        {"sDefaultContent": "<a class='edit-modal-question' id='' style='padding-right:20px'><i class='fa fa-pencil-square-o fa-lg edit-question' aria-hidden='true'></i></a>" + "<a href='#' class='remove-question' data-group='" + group_name + "'><i class='fa fa-trash-o fa-lg' aria-hidden='true'></i></a>"},
                                     ],
                                     "bPaginate": true,
                                     "oLanguage": {
                                         "sInfo": "_TOTAL_ entries"
                                     },
                                 });
-                                $(this).attr('id', group_slug)
+                                $(this).attr('id', group_name);
                                 $('tr.details .dataTables_info').html('');
-                                $('tr.details .dataTables_info').append("<a  id='" + group_slug + "' data-sdg='" + group_slug + "' href='' class='add-question btn btn-primary'>+ Add Question</a>");
+                                $('tr.details .dataTables_info').append("<a  id='" + group_name + "' data-sdg='" + s_id + "' href='' class='add-question btn btn-primary'>+ Add Question</a>");
+                                $('#exampleTable_' + group_name + ' tbody').addClass("DragMeSub");
+                                var obj_sub = [];
+                                $('.DragMeSub').sortable({
+                                    disabled: false,
+                                    axis: 'y',
+                                    forceHelperSize: true,
+                                    update: function (event, ui) {
+                                        var Newpos_sub = ui.item.index();
+                                        var RefID_sub = $('tr').find('td:first').html();
+                                        //alert("Position " + Newpos + "..... RefID: " + RefID);
+                                        $("#exampleTable_" + group_name + " tr:has(td)").each(function () {
+                                            var RefID = $(this).find("td:eq(0)").html();
+                                            var RefName_sub = $(this).find("td:eq(1)").html();
+                                            var NewPosition_sub = $(this).index() + 1;
+                                            tmp = {
+                                                'question_slug': RefName_sub,
+                                                'order_number': NewPosition_sub,
+                                                'group_name': group_name
+                                            };
+                                            obj_sub.push(tmp);
+                                        });
+                                        $.ajax({
+                                            url: "{{ url_for('admin.update_order_question') }}", //this is the submit URL
+                                            type: 'POST', //or POST,
+                                            dataType: 'json',
+                                            data: JSON.stringify(obj_sub),
+                                            success: function (data) {
+                                                obj_sub = [];
+                                                $('#exampleTable_' + group_name).dataTable().fnDestroy();
+                                                oInnerTable = $("#exampleTable_" + group_name).dataTable({
+                                                    "bJQueryUI": true,
+                                                    "bFilter": false,
+                                                    "aaData": data,
+                                                    "bSort": true, // disables sorting
+                                                    "info": true,
+                                                    "aoColumns": [
+                                                        {"mDataProp": "order_number"},
+                                                        {"mDataProp": "question_slug"},
+                                                        {"mDataProp": "question_name"},
+                                                        {"sDefaultContent": "<a href='' class='edit-modal-question' id='' style='padding-right:20px'><i class='fa fa-pencil-square-o fa-lg edit-question' aria-hidden='true'></i></a>" + "<a href='#' class='remove-question' data-group='" + group_name + "'><i class='fa fa-trash-o fa-lg' aria-hidden='true'></i></a>"},
+                                                    ],
+                                                    "bPaginate": true,
+                                                    "oLanguage": {
+                                                        "sInfo": "_TOTAL_ entries"
+                                                    },
+                                                });
+                                                $(this).attr('id', group_name)
+                                                $('tr.details .dataTables_info').html('');
+                                                $('tr.details .dataTables_info').append("<a  id='" + group_name + "' data-sdg='" + group_name + "' href='' class='add-question btn btn-primary'>+ Add Question</a>");
 
+                                            }
+                                        });
+                                    }
+                                }).disableSelection();
                             }
-                        });
-                        setTimeout(function () {
-                            dialogRef.close();
-                        }, 100);
-                    }
-                }, {
-                    label: 'Close',
-                    action: function (dialogRef) {
-                        dialogRef.close();
-                    }
-                }]
-            });
-
-
-        });
-        $('#edit-group-form').on('submit', function (e) {
-
-            $.ajax({
-                url: "{{ url_for('admin.edit_selected_group') }}", //this is the submit URL
-                type: 'POST', //or POST,
-                dataType: 'json',
-                data: {
-                    'group_name': $('#edit_group_id').val(),
-                    'order_number': $('#edit_order_number').val(),
-                    'hidden_group': $('#hidden_group').val(),
-                    'project_slug': $('#edit_project_name').val(),
-                },
-                success: function (data) {
-                    oTable.fnClearTable(0);
-                    oTable.fnAddData(data);
-                    oTable.fnDraw();
-
-                }
-            });
-            $('#edit-group-modal').modal('hide');
-            e.preventDefault();
-        });
-        $('#add-question-form').on('submit', function (e) {
-            var group_name = $('#slug_group_question').val();
-            $.ajax({
-                url: "{{ url_for('admin.add_question_group') }}", //this is the submit URL
-                type: 'POST', //or POST,
-                dataType: 'json',
-                data: {
-                    'question_name': $('#question_name').val(),
-                    'group_name': $('#slug_group_question').val()
-                },
-                success: function (data) {
-                    $('#exampleTable_' + group_name).dataTable().fnDestroy();
-                    oInnerTable = $("#exampleTable_" + group_name).dataTable({
-                        "bJQueryUI": true,
-                        "bFilter": false,
-                        "aaData": data,
-                        "bSort": true, // disables sorting
-                        "info": true,
-                        "aoColumns": [
-                            {"mDataProp": "order_number"},
-                            {"mDataProp": "question_slug"},
-                            {"mDataProp": "question_name"},
-                            {"sDefaultContent": "<a  class='edit-modal-question' id='' style='padding-right:20px'><i class='fa fa-pencil-square-o fa-lg edit-question' aria-hidden='true'></i></a>" + "<a href='#' class='remove-question' data-group='" + group_name + "'><i class='fa fa-trash-o fa-lg' aria-hidden='true'></i></a>"},
-                        ],
-                        "bPaginate": true,
-                        "oLanguage": {
-                            "sInfo": "_TOTAL_ entries"
-                        },
+                        }
                     });
-                    $(this).attr('id', group_name)
-                    $('tr.details .dataTables_info').html('');
-                    $('tr.details .dataTables_info').append("<a  id='" + group_name + "' data-sdg='" + group_name + "' href='' class='add-question btn btn-primary'>+ Add Question</a>");
+                });
+            }
 
-
-                }
-            });
-            e.preventDefault();
-            $('#add-question-modal').modal('hide');
-        });
-
-        $('#edit-question-form').on('submit', function (e) {
-            var group_name = $('#edit_slug_group').val();
-            $.ajax({
-                url: "{{ url_for('admin.edit_question_group') }}", //this is the submit URL
-                type: 'POST', //or POST,
-                dataType: 'json',
-                data: {
-                    'question_name': $('#edit_question_name').val(),
-                    'group_name': $('#edit_slug_group').val(),
-                    'hidden_question': $('#edit_slug_group_question').val(),
-                },
-                success: function (data) {
-
-                    $('#exampleTable_' + group_name).dataTable().fnDestroy();
-                    oInnerTable = $("#exampleTable_" + group_name).dataTable({
-                        "bJQueryUI": true,
-                        "bFilter": false,
-                        "aaData": data,
-                        "bSort": true, // disables sorting
-                        "info": true,
-                        "aoColumns": [
-                            {"mDataProp": "order_number"},
-                            {"mDataProp": "question_slug"},
-                            {"mDataProp": "question_name"},
-                            {"sDefaultContent": "<a class='edit-modal-question' id='' style='padding-right:20px'><i class='fa fa-pencil-square-o fa-lg edit-question' aria-hidden='true'></i></a>" + "<a href='#' class='remove-question' data-group='" + group_name + "'><i class='fa fa-trash-o fa-lg' aria-hidden='true'></i></a>"},
-                        ],
-                        "bPaginate": true,
-                        "oLanguage": {
-                            "sInfo": "_TOTAL_ entries"
+            function init_table(newRowData) {
+                oTable = $('#exampleTable').dataTable({
+                    "aaData": newRowData,
+                    "order": [[3, "asc"]],
+                    "aoColumns": [
+                        {
+                            "mDataProp": null,
+                            "sClass": "control center",
+                            "sDefaultContent": '<img src="{{ url_for('static',filename='assets/plus.png') }}" class="show-sub-table" style="width:20px;"/>'
                         },
-                    })
-                    $(this).attr('id', group_name)
-                    $('tr.details .dataTables_info').html('');
-                    $('tr.details .dataTables_info').append("<a  id='" + group_name + "' data-sdg='" + group_name + "' href='' class='add-question btn btn-primary'>+ Add Question</a>");
+                        {"mDataProp": "generated_id"},
+                        {"mDataProp": "project_slug"},
+                        {"mDataProp": "order_number"},
+                        {"mDataProp": "slug"},
+                        {"mDataProp": "group_name"},
+                        {"sDefaultContent": "<a class='edit-group-modal' id='' style='padding-right:20px'><i class='fa fa-pencil-square-o fa-lg edit-group' aria-hidden='true'></i></a>" + "<a href='#' class='remove-group'><i class='fa fa-trash-o fa-lg' aria-hidden='true'></i></a>"},
+                    ],
+                    "oLanguage": {
+                        "sInfo": "_TOTAL_ entries"
+                    },
+                    "aaSorting": [[1, 'asc']]
+                });
+            }
 
-                }
+            init_table(newRowData);
+            init_sub_table();
+            $('body').on('click', '.add-question ', function (e) {
+                e.preventDefault();
+                $('#add-question-modal').modal('show');
+                var groupe_name = $(this).attr('id');
+                $('#slug_group_question').val(groupe_name);
             });
-            $('#edit-question-modal').modal('hide');
-            e.preventDefault();
+            $('body').on('click', '.edit-group-modal', function () {
+                $('#edit-group-modal').modal('show');
+            });
+            $('body').on('click', '.remove-group', function (e) {
+                e.preventDefault();
+                var group_name = $($(this).parent().parent().children()[1]).text();
+                BootstrapDialog.show({
+                    message: 'Are you sure you want to delete the Group?',
+                    buttons: [{
+                        icon: 'glyphicon glyphicon-send',
+                        label: 'OK',
+                        cssClass: 'btn-primary',
+                        autospin: false,
+                        action: function (dialogRef) {
+                            $.ajax({
+                                url: "{{ url_for('admin.delete_group') }}", //this is the submit URL
+                                type: 'POST', //or POST
+                                dataType: 'json',
+                                data: {'group_name': group_name},
+                                success: function (data) {
+                                    oTable.fnClearTable(0);
+                                    oTable.fnAddData(data);
+                                    oTable.fnDraw();
+                                }
+                            });
+                            setTimeout(function () {
+                                dialogRef.close();
+                            }, 100);
+                        }
+                    },
+                        {
+                            label: 'Close',
+                            action: function (dialogRef) {
+                                dialogRef.close();
+                            }
+                        }
+                    ]
+                });
+
+            });
+            $('body').on('click', '.remove-question', function (e) {
+                e.preventDefault();
+                var question_slug = $($(this).parent().parent().children()[1]).text();
+                var group_slug = $(this).attr('data-group');
+                BootstrapDialog.show({
+                    message: 'Are you sure you want to delete the Question?',
+                    buttons: [{
+                        icon: 'glyphicon glyphicon-send',
+                        label: 'OK',
+                        cssClass: 'btn-primary',
+                        autospin: false,
+                        action: function (dialogRef) {
+                            $.ajax({
+                                url: "{{ url_for('admin.remove_question') }}", //this is the submit URL
+                                type: 'POST', //or POST
+                                dataType: 'json',
+                                data: {'question_slug': question_slug, 'group_name': group_slug},
+                                success: function (data) {
+                                    $('#exampleTable_' + group_slug).dataTable().fnDestroy();
+                                    oInnerTable = $("#exampleTable_" + group_slug).dataTable({
+                                        "bJQueryUI": true,
+                                        "bFilter": false,
+                                        "aaData": data,
+                                        "bSort": true, // disables sorting
+                                        "info": true,
+                                        "aoColumns": [
+                                            {"mDataProp": "order_number"},
+                                            {"mDataProp": "question_slug"},
+                                            {"mDataProp": "question_name"},
+                                            {"sDefaultContent": "<a href='' class='edit-modal-question' id='' style='padding-right:20px'><i class='fa fa-pencil-square-o fa-lg edit-question' aria-hidden='true'></i></a>" + "<a href='#' class='remove-question' data-group='" + group_slug + "'><i class='fa fa-trash-o fa-lg' aria-hidden='true'></i></a>"},
+                                        ],
+                                        "bPaginate": true,
+                                        "oLanguage": {
+                                            "sInfo": "_TOTAL_ entries"
+                                        },
+                                    });
+                                    $(this).attr('id', group_slug)
+                                    $('tr.details .dataTables_info').html('');
+                                    $('tr.details .dataTables_info').append("<a  id='" + group_slug + "' data-sdg='" + group_slug + "' href='' class='add-question btn btn-primary'>+ Add Question</a>");
+                                }
+                            });
+                            setTimeout(function () {
+                                dialogRef.close();
+                            }, 100);
+                        }
+                    }, {
+                        label: 'Close',
+                        action: function (dialogRef) {
+                            dialogRef.close();
+                        }
+                    }]
+                });
+            });
+            $('#edit-group-form').on('submit', function (e) {
+                $.ajax({
+                    url: "{{ url_for('admin.edit_selected_group') }}", //this is the submit URL
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        'group_name': $('#edit_group_id').val(),
+                        'order_number': $('#edit_order_number').val(),
+                        'hidden_group': $('#hidden_group').val(),
+                        'project_slug': $('#edit_project_name').val(),
+                    },
+                    success: function (data) {
+                        oTable.fnClearTable(0);
+                        oTable.fnAddData(data);
+                        oTable.fnDraw();
+                    }
+                });
+                $('#edit-group-modal').modal('hide');
+                e.preventDefault();
+            });
+            $('#add-question-form').on('submit', function (e) {
+                var group_name = $('#slug_group_question').val();
+                $.ajax({
+                    url: "{{ url_for('admin.add_question_group') }}", //this is the submit URL
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        'question_name': $('#question_name').val(),
+                        'group_name': $('#slug_group_question').val()
+                    },
+                    success: function (data) {
+                        $('#exampleTable_' + group_name).dataTable().fnDestroy();
+                        oInnerTable = $("#exampleTable_" + group_name).dataTable({
+                            "bJQueryUI": true,
+                            "bFilter": false,
+                            "aaData": data,
+                            "bSort": true, // disables sorting
+                            "info": true,
+                            "aoColumns": [
+                                {"mDataProp": "order_number"},
+                                {"mDataProp": "question_slug"},
+                                {"mDataProp": "question_name"},
+                                {"sDefaultContent": "<a  class='edit-modal-question' id='' style='padding-right:20px'><i class='fa fa-pencil-square-o fa-lg edit-question' aria-hidden='true'></i></a>" + "<a href='#' class='remove-question' data-group='" + group_name + "'><i class='fa fa-trash-o fa-lg' aria-hidden='true'></i></a>"},
+                            ],
+                            "bPaginate": true,
+                            "oLanguage": {
+                                "sInfo": "_TOTAL_ entries"
+                            },
+                        });
+                        $(this).attr('id', group_name)
+                        $('tr.details .dataTables_info').html('');
+                        $('tr.details .dataTables_info').append("<a  id='" + group_name + "' data-sdg='" + group_name + "' href='' class='add-question btn btn-primary'>+ Add Question</a>");
+                    }
+                });
+                e.preventDefault();
+                $('#add-question-modal').modal('hide');
+                $('.form-control').val('');
+            });
+            $('#edit-question-form').on('submit', function (e) {
+                var group_name = $('#edit_slug_group').val();
+                $.ajax({
+                    url: "{{ url_for('admin.edit_question_group') }}", //this is the submit URL
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        'question_name': $('#edit_question_name').val(),
+                        'group_name': $('#edit_slug_group').val(),
+                        'hidden_question': $('#edit_slug_group_question').val(),
+                    },
+                    success: function (data) {
+                        $('#exampleTable_' + group_name).dataTable().fnDestroy();
+                        oInnerTable = $("#exampleTable_" + group_name).dataTable({
+                            "bJQueryUI": true,
+                            "bFilter": false,
+                            "aaData": data,
+                            "bSort": true,
+                            "info": true,
+                            "aoColumns": [
+                                {"mDataProp": "order_number"},
+                                {"mDataProp": "question_slug"},
+                                {"mDataProp": "question_name"},
+                                {"sDefaultContent": "<a class='edit-modal-question' id='' style='padding-right:20px'><i class='fa fa-pencil-square-o fa-lg edit-question' aria-hidden='true'></i></a>" + "<a href='#' class='remove-question' data-group='" + group_name + "'><i class='fa fa-trash-o fa-lg' aria-hidden='true'></i></a>"},
+                            ],
+                            "bPaginate": true,
+                            "oLanguage": {
+                                "sInfo": "_TOTAL_ entries"
+                            },
+                        })
+                        $(this).attr('id', group_name)
+                        $('tr.details .dataTables_info').html('');
+                        $('tr.details .dataTables_info').append("<a  id='" + group_name + "' data-sdg='" + group_name + "' href='' class='add-question btn btn-primary'>+ Add Question</a>");
+                    }
+                });
+                $('#edit-question-modal').modal('hide');
+                e.preventDefault();
+            });
+            $('body').on('click', '.edit-group-modal', function (e) {
+                var group_name = $($(this).parent().parent().children()[1]).text();
+                $('.form-control').val('');
+                $.ajax({
+                    url: "{{ url_for('admin.get_selected_group') }}", //this is the submit URL
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        'group_name': group_name,
+                    },
+                    success: function (data) {
+                        $('#edit_group_id').val(data['group_name']);
+                        $('#hidden_group').val(data['generated_id']);
+                        $('#edit_order_number option[value="' + data['order_number'] + '"]').attr('selected', 'selected');
+                        $('#edit_project_name option[value="' + data['project_slug'] + '"]').attr('selected', 'selected');
+                    }
+                });
+            });
+            $('body').on('click', '.edit-modal-question', function (e) {
+                var question_slug = $($(this).parent().parent().children()[1]).text();
+                $('#edit-question-modal').modal('show');
+                $.ajax({
+                    url: "{{ url_for('admin.get_selected_question') }}", //this is the submit URL
+                    url: "{{ url_for('admin.get_selected_question') }}", //this is the submit URL
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        'question_slug': question_slug,
+                    },
+                    success: function (data) {
+                        $('#edit_question_name').val(data[0]['question_name']);
+                        $('#edit_slug_group_question').val(data[0]['question_slug']);
+                        $('#edit_slug_group').val(data[0]['group_slug']);
+                        $('#edit_question_order_number option[value="' + data[0]['order_number'] + '"]').attr('selected', 'selected');
+                    }
+                });
+            });
+
+            $('#exampleTable tbody').addClass("DragMe");
+            var obj = [];
+            $('.DragMe').sortable({
+                disabled: false,
+                axis: 'y',
+                forceHelperSize: true,
+                update: function (event, ui) {
+                    oTable.fnClearTable(0);
+                    var Newpos = ui.item.index();
+                    var RefID = $('tr').find('td:first').html();
+                    //alert("Position " + Newpos + "..... RefID: " + RefID);
+                    $("#exampleTable tr:has(td)").each(function () {
+                        var RefID = $(this).find("td:eq(3)").html();
+                        var RefName = $(this).find("td:eq(1)").html();
+                        var NewPosition = $("tr").index(this);
+                        tmp = {
+                            'generated_id': RefName,
+                            'order_number': NewPosition
+                        };
+                        obj.push(tmp);
+                    });
+                    $.ajax({
+                        url: "{{ url_for('admin.update_order_group') }}", //this is the submit URL
+                        type: 'POST', //or POST,
+                        dataType: 'json',
+                        data: JSON.stringify(obj),
+                        success: function (data) {
+                            obj = [];
+                            oTable.fnAddData(data);
+                            oTable.fnDraw();
+                        }
+                    });
+                }
+            }).disableSelection();
         });
-        $('body').on('click', '.edit-group-modal', function (e) {
-            var group_name = $($(this).parent().parent().children()[1]).text();
-            $('.form-control').val('');
-            $.ajax({
-                url: "{{ url_for('admin.get_selected_group') }}", //this is the submit URL
-                type: 'POST',
-                dataType: 'json',
-                data: {
-                    'group_name': group_name,
-                },
-                success: function (data) {
-                    $('#edit_group_id').val(data['group_name']);
-                    $('#hidden_group').val(data['generated_id']);
-                    $('#edit_order_number option[value="' + data['order_number'] + '"]').attr('selected', 'selected');
-                    $('#edit_project_name option[value="' + data['project_slug'] + '"]').attr('selected', 'selected');
-                }
-            });
-        })
-        $('body').on('click', '.edit-modal-question', function (e) {
-            var question_slug = $($(this).parent().parent().children()[1]).text();
-            $('#edit-question-modal').modal('show');
-            $.ajax({
-                url: "{{ url_for('admin.get_selected_question') }}", //this is the submit URL
-                url: "{{ url_for('admin.get_selected_question') }}", //this is the submit URL
-                type: 'POST',
-                dataType: 'json',
-                data: {
-                    'question_slug': question_slug,
-                },
-                success: function (data) {
-                    $('#edit_question_name').val(data[0]['question_name']);
-                    $('#edit_slug_group_question').val(data[0]['question_slug']);
-                    $('#edit_slug_group').val(data[0]['group_slug']);
-                    $('#edit_question_order_number option[value="' + data[0]['order_number'] + '"]').attr('selected', 'selected');
-                }
-            });
-        })
-
-   $('#exampleTable tbody').addClass("DragMe");
-        var obj = [];
-     $('.DragMe').sortable({
-
-         disabled: false,
-         axis: 'y',
-         forceHelperSize: true,
-         update: function (event, ui) {
-             oTable.fnClearTable(0);
-             var Newpos = ui.item.index();
-             var RefID = $('tr').find('td:first').html();
-             //alert("Position " + Newpos + "..... RefID: " + RefID);
-             $("#exampleTable tr:has(td)").each(function () {
-                 var RefID = $(this).find("td:eq(3)").html();
-                 var RefName = $(this).find("td:eq(1)").html();
-                 console.log(Newpos);
-                 var NewPosition = $("tr").index(this);
-                 tmp = {
-                        'generated_id': RefName,
-                        'order_number': NewPosition
-                    };
-
-                    obj.push(tmp);
-             });
-              $.ajax({
-                url: "{{ url_for('admin.update_order_group') }}", //this is the submit URL
-                type: 'POST', //or POST,
-                dataType: 'json',
-                data: JSON.stringify(obj),
-                success: function (data) {
-                    console.log(data);
-                    obj = [];
-
-                    oTable.fnAddData(data);
-                    oTable.fnDraw();
-                }
-            });
-
-         }
-     }).disableSelection();
-    })
-
-</script>
-
- <div id="wrapper">
+    </script>
+    <div id="wrapper">
         <div id="page-wrapper">
-
-            <div class="container-fluid">
-                    <h2>Add Questions</h2>
+            <div class="container-fluid" style="margin-top: 70px">
+                <h2>Add Questions</h2>
                 <!-- Page Heading -->
                 <div class="row">
                     <div class="col-lg-12">
@@ -650,19 +599,17 @@
                             </tr>
                             </thead>
                             <tbody>
-
                             </tbody>
                         </table>
-
                         <div style="display:none" id="div-sub-table" style="background:#337ab7;height:auto;">
                             <table id="detailsTable">
                                 <thead>
-                                    <tr>
-                                        <th>Order</th>
-                                        <th>Question Slug</th>
-                                        <th>Question</th>
-                                        <th></th>
-                                    </tr>
+                                <tr>
+                                    <th>Order</th>
+                                    <th>Question Slug</th>
+                                    <th>Question</th>
+                                    <th></th>
+                                </tr>
                                 </thead>
                                 <tbody></tbody>
                             </table>
@@ -674,13 +621,10 @@
             <!-- /.container-fluid -->
         </div>
         <!-- /#page-wrapper -->
-     <div class="col-md-12">
-			<div class="col-md-2" >
-				<a class="btn btn-primary" href="" id="show-modal-group" style="width:100%;">Add Group</a>
-			</div>
-		</div>
+        <div class="col-md-12">
+            <div class="col-md-2">
+                <a class="btn btn-primary" href="" id="show-modal-group" style="width:100%;">Add Group</a>
+            </div>
+        </div>
     </div>
-
-
-
 {% endblock %}

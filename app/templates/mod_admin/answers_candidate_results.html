@@ -1,61 +1,83 @@
 {% extends 'layout_admin.html' %}
 
 {% block body %}
-    <div id="wrapper" xmlns="http://www.w3.org/1999/html">
-     <div id="page-wrapper">
-         <div class="container-fluid" style="margin-top: 100px">
-             <div class="row">
-                 <div class="col-md-12">
-                    <h2>Assign Answers</h2>
-                    <form id="add-candidate-form" name="add_group"  method="POST" enctype="multipart/form-data" action="{{ url_for('admin.edit_candidate_answers') }}">
-                        <input type="hidden" name="candidate_slug" value="{{ candidate_url }}"/>
-                        <ul>
-
-                     {% for doc in docs  %}
-                            <h2>{{ doc.group_name }}</h2>
-                            <ul>
-                            {% for question in questions %}
-                                   {% set selected="" %}
-                                    {% set selected_vazno="" %}
-                                    {% set selected_comment="" %}
-                                  {% set count = loop.index %}
-                                    {% if doc.generated_id==question.group_slug %}
-                                        <input type="hidden" name="question_{{ count }}" value="{{ question.question_name }}"/>
-                                         <li><b>{{ question.question_name }}</b></li>
-                                        {% for candidatesa in candidates %}
-                                            {%  if candidatesa['question_'~count]==question.question_name  %}
-                                                {% set selected=candidatesa['status_'~count] %}
-                                                {% set selected_vazno=candidatesa['vazno_'~count] %}
-                                                 {% set selected_comment=candidatesa['comment_'~count] %}
-
-                                            {% endif %}
-                                        <input type="radio" name="status_{{ count }}" value="Slažem se" {% if selected=="Slažem se" %} checked="checked" {% endif %}/>Slažem se <br/>
-                                         <input type="radio" name="status_{{ count }}" value="Ne slažem se" {% if selected=="Ne slažem se" %} checked="checked" {% endif %}/>Ne slažem se  <br/>
-                                         <input type="radio" name="status_{{ count }}" value="Nemam stav" {% if selected=="Nemam stav" %} checked="checked" {% endif %}/>Nemam stav  <br/>
-                                        <p><b>Koliko je ovo pitanje važno</b><br/>
-                                        <input type="radio" name="vazno_{{ count }}" value="Nije važno" {% if selected_vazno=="Nije važno" %} checked="checked" {% endif %}/>Nije važno
-                                        <input type="radio" name="vazno_{{ count }}" value="Manje važno" {% if selected_vazno=="Manje važno" %} checked="checked" {% endif %}/>Manje važno
-                                        <input type="radio" name="vazno_{{ count }}" value="Važno" {% if selected_vazno=="Važno" %} checked="checked" {% endif %}/>Važno
-                                         <input type="radio" name="vazno_{{ count }}" value="Veoma važno" {% if selected_vazno=="Veoma važno" %} checked="checked" {% endif %}/>Veoma važno
-                                        </p>
-                                      <textarea rows="4" cols="50" name="comment_{{ count  }}">
-                                            {{ selected_comment }}
-                                      </textarea>
-                                         {% endfor %}
-                                    {% endif %}
-                                {% endfor %}
-                            </ul>
-                     {% endfor %}
-                    </ul>
-                    <div class="col-md-6">
-                        <input type="submit" class="btn btn-primary" id="add-indicator-button" style="float:right">
+    <div id="wrapper">
+        <div id="page-wrapper">
+            <div class="container-fluid" style="margin-top: 70px">
+                <div class="row">
+                    <div class="col-md-2">
                     </div>
-                    </form>
-                 </div>
-             </div>
+                    <div class="col-md-8">
+                        <h2>Assign Answers</h2>
+                        <form id="add-candidate-form" name="add_group" method="POST" enctype="multipart/form-data"
+                              action="{{ url_for('admin.edit_candidate_answers') }}">
+                            <input type="hidden" name="candidate_slug" value="{{ candidate_url }}"/>
+                            {% for doc in docs %}
+                                <h2>{{ doc.group_name }}</h2>
+                                <div class="panel panel-default">
+                                    {% for question in questions %}
+                                        {% set selected="" %}
+                                        {% set selected_vazno="" %}
+                                        {% set selected_comment="" %}
+                                        {% set count = loop.index %}
+                                        {% if doc.generated_id==question.group_slug %}
+                                            <input type="hidden" name="question_{{ count }}"
+                                                   value="{{ question.question_name }}"/>
+                                            <div class="panel-heading"><h3 class="panel-title">
+                                                <b>{{ question.question_name }}</b></h3></div>
+                                            <div class="body-question">
+                                                {% for candidatesa in candidates %}
+                                                    {% if candidatesa['question_'~count]==question.question_name %}
+                                                        {% set selected=candidatesa['status_'~count] %}
+                                                        {% set selected_vazno=candidatesa['vazno_'~count] %}
+                                                        {% set selected_comment=candidatesa['comment_'~count] %}
+                                                    {% endif %}
+                                                    <input type="radio" name="status_{{ count }}" value="Slažem se"
+                                                            {% if selected=="Slažem se" %}
+                                                           checked="checked" {% endif %}/>Slažem se <br/>
+                                                    <input type="radio" name="status_{{ count }}" value="Ne slažem se"
+                                                            {% if selected=="Ne slažem se" %}
+                                                           checked="checked" {% endif %}/>Ne slažem se  <br/>
+                                                    <input type="radio" name="status_{{ count }}" value="Nemam stav"
+                                                            {% if selected=="Nemam stav" %}
+                                                           checked="checked" {% endif %}/>Nemam stav  <br/>
+                                                    <p><b>Koliko je ovo pitanje važno</b><br/>
+                                                        <input type="radio" name="vazno_{{ count }}" value="Nije važno"
+                                                                {% if selected_vazno=="Nije važno" %}
+                                                               checked="checked" {% endif %}/>Nije važno
+                                                        <input type="radio" name="vazno_{{ count }}" value="Manje važno"
+                                                                {% if selected_vazno=="Manje važno" %}
+                                                               checked="checked" {% endif %}/>Manje važno
+                                                        <input type="radio" name="vazno_{{ count }}" value="Važno"
+                                                                {% if selected_vazno=="Važno" %}
+                                                               checked="checked" {% endif %}/>Važno
+                                                        <input type="radio" name="vazno_{{ count }}" value="Veoma važno"
+                                                                {% if selected_vazno=="Veoma važno" %}
+                                                               checked="checked" {% endif %}/>Veoma važno
+                                                    </p>
+                                                    <textarea rows="10" cols="100"
+                                                              name="comment_{{ count }}">{{ selected_comment }}</textarea>
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            {% endfor %}
+                            <div class="col-md-6" style="margin-bottom:40px">
+                                <a href="{{ url_for('admin.candidates') }}" class="btn btn-default" style="width:100%;">Cancel</a>
+                            </div>
+                            <div class="col-md-6" style="margin-bottom:40px">
+                                <input type="submit" class="btn btn-primary" id="add-indicator-button"
+                                       style="width:100%">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-md-2">
+                    </div>
+                </div>
 
+            </div>
         </div>
     </div>
- </div>
 
 {% endblock %}

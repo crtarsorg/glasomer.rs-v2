@@ -1,9 +1,8 @@
-from app.forms.forms import LoginForm
-from flask import Blueprint, render_template, request, Response, redirect, url_for, current_app
-from app import user_datastore, bcrypt
-from flask.ext.security import login_user, logout_user, roles_required
-mod_auth = Blueprint('auth', __name__, url_prefix='/auth')
 
+from flask import Blueprint, render_template, request, redirect, url_for
+from app import user_datastore, bcrypt
+from flask.ext.security import login_user, logout_user
+mod_auth = Blueprint('auth', __name__, url_prefix='/auth')
 
 @mod_auth.route('/login', methods=['GET', 'POST'])
 def login():

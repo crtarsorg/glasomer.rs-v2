@@ -1,12 +1,7 @@
-from app import mongo_utils, mongo,UPLOAD_FOLDER,ALLOWED_EXTENSIONS
-from bson import json_util, ObjectId
+from app import mongo_utils
+from bson import json_util
 from flask import Blueprint, render_template, request, Response, redirect, url_for, flash
-from flask.ext.security import login_required, current_user
-import os, json
-from slugify import slugify
-from werkzeug.utils import secure_filename
 from flask.ext.security import current_user
-
 
 mod_project = Blueprint('projects', __name__, url_prefix='/projects')
 @mod_project.route('/', methods=['GET', "POST"])

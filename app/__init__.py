@@ -141,14 +141,12 @@ def init_modules(app):
 
     # Import blueprint modules
     from app.mod_main.views import mod_main
-    from app.mod_api.views import mod_api
     from app.mod_whatis.views import mod_whatis
     from app.mod_auth.views import mod_auth
     from app.mod_admin.views import mod_admin
     from app.mod_project.views import mod_project
     app.register_blueprint(mod_auth)
     app.register_blueprint(mod_main)
-    app.register_blueprint(mod_api)
     app.register_blueprint(mod_whatis)
     app.register_blueprint(mod_admin)
     app.register_blueprint(mod_project)

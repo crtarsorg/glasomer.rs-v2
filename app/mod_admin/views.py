@@ -1,17 +1,13 @@
-from app import mongo_utils, mongo,UPLOAD_FOLDER,ALLOWED_EXTENSIONS
-from bson import json_util, ObjectId
+from app import mongo_utils,UPLOAD_FOLDER,ALLOWED_EXTENSIONS
+from bson import json_util
 from flask import Blueprint, render_template, request, Response, redirect, url_for, flash
-from flask.ext.security import login_required, current_user
+from flask.ext.security import login_required
 import os, json
-from slugify import slugify
-from werkzeug.utils import secure_filename
 from flask.ext.security import current_user
-
 
 mod_admin = Blueprint('admin', __name__, url_prefix='/admin')
 
 @mod_admin.route('/', methods=['GET', "POST"])
-
 def index():
     if current_user.is_authenticated:
         projects = mongo_utils.find_all_projects()
@@ -116,7 +112,6 @@ def get_nr_groups():
 def get_selected_group():
     if request.method == 'POST':
         data = request.form.to_dict()
-        print data
         docs = mongo_utils.find_selected_group(data)
         return Response(response=json_util.dumps(docs), status=200, mimetype='application/json')
 

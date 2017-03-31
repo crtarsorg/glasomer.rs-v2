@@ -1,51 +1,68 @@
 {% extends 'layout_admin.html' %}
 
 {% block body %}
-    <div id="wrapper" xmlns="http://www.w3.org/1999/html">
-     <div id="page-wrapper">
-         <div class="container-fluid" style="margin-top: 100px">
-             <div class="row">
-                 <div class="col-md-12">
-                    <h2>Assign Answers</h2>
-                    <form id="add-candidate-form" name="add_group"  method="POST" enctype="multipart/form-data" action="{{ url_for('admin.add_candidate_answers') }}">
-                        <input type="hidden" name="candidate_slug" value="{{ candidate_url }}"/>
-                        <ul>
-
-                     {% for doc in docs  %}
-                            <h2>{{ doc.group_name }}</h2>
-                            <ul>
-                            {% for question in questions %}
-                                  {% set count = loop.index %}
-                                    {% if doc.generated_id==question.group_slug %}
-
-                                            <li><b>{{ question.question_name }}</b></li>
-                                        <input type="hidden" name="question_{{ count }}" value="{{ question.question_name }}"/>
-                                        <input type="radio" name="status_{{ count }}" value="Slažem se"/>Slažem se <br/>
-                                         <input type="radio" name="status_{{ count }}" value="Ne slažem se"/>Ne slažem se  <br/>
-                                         <input type="radio" name="status_{{ count }}" value="Nemam stav"/>Nemam stav   <br/>
-                                        <p><b>Koliko je ovo pitanje važno</b><br/>
-                                        <input type="radio" name="vazno_{{ count }}" value="Nije važno"/>Nije važno
-                                        <input type="radio" name="vazno_{{ count }}" value="Manje važno"/>Manje važno
-                                        <input type="radio" name="vazno_{{ count }}" value="Važno"/>Važno
-                                         <input type="radio" name="vazno_{{ count }}" value="Veoma važno"/>Veoma važno
-                                        </p>
-                                      <textarea rows="4" cols="50" name="comment_{{ count  }}">
-
-                                      </textarea>
-                                    {% endif %}
-                                {% endfor %}
-                            </ul>
-                     {% endfor %}
-                    </ul>
-                    <div class="col-md-6">
-                        <input type="submit" class="btn btn-primary" id="add-indicator-button" style="float:right">
+    <div id="wrapper">
+        <div id="page-wrapper">
+            <div class="container-fluid" style="margin-top: 60px">
+                <div class="row">
+                    <div class="col-md-2">
                     </div>
-                    </form>
-                 </div>
-             </div>
-
+                    <div class="col-md-8">
+                        <div class="col-md-12">
+                            <h2>Assign Answers</h2>
+                        </div>
+                        <form id="add-candidate-form" name="add_group" method="POST" enctype="multipart/form-data"
+                              action="{{ url_for('admin.add_candidate_answers') }}">
+                            <input type="hidden" name="candidate_slug" value="{{ candidate_url }}"/>
+                            {% for doc in docs %}
+                                <h1>{{ doc.group_name }}</h1>
+                                <div class="panel panel-default">
+                                    {% for question in questions %}
+                                        {% set count = loop.index %}
+                                        {% if doc.generated_id==question.group_slug %}
+                                            <div class="panel-heading"><h3 class="panel-title">
+                                                <b>{{ question.question_name }}</b></h3></div>
+                                            <div class="body-question">
+                                                <input type="hidden" name="question_{{ count }}"
+                                                       value="{{ question.question_name }}"/>
+                                                <input type="radio" name="status_{{ count }}" value="Slažem se"/>Slažem
+                                                se <br/>
+                                                <input type="radio" name="status_{{ count }}" value="Ne slažem se"/>Ne
+                                                slažem se <br/>
+                                                <input type="radio" name="status_{{ count }}" value="Nemam stav"/>Nemam
+                                                stav <br/>
+                                                <p><b>Koliko je ovo pitanje važno</b><br/>
+                                                    <input type="radio" name="vazno_{{ count }}" value="Nije važno"/>Nije
+                                                    važno
+                                                    <input type="radio" name="vazno_{{ count }}" value="Manje važno"/>Manje
+                                                    važno
+                                                    <input type="radio" name="vazno_{{ count }}" value="Važno"/>Važno
+                                                    <input type="radio" name="vazno_{{ count }}" value="Veoma važno"/>Veoma
+                                                    važno
+                                                </p>
+                                                <textarea rows="10" cols="100" name="comment_{{ count }}"></textarea>
+                                            </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            {% endfor %}
+                            <div>
+                                <div class="col-md-6" style="margin-bottom:40px">
+                                    <a href="{{ url_for('admin.candidates') }}" class="btn btn-default"
+                                       style="width:100%;">Cancel</a>
+                                </div>
+                                <div class="col-md-6" style="margin-bottom:40px">
+                                    <input type="submit" class="btn btn-primary" id="add-indicator-button"
+                                           style="width:100%;">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-md-2">
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
- </div>
 
 {% endblock %}

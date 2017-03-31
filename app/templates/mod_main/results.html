@@ -1,153 +1,167 @@
 {% extends 'layout_results.html' %}
- {% block meta %}
-    <meta name="description" content="Glasomer pomaže građanima da uporede svoje političke stavove sa stavovima kandidata koji se takmiče na predstojećim predsedničkim izborima. Izabrani stavovi su u vezi sa aktuelnim društveno-političkim dešavanjima u Srbiji."/>
+{% block meta %}
+    <meta name="description"
+          content="Glasomer pomaže građanima da uporede svoje političke stavove sa stavovima kandidata koji se takmiče na predstojećim predsedničkim izborima. Izabrani stavovi su u vezi sa aktuelnim društveno-političkim dešavanjima u Srbiji."/>
     <!-- FB meta -->
     <meta property="og:title" content="Tri kandidata sa kojima se najviše podudaraju moji odgovori?"/>
-    <meta property="og:url" content="http://glasomer.rs/results/{{ user_id }}" />
-    <meta property="og:description" content=" {% set i =0 %} {% for result in results %} {% set i=loop.index  %} {% if i<=3 %}{{ result['candidate_name'] }}: {{ "{:.2f}".format(result['percentage']) }}%{% endif %}{% endfor %}"/>
-    <meta property="og:image" content="{{ url_for('static', filename = 'assets/instinomer_logo.png') }}" />
+    <meta property="og:url" content="http://glasomer.rs/results/{{ user_id }}"/>
+    <meta property="og:description" content=" {% set i =0 %} {% for result in results %} {% set i=loop.index %}
+        {% if i<=3 %}{{ result['candidate_name'] }}: {{ "{:.2f}".format(result['percentage']) }}%{% endif %}{% endfor %}"/>
+    <meta property="og:image" content="{{ url_for('static', filename = 'assets/instinomer_logo.png') }}"/>
 
     <!-- Twitter meta -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:site" content="@CRTArs">
     <meta name="twitter:creator" content="@CRTArs">
     <meta name="twitter:title" content="Tri kandidata sa kojima se najviše podudaraju moji odgovori?">
-    <meta name="twitter:description" content="{% set i =0 %} {% for result in results %} {% set i=loop.index  %} {% if i<=3 %}{{ result['candidate_name'] }}: {{ "{:.2f}".format(result['percentage']) }}%{% endif %}{% endfor %}">
+    <meta name="twitter:description" content="{% set i =0 %} {% for result in results %} {% set i=loop.index %}
+        {% if i<=3 %}{{ result['candidate_name'] }}: {{ "{:.2f}".format(result['percentage']) }}%{% endif %}{% endfor %}">
     <meta name="twitter:image" content="{{ url_for('static', filename = 'assets/instinomer_logo.png') }} "/>
-    {% endblock %}
+{% endblock %}
 {% block body %}
     <style>
-    .ajax-loader {
-  visibility: hidden;
-  background-color: rgba(255,255,255,0.7);
-  position: absolute;
-  z-index: +100 !important;
-  width: 100%;
-  height:100%;
-}
+        .ajax-loader {
+            visibility: hidden;
+            background-color: rgba(255, 255, 255, 0.7);
+            position: absolute;
+            z-index: +100 !important;
+            width: 100%;
+            height: 100%;
+        }
 
-.ajax-loader img {
-  position: relative;
-  top:50%;
-  left:50%;
-}
+        .ajax-loader img {
+            position: relative;
+            top: 50%;
+            left: 50%;
+        }
+
         #wheel-tab {
-             display: none;
+            display: none;
         }
-    #wheel-right, #wheel-left{
-        font-weight: 700;
+
+        #wheel-right, #wheel-left {
+            font-weight: 700;
         }
-     .nav-tabs>li.color-next>a:hover{
-        background: #337ab7;
-        color:white;
-     }
-     .nav-tabs>li.color-next>a:active{
-        background: #337ab7;
-        color:white;
-    }
-      .nav-tabs>li.color-next>a:focus{
-        background: #337ab7;
-        color:white;
-    }
-    #exampleTable_previous{
-        display:none;
-    }
-    #exampleTable_next{
-        display: none;
-    }
-     #exampleTable1_previous{
-        display:none;
-    }
-    #exampleTable1_next{
-        display: none;
-    }
-    .details ul.pagination li.previous{
-        display: none;
-    }
-     .details ul.pagination li.next{
-        display: none;
-    }
+
+        .nav-tabs > li.color-next > a:hover {
+            background: #337ab7;
+            color: white;
+        }
+
+        .nav-tabs > li.color-next > a:active {
+            background: #337ab7;
+            color: white;
+        }
+
+        .nav-tabs > li.color-next > a:focus {
+            background: #337ab7;
+            color: white;
+        }
+
+        #exampleTable_previous {
+            display: none;
+        }
+
+        #exampleTable_next {
+            display: none;
+        }
+
+        #exampleTable1_previous {
+            display: none;
+        }
+
+        #exampleTable1_next {
+            display: none;
+        }
+
+        .details ul.pagination li.previous {
+            display: none;
+        }
+
+        .details ul.pagination li.next {
+            display: none;
+        }
 
     </style>
 
-         <div id="answers-candidates-modal" class="modal fade" tabindex="-1">
-			<div class="modal-dialog modal-lg">
-				<div class="modal-content">
-					<div class="modal-header">
-						<button class="close" type="button" data-dismiss="modal">x</button>
-						<h4 class="modal-title">Uporedite odgovore</h4>
-					</div>
-					<div class="modal-body">
-                           <table id="exampleTable" class="stripe">
+    <div id="answers-candidates-modal" class="modal fade" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button class="close" type="button" data-dismiss="modal">x</button>
+                    <h4 class="modal-title">Uporedite odgovore</h4>
+                </div>
+                <div class="modal-body">
+                    <table id="exampleTable" class="stripe">
+                        <thead>
+                        <tr>
+                            <th></th>
+
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+
+                    <div style="display:none" id="div-sub-table" style="background:#337ab7;height:auto;">
+                        <table id="detailsTable">
                             <thead>
                             <tr>
-                                <th></th>
-
+                                <th>Ime stranke</th>
+                                <th>Odgovor</th>
+                                <th>Koliko je pitanje važno</th>
+                                <th>Komentar</th>
                             </tr>
                             </thead>
-                            <tbody>
-
-                            </tbody>
+                            <tbody></tbody>
                         </table>
-
-                        <div style="display:none" id="div-sub-table" style="background:#337ab7;height:auto;">
-                            <table id="detailsTable">
-                                <thead>
-                                    <tr>
-                                        <th>Ime stranke</th>
-                                        <th>Odgovor</th>
-                                        <th>Koliko je pitanje važno</th>
-                                        <th>Komentar</th>
-                                    </tr>
-                                </thead>
-                                <tbody></tbody>
-                            </table>
-                        </div>
-					</div><!-- /.modal-content -->
-				</div>
-			</div><!-- /.modal-dialog -->
-		</div><!-- /.modal -->
+                    </div>
+                </div><!-- /.modal-content -->
+            </div>
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
 
     <div id="answers-users-modal" class="modal fade" tabindex="-1">
-			<div class="modal-dialog modal-lg">
-				<div class="modal-content">
-					<div class="modal-header">
-						<button class="close" type="button" data-dismiss="modal">x</button>
-						<h4 class="modal-title">Uporedite odgovore</h4>
-					</div>
-					<div class="modal-body">
-                           <table id="exampleTable1" class="stripe">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button class="close" type="button" data-dismiss="modal">x</button>
+                    <h4 class="modal-title">Uporedite odgovore</h4>
+                </div>
+                <div class="modal-body">
+                    <table id="exampleTable1" class="stripe">
+                        <thead>
+                        <tr>
+                            <th></th>
+
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+
+                    <div style="display:none" id="div-sub-table" style="background:#337ab7;height:auto;">
+                        <table id="detailsTable1">
                             <thead>
                             <tr>
-                                <th></th>
-
+                                <th>Ime stranke</th>
+                                <th>Odgovor</th>
+                                <th>Koliko je pitanje važno</th>
+                                <th>Komentar</th>
                             </tr>
                             </thead>
-                            <tbody>
-
-                            </tbody>
+                            <tbody></tbody>
                         </table>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div>
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
 
-                        <div style="display:none" id="div-sub-table" style="background:#337ab7;height:auto;">
-                            <table id="detailsTable1">
-                                <thead>
-                                    <tr>
-                                        <th>Ime stranke</th>
-                                        <th>Odgovor</th>
-                                        <th>Koliko je pitanje važno</th>
-                                        <th>Komentar</th>
-                                    </tr>
-                                </thead>
-                                <tbody></tbody>
-                            </table>
-                        </div>
-					</div><!-- /.modal-content -->
-				</div>
-			</div><!-- /.modal-dialog -->
-		</div><!-- /.modal -->
-
-<script>
-        var user_id="";
+    <script>
+        var user_id = "";
         function fnFormatDetails(table_id, html) {
             var sOut = "<table id=\"exampleTable_" + table_id + "\">";
             sOut += html;
@@ -161,251 +175,250 @@
             return sOut;
         }
 
-        var newRowData= $.ajax({
-					url: "{{ url_for('main.get_all_questions') }}", //this is the submit URL
-					type: 'GET', //or POST,
-					dataType: 'json',
-				    async: false,
-            }).responseJSON;
+        var newRowData = $.ajax({
+            url: "{{ url_for('main.get_all_questions') }}", //this is the submit URL
+            type: 'GET', //or POST,
+            dataType: 'json',
+            async: false,
+        }).responseJSON;
 
-         var newRowData1="";
+        var newRowData1 = "";
 
-    $(document).ready(function() {
+        $(document).ready(function () {
 
-        var iTableCounter = 1;
-        var oTable;
-        var oInnerTable;
-        var detailsTableHtml;
-        var oTable;
+            var iTableCounter = 1;
+            var oTable;
+            var oInnerTable;
+            var detailsTableHtml;
+            var oTable;
 
-        var iTableCounter1 = 1;
-        var oTable1;
-        var oInnerTable1;
-        var detailsTableHtml1;
-        var oTable1;
-        // you would probably be using templates here
-        detailsTableHtml = $("#detailsTable").html();
-        //Insert a 'details' column to the table
-        var nCloneTh = document.createElement('th');
-        var nCloneTd = document.createElement('td');
-        nCloneTd.innerHTML = '<img src="{{ url_for('static',filename='assets/plus.png') }}" class="show-sub-table" style="width:20px"/>';
-        nCloneTd.className = "center";
-        $('#exampleTable thead tr').each(function () {
-            this.insertBefore(nCloneTh, this.childNodes[0]);
-        });
-        $('#exampleTable tbody tr').each(function () {
-            this.insertBefore(nCloneTd.cloneNode(true), this.childNodes[0]);
-        });
+            var iTableCounter1 = 1;
+            var oTable1;
+            var oInnerTable1;
+            var detailsTableHtml1;
+            var oTable1;
+            // you would probably be using templates here
+            detailsTableHtml = $("#detailsTable").html();
+            //Insert a 'details' column to the table
+            var nCloneTh = document.createElement('th');
+            var nCloneTd = document.createElement('td');
+            nCloneTd.innerHTML = '<img src="{{ url_for('static',filename='assets/plus.png') }}" class="show-sub-table" style="width:20px"/>';
+            nCloneTd.className = "center";
+            $('#exampleTable thead tr').each(function () {
+                this.insertBefore(nCloneTh, this.childNodes[0]);
+            });
+            $('#exampleTable tbody tr').each(function () {
+                this.insertBefore(nCloneTd.cloneNode(true), this.childNodes[0]);
+            });
 
-        detailsTableHtml1 = $("#detailsTable1").html();
-        //Insert a 'details' column to the table
-        var nCloneTh1 = document.createElement('th');
-        var nCloneTd1 = document.createElement('td');
-        nCloneTd1.innerHTML = '<img src="{{ url_for('static',filename='assets/plus.png') }}" class="show-sub-table1" style="width:20px"/>';
-        nCloneTd1.className = "center";
-        $('#exampleTable1 thead tr').each(function () {
-            this.insertBefore(nCloneTh1, this.childNodes[0]);
-        });
-        $('#exampleTable1 tbody tr').each(function () {
-            this.insertBefore(nCloneTd1.cloneNode(true), this.childNodes[0]);
-        });
-        var count_rows = 0;
+            detailsTableHtml1 = $("#detailsTable1").html();
+            //Insert a 'details' column to the table
+            var nCloneTh1 = document.createElement('th');
+            var nCloneTd1 = document.createElement('td');
+            nCloneTd1.innerHTML = '<img src="{{ url_for('static',filename='assets/plus.png') }}" class="show-sub-table1" style="width:20px"/>';
+            nCloneTd1.className = "center";
+            $('#exampleTable1 thead tr').each(function () {
+                this.insertBefore(nCloneTh1, this.childNodes[0]);
+            });
+            $('#exampleTable1 tbody tr').each(function () {
+                this.insertBefore(nCloneTd1.cloneNode(true), this.childNodes[0]);
+            });
+            var count_rows = 0;
 
-        function init_sub_table() {
-            $('body').on('click', '.show-sub-table', function (e) {
-                count_rows = count_rows + 1;
-                e.preventDefault();
-                var question_name = $($(this).parent().parent().children()[1]).text();
-                var group_name = count_rows;
+            function init_sub_table() {
+                $('body').on('click', '.show-sub-table', function (e) {
+                    count_rows = count_rows + 1;
+                    e.preventDefault();
+                    var question_name = $($(this).parent().parent().children()[1]).text();
+                    var group_name = count_rows;
 
-                var s_id = $($(this).parent().parent().children()[3]).text();
-                var nTr = $(this).parents('tr')[0];
+                    var s_id = $($(this).parent().parent().children()[3]).text();
+                    var nTr = $(this).parents('tr')[0];
 
-                var nTds = this;
-                if (oTable.fnIsOpen(nTr)) {
-                    /* This row is already open - close it */
-                    this.src = '{{ url_for('static',filename='assets/plus.png') }}';
-                }
-                else {
-                    this.src = '{{ url_for('static',filename='assets/minus.png') }}';
-                }
-                $.ajax({
-                    url: "{{ url_for('main.get_questions_results_shared') }}",
-                    type: 'POST', //or POST
-                    dataType: 'json',
-                    data: {'question_name': question_name,'user_id':{{ user_id }}},
-                    success: function (data) {
-                        console.log(data);
-                        if (oTable.fnIsOpen(nTr)) {
-                            /* This row is already open - close it */
-                            this.src = '{{ url_for('static',filename='assets/minus.png') }}';
-                            this.id = group_name;
-                            oTable.fnClose(nTr);
-                        }
-                        else {
-                            this.src = '{{ url_for('static',filename='assets/minus.png') }}';
-                            oTable.fnOpen(nTr, fnFormatDetails(group_name, detailsTableHtml), 'details');
-                            oInnerTable = $("#exampleTable_" + group_name).dataTable({
-
-                                "aaData": data,
-                                "bSort": true, // disables sorting
-                                "info": true,
-                                "aoColumns": [
-                                    {"mDataProp": "candidate_slug"},
-                                    {"mDataProp": "status"},
-                                    {"mDataProp": "vazno"},
-                                    {"mDataProp": "comment"},
-                                ],
-                                "bPaginate": true,
-                                "language": {
-                                    "url": "{{ url_for("static",filename="data/datatable_translate.json")}}"
-                                },
-                            });
-
-                        }
-
+                    var nTds = this;
+                    if (oTable.fnIsOpen(nTr)) {
+                        /* This row is already open - close it */
+                        this.src = '{{ url_for('static',filename='assets/plus.png') }}';
                     }
+                    else {
+                        this.src = '{{ url_for('static',filename='assets/minus.png') }}';
+                    }
+                    $.ajax({
+                        url: "{{ url_for('main.get_questions_results_shared') }}",
+                        type: 'POST', //or POST
+                        dataType: 'json',
+                        data: {'question_name': question_name, 'user_id':{{ user_id }}},
+                        success: function (data) {
+                            if (oTable.fnIsOpen(nTr)) {
+                                /* This row is already open - close it */
+                                this.src = '{{ url_for('static',filename='assets/minus.png') }}';
+                                this.id = group_name;
+                                oTable.fnClose(nTr);
+                            }
+                            else {
+                                this.src = '{{ url_for('static',filename='assets/minus.png') }}';
+                                oTable.fnOpen(nTr, fnFormatDetails(group_name, detailsTableHtml), 'details');
+                                oInnerTable = $("#exampleTable_" + group_name).dataTable({
+
+                                    "aaData": data,
+                                    "bSort": true, // disables sorting
+                                    "info": true,
+                                    "aoColumns": [
+                                        {"mDataProp": "candidate_slug"},
+                                        {"mDataProp": "status"},
+                                        {"mDataProp": "vazno"},
+                                        {"mDataProp": "comment"},
+                                    ],
+                                    "bPaginate": true,
+                                    "language": {
+                                        "url": "{{ url_for("static",filename="data/datatable_translate.json")}}"
+                                    },
+                                });
+
+                            }
+
+                        }
+                    });
+
+                });
+            }
+
+            var count_user_question = 0;
+
+            function init_sub_table_user() {
+                $('body').on('click', '.show-sub-table1', function (e) {
+                    count_user_question = count_user_question + 1;
+                    e.preventDefault();
+                    var question_name = $($(this).parent().parent().children()[1]).text();
+                    var group_name = count_user_question;
+
+                    var s_id = $($(this).parent().parent().children()[3]).text();
+                    var nTr1 = $(this).parents('tr')[0];
+
+                    var nTds1 = this;
+                    if (oTable1.fnIsOpen(nTr1)) {
+                        /* This row is already open - close it */
+                        this.src = '{{ url_for('static',filename='assets/plus.png') }}';
+                    }
+                    else {
+                        this.src = '{{ url_for('static',filename='assets/minus.png') }}';
+                    }
+                    $.ajax({
+                        url: "{{ url_for('main.get_questions_results_shared') }}",
+                        type: 'POST', //or POST
+                        dataType: 'json',
+                        data: {
+                            'question_name': question_name,
+                            'user_id':{{ user_id }}
+                        },
+                        success: function (data) {
+                            if (oTable1.fnIsOpen(nTr1)) {
+                                /* This row is already open - close it */
+                                this.src = '{{ url_for('static',filename='assets/minus.png') }}';
+                                this.id = group_name;
+                                oTable1.fnClose(nTr1);
+                            }
+                            else {
+                                this.src = '{{ url_for('static',filename='assets/minus.png') }}';
+                                oTable1.fnOpen(nTr1, fnFormatDetails1(group_name, detailsTableHtml1), 'details');
+                                oInnerTable1 = $("#exampleTable1_" + group_name).dataTable({
+                                    "aaData": data,
+                                    "bSort": true, // disables sorting
+                                    "info": true,
+                                    "aoColumns": [
+                                        {"mDataProp": "candidate_slug"},
+                                        {"mDataProp": "status"},
+                                        {"mDataProp": "vazno"},
+                                        {"mDataProp": "comment"},
+                                    ],
+                                    "bPaginate": true,
+                                    "language": {
+                                        "url": "{{ url_for("static",filename="data/datatable_translate.json")}}"
+                                    },
+                                });
+
+                            }
+
+                        }
+                    });
+
+                });
+            }
+
+            function init_table(newRowData) {
+                oTable = $('#exampleTable').dataTable({
+                    "aaData": newRowData,
+
+                    "aoColumns": [
+                        {
+                            "mDataProp": null,
+                            "sClass": "control center",
+                            "sDefaultContent": '<img src="{{ url_for('static',filename='assets/plus.png') }}" class="show-sub-table" style="width:20px;"/>'
+                        },
+
+                        {"mDataProp": "question_name"},
+                    ],
+                    "language": {
+                        "url": "{{ url_for("static",filename="data/datatable_translate.json")}}"
+                    },
+
                 });
 
-            });
-        }
+            }
 
-        var count_user_question = 0;
+            function init_table_users(newRowData1) {
+                oTable1 = $('#exampleTable1').dataTable({
+                    "aaData": newRowData1,
+                    "aoColumns": [
+                        {
 
-        function init_sub_table_user() {
-            $('body').on('click', '.show-sub-table1', function (e) {
-                count_user_question = count_user_question + 1;
-                e.preventDefault();
-                var question_name = $($(this).parent().parent().children()[1]).text();
-                var group_name = count_user_question;
+                            "mDataProp": null,
+                            "bSortable": false,
+                            "sClass": "control center",
+                            "sDefaultContent": '<img src="{{ url_for('static',filename='assets/plus.png') }}" class="show-sub-table1" style="width:20px;"/>'
+                        },
 
-                var s_id = $($(this).parent().parent().children()[3]).text();
-                var nTr1 = $(this).parents('tr')[0];
-
-                var nTds1 = this;
-                if (oTable1.fnIsOpen(nTr1)) {
-                    /* This row is already open - close it */
-                    this.src = '{{ url_for('static',filename='assets/plus.png') }}';
-                }
-                else {
-                    this.src = '{{ url_for('static',filename='assets/minus.png') }}';
-                }
-                $.ajax({
-                    url: "{{ url_for('main.get_questions_results_shared') }}",
-                    type: 'POST', //or POST
-                    dataType: 'json',
-                    data: {
-                        'question_name': question_name,
-                        'user_id':{{ user_id }}
+                        {"mDataProp": "question_name"},
+                    ],
+                    "language": {
+                        "url": "{{ url_for("static",filename="data/datatable_translate.json")}}"
                     },
-                    success: function (data) {
-                        if (oTable1.fnIsOpen(nTr1)) {
-                            /* This row is already open - close it */
-                            this.src = '{{ url_for('static',filename='assets/minus.png') }}';
-                            this.id = group_name;
-                            oTable1.fnClose(nTr1);
-                        }
-                        else {
-                            this.src = '{{ url_for('static',filename='assets/minus.png') }}';
-                            oTable1.fnOpen(nTr1, fnFormatDetails1(group_name, detailsTableHtml1), 'details');
-                            oInnerTable1 = $("#exampleTable1_" + group_name).dataTable({
-                                "aaData": data,
-                                "bSort": true, // disables sorting
-                                "info": true,
-                                "aoColumns": [
-                                    {"mDataProp": "candidate_slug"},
-                                    {"mDataProp": "status"},
-                                    {"mDataProp": "vazno"},
-                                    {"mDataProp": "comment"},
-                                ],
-                                "bPaginate": true,
-                                "language": {
-                                    "url": "{{ url_for("static",filename="data/datatable_translate.json")}}"
-                                },
-                            });
-
-                        }
-
-                    }
+                    "aaSorting": [[1, 'desc']]
                 });
 
+            }
+
+            init_table(newRowData);
+            init_sub_table();
+            init_table_users(newRowData1);
+            init_sub_table_user();
+            $('body').on('click', '#answers-candidates', function (e) {
+                $('#answers-candidates-modal').modal('show');
             });
-        }
+            $('body').on('click', '#user_answers', function (e) {
 
-        function init_table(newRowData) {
-            oTable = $('#exampleTable').dataTable({
-                "aaData": newRowData,
-
-                "aoColumns": [
-                    {
-                        "mDataProp": null,
-                        "sClass": "control center",
-                        "sDefaultContent": '<img src="{{ url_for('static',filename='assets/plus.png') }}" class="show-sub-table" style="width:20px;"/>'
-                    },
-
-                    {"mDataProp": "question_name"},
-                ],
-                "language": {
-                    "url": "{{ url_for("static",filename="data/datatable_translate.json")}}"
-                },
-
+                $('#answers-users-modal').modal('show');
             });
-
-        }
-
-        function init_table_users(newRowData1) {
-            oTable1 = $('#exampleTable1').dataTable({
-                "aaData": newRowData1,
-                "aoColumns": [
-                    {
-
-                        "mDataProp": null,
-                        "bSortable": false ,
-                        "sClass": "control center",
-                        "sDefaultContent": '<img src="{{ url_for('static',filename='assets/plus.png') }}" class="show-sub-table1" style="width:20px;"/>'
-                    },
-
-                    {"mDataProp": "question_name"},
-                ],
-                "language": {
-                    "url": "{{ url_for("static",filename="data/datatable_translate.json")}}"
-                },
-                "aaSorting": [[1, 'desc']]
-            });
-
-        }
-
-        init_table(newRowData);
-        init_sub_table();
-        init_table_users(newRowData1);
-        init_sub_table_user();
-        $('body').on('click', '#answers-candidates', function (e) {
-            $('#answers-candidates-modal').modal('show');
-        });
-        $('body').on('click', '#user_answers', function (e) {
-
-            $('#answers-users-modal').modal('show');
-        });
 
 
             $.ajax({
                 url: "{{ url_for('main.get_user_answers_results') }}", //this is the submit URL
                 type: 'POST', //or POST,
                 dataType: 'json',
-                beforeSend: function(){
+                beforeSend: function () {
                     $('.ajax-loader').css("visibility", "visible");
-                  },
-                data:{
+                },
+                data: {
                     'user_id':{{ user_id }}
-                    },
+                },
                 success: function (data) {
                     newRowData1 = $.ajax({
                         url: "{{ url_for('main.get_all_q_a_u_result') }}", //this is the submit URL
                         type: 'POST', //or POST,
                         dataType: 'json',
-                         data:{
-                             'user_id':{{ user_id }}
-                            },
+                        data: {
+                            'user_id':{{ user_id }}
+                        },
                         async: false,
                     }).responseJSON;
                     if (newRowData1 != "") {
@@ -465,147 +478,132 @@
                         i = i + 1;
                         if (i <= 3) {
                             $('#user-div-results').append('<div class="row" style="margin-bottom:20px"><div class="col-md-4" style="text-align:center"><img style="width:200px;margin:0 auto;" src="{{ url_for('static', filename='uploads/') }}' + b['image'] + '" class="img-responsive"/><p style="font-size:15px;color:#1A3966;font-weight:bold;text-transform:uppercase">' + b['candidate_name'] + '</p><h2 style="color:#337ab7;margin-top:0px;">' + b['percentage'].toFixed(2) + '%</h2></div>' +
-                                    '<div class="col-md-8 candidate-biography candidate-biography_'+i+'" data-id='+i+'>' + b['candidate_biography'] + '</div><div class="show_more" style="float:right;margin-right:100px"><a href="#" class="show_more_'+i+'" id='+i+'>Prikaži više</a></div></div>');
-                        $('.candidate-biography').css({
+                                    '<div class="col-md-8 candidate-biography candidate-biography_' + i + '" data-id=' + i + '>' + b['candidate_biography'] + '</div><div class="show_more" style="float:right;margin-right:100px"><a href="#" class="show_more_' + i + '" id=' + i + '>Prikaži više</a></div></div>');
+                            $('.candidate-biography').css({
                                 'height': '100px',
 
-                                'overflow':'hidden'
+                                'overflow': 'hidden'
                             })
-                            var candidate_length=$('.candidate-biography_'+i).height();
-                            console.log(candidate_length);
-                            if (candidate_length>60){
-                                var data_id=$('.candidate-biography_'+i).attr('data-id');
-                                $('#'+data_id).css('display','block');
-                            }else{
-                                 var data_id=$('.candidate-biography_'+i).attr('data-id');
-                                $('#'+data_id).css('display','none');
+                            var candidate_length = $('.candidate-biography_' + i).height();
+                            if (candidate_length > 60) {
+                                var data_id = $('.candidate-biography_' + i).attr('data-id');
+                                $('#' + data_id).css('display', 'block');
+                            } else {
+                                var data_id = $('.candidate-biography_' + i).attr('data-id');
+                                $('#' + data_id).css('display', 'none');
                             }
-
-
-                            $("body").on('click',".show_more_"+i, function(e){
-                                var id=$(this).attr('id');
+                            $("body").on('click', ".show_more_" + i, function (e) {
+                                var id = $(this).attr('id');
                                 e.preventDefault();
-
-                                 $('.candidate-biography_'+id).css({
-                                'height': 'auto',
-                                'overflow':'auto'
-                            });
+                                $('.candidate-biography_' + id).css({
+                                    'height': 'auto',
+                                    'overflow': 'auto'
+                                });
                                 $(this).text('Prikaži manje');
-                                $(this).removeClass("show_more_"+id);
-                                $(this).addClass("show_less_"+id);
+                                $(this).removeClass("show_more_" + id);
+                                $(this).addClass("show_less_" + id);
                             });
-
-
-                                 $("body").on('click',".show_less_"+i, function(e){
-                                    var id=$(this).attr('id');
-                                     e.preventDefault();
-                                    $('.candidate-biography_'+id).css({
-                                        'height': '60px',
-                                        'overflow':'hidden'
-                                    });
+                            $("body").on('click', ".show_less_" + i, function (e) {
+                                var id = $(this).attr('id');
+                                e.preventDefault();
+                                $('.candidate-biography_' + id).css({
+                                    'height': '60px',
+                                    'overflow': 'hidden'
+                                });
                                 $(this).text('Prikaži više');
-                                $(this).removeClass("show_less_"+id);
-                                $(this).addClass("show_more_"+id);
+                                $(this).removeClass("show_less_" + id);
+                                $(this).addClass("show_more_" + id);
                             })
 
                         }
-
-
                     })
-
                 },
-                 complete: function(){
+                complete: function () {
                     $('.ajax-loader').css("visibility", "hidden");
-                  }
+                }
             });
+            $('#back-start').on('click', function (e) {
+                e.preventDefault();
+                $('.user_results').hide('slow');
+                $('.user_questions').show('slow');
+            });
+            $("#mydiv").hasClass("bar");
+            $('.back-btn').css('display', 'none');
+            if ($('#tab-1').hasClass('active')) {
+                $('.back-btn').css('display', 'none');
+            }
+            var $tabs = $('#wheel-tab li');
+            $('#wheel-left').on('click', function () {
+                $tabs.filter('.active').prev('li').find('a[data-toggle="tab"]').tab('show');
+                if ($('.btn-vote').is(':hidden')) {
+                    if ($(window).width() < 960) {
+                        $('.color-next').css('display', 'block');
+                        $('.color-next').css('width', '100%');
+                    } else {
+                        $('.color-next').css('display', 'table-cell');
+                        $('.color-next').css('width', '1%');
+                    }
+                }
+                if ($('#tab-1').hasClass('active')) {
+                    $('.back-btn').css('display', 'none');
 
-        $('#back-start').on('click', function (e) {
-            e.preventDefault();
-            $('.user_results').hide('slow');
-            $('.user_questions').show('slow');
-        });
-        $( "#mydiv" ).hasClass( "bar" );
-        $('.back-btn').css('display','none');
-        if ($('#tab-1').hasClass('active')) {
-            $('.back-btn').css('display','none');
-        }
-        var $tabs = $('#wheel-tab li');
-        $('#wheel-left').on('click', function () {
-            $tabs.filter('.active').prev('li').find('a[data-toggle="tab"]').tab('show');
-             if ($('.btn-vote').is(':hidden')) {
-                 if ($(window).width() < 960) {
-                     $('.color-next').css('display', 'block');
-                     $('.color-next').css('width', '100%');
-                 }else{
-                    $('.color-next').css('display', 'table-cell');
-                     $('.color-next').css('width', '1%');
-                 }
-             }
-
-             if ($('#tab-1').hasClass('active')) {
-                 $('.back-btn').css('display','none');
-
-             }
-        });
-
-                $('.tab-pane:last .btn-vote').css('display', 'block');
-                $('#wheel-right').on('click', function () {
-                     if ($(window).width() < 960) {
-                     $('.back-btn').css('display', 'block');
-                     $('.back-btn').css('width', '100%');
-                 }else{
+                }
+            });
+            $('.tab-pane:last .btn-vote').css('display', 'block');
+            $('#wheel-right').on('click', function () {
+                if ($(window).width() < 960) {
+                    $('.back-btn').css('display', 'block');
+                    $('.back-btn').css('width', '100%');
+                } else {
                     $('.back-btn').css('display', 'table-cell');
-                     $('.back-btn').css('width', '1%');
-                 }
+                    $('.back-btn').css('width', '1%');
+                }
                 $tabs.filter('.active').next('li').find('a[data-toggle="tab"]').tab('show');
                 if ($('.btn-vote').is(':visible')) {
                     $('.color-next').css('display', 'none');
                 }
-
-        });
-
-    })
-
-</script>
-
+            });
+        })
+    </script>
     <div class="container">
-     <div class="row">
-        <div class="col-md-12">
-            <div class="user_results" style="display: none;margin-top:30px;">
-                <div class="row" style="margin-bottom:20px;">
-                    <div class="col-md-5">
-                        <button type="submit" class="btn btn-default top-links-modal" id="answers-candidates" style="">
-                             <i class="icon-th-list"></i> Odgovori predsedničkih kandidata
-                        </button>
-                    </div>
-                    <div class="col-md-7">
-                         <button type="submit" class="btn btn-default top-links-modal" id="user_answers">
-                             <i class="icon-th-list"></i> Uporedite moji odgovore
-                        </button>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="user_results" style="display: none;margin-top:30px;">
+                    <div class="row" style="margin-bottom:20px;">
+                        <div class="col-md-5">
+                            <button type="submit" class="btn btn-default top-links-modal" id="answers-candidates"
+                                    style="">
+                                <i class="icon-th-list"></i> Odgovori predsedničkih kandidata
+                            </button>
+                        </div>
+                        <div class="col-md-7">
+                            <button type="submit" class="btn btn-default top-links-modal" id="user_answers">
+                                <i class="icon-th-list"></i> Uporedite moji odgovore
+                            </button>
+                        </div>
                     </div>
                 </div>
-
             </div>
         </div>
-    </div>
         <div class="row">
             <div class="col-md-12">
                 <div class="user_results">
-                      <div class="panel panel-default">
-                            <div class="panel-heading" style="overflow: auto;">
-                                <h3 class="panel-title">
-                                    <div class="col-md-8" style="padding:10px;"><b>Tri kandidata sa kojima se najviše podudaraju moji odgovori</b></div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading" style="overflow: auto;">
+                            <h3 class="panel-title">
+                                <div class="col-md-8" style="padding:10px;">
+                                    <b>Tri kandidata sa kojima se najviše podudaraju moji odgovori</b>
+                                </div>
 
-                                </h3>
-                            </div>
-                          <div class="panel-body" id="user-div-results">
-
-
+                            </h3>
+                        </div>
+                        <div class="panel-body" id="user-div-results">
                             <div class="ajax-loader">
-                              <img src="{{ url_for('static', filename = 'assets/loading2.gif') }}" class="img-responsive" />
+                                <img src="{{ url_for('static', filename = 'assets/loading2.gif') }}"
+                                     class="img-responsive"/>
                             </div>
-                          </div>
-                      </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
