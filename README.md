@@ -85,18 +85,18 @@ The Application installation and deployment process
 Instructions for the login page:
 
 Since we have also adminstration part, we are using authentication and there are some configurations that should be added on the config.cfg:
-    - [Authentication]
-    - LOGIN_USER_TEMPLATE_PATH=mod_auth/login.html
-    - LOGIN_URL=/auth/login
-    - REGISTER_USER_TEMPLATE_PATH=mod_auth/register.html
-    - CAN_REGISTER=True
-    - CONFIRM_EMAIL=False
-    - SEND_REGISTER_EMAIL=False
-    - SEND_PASSWORD_CHANGE_EMAIL=False
-    - SEND_CONFIRM_EMAIL_WITHIN=False
-    - PASSWORD_CHANGEABLE=False
-    - PASSWORD_HASH=bcrypt
-    - PASSWORD_SALT=
+    [Authentication]
+    LOGIN_USER_TEMPLATE_PATH=mod_auth/login.html
+    LOGIN_URL=/auth/login
+    REGISTER_USER_TEMPLATE_PATH=mod_auth/register.html
+    CAN_REGISTER=True
+    CONFIRM_EMAIL=False
+    SEND_REGISTER_EMAIL=False
+    SEND_PASSWORD_CHANGE_EMAIL=False
+    SEND_CONFIRM_EMAIL_WITHIN=False
+    PASSWORD_CHANGEABLE=False
+    PASSWORD_HASH=bcrypt
+    PASSWORD_SALT=
 
 User registraion:
     For security reasons and we have only one user(admin) for the moment.
