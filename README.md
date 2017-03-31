@@ -1,18 +1,25 @@
-What Is This?
+# What Is This?
+---------------
 
 A quiz to assess who you should vote for in Serbian elections.
 
-Installation instructions.
+## Installation instructions:
+---------------
 
-Things that are needed to install are listed in:
+### Things that are needed to install are listed in:
+
     - requirements.txt
 
-To install all the points from requirements file we have to run:
+### To install all the points from requirements file we have to run:
+
     - "bash install.sh"
 
-For the configuration stuff rename the config-template.cfg to:
+### For the configuration stuff rename the config-template.cfg to:
+
     - "config.cfg"
-To add in the config.cfg that we just created:
+    
+### To add in the config.cfg that we just created:
+
 
     [Application]
     SERVER_PORT=
@@ -23,9 +30,7 @@ To add in the config.cfg that we just created:
     PATH=logs/error.log
     LEVEL=debug
 
-Deployment instructions:
-
-The Application installation and deployment process
+## Deployment instructions:
 
 1. Install Apache Virtual Hosts (if the server is configured for the first time)
    - sudo apt-get update
@@ -83,7 +88,7 @@ The Application installation and deployment process
       sudo apt-get update
       sudo apt-get install -y mongodb-org
 
-Instructions for the login page:
+## Instructions for the login page:
 
 Since we have also adminstration part,
  we are using authentication and there are some configurations that should be added on the config.cfg:
@@ -121,7 +126,7 @@ Login:
 
         http://glasomer.rs/admin
 
-Instructions how admin is organized and how question should be added:
+## Instructions how admin is organized and how question should be added:
 
     The level of how the questions are added:
 
