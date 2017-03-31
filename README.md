@@ -135,8 +135,11 @@ Login:
     By level we mean that the questions first are dependent from the project
     and than by the group that they are in.
 
-    What do we mean by project? \
-    [logo]: https://github.com/crtarsorg/glasomer.rs-v2/blob/master/app/static/assets/projects_screenshot.png
+    What do we mean by project? 
+    
+    
+    [logo]: https://github.com/crtarsorg/glasomer.rs-v2/blob/master/app/static/assets/projects_screenshot.png "PROJECTS DASHBOARD"
+    
     There is a possibility to add multiple projects and than enable or disable a project.
     There cannot be multiple projects enabled at once.
     The reason why we use projects is that we can make questionaries for different reasons,
