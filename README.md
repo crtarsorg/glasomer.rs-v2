@@ -136,10 +136,7 @@ Login:
     and than by the group that they are in.
 
     What do we mean by project? 
-    
-    Reference-style: 
-    ![alt text][logo]
-    [logo]: https://github.com/crtarsorg/glasomer.rs-v2/blob/master/app/static/assets/projects_screenshot.png "PROJECTS DASHBOARD"
+    ![Alt text](https://github.com/crtarsorg/glasomer.rs-v2/blob/master/app/static/assets/projects_screenshot.png?raw=true "PROJECTS DASHBOARD")
     
     There is a possibility to add multiple projects and than enable or disable a project.
     There cannot be multiple projects enabled at once.
