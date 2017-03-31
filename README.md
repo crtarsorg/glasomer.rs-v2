@@ -85,6 +85,7 @@ The Application installation and deployment process
 Instructions for the login page:
 
 Since we have also adminstration part, we are using authentication and there are some configurations that should be added on the config.cfg:
+
     [Authentication]
     LOGIN_USER_TEMPLATE_PATH=mod_auth/login.html
     LOGIN_URL=/auth/login
@@ -106,15 +107,21 @@ User registraion:
 
 Login:
     The url for the admin page is:
+
         http://glasomer.rs/admin
+
     If we are not authenticated than we will be redirected to:
+
         http://glasomer.rs/auth/login
+
     After login than we redirected again to:
+
         http://glasomer.rs/admin
 
 Instructions how admin is organized and how question should be added:
 
     The level of how the questions are added:
+
       1. Project
       2. Group
       3. Question
@@ -142,7 +149,8 @@ Instructions how admin is organized and how question should be added:
     Manage Candidates Dashboard:
 
     There is a part where we manage candidates, like adding, editing or deleting.
-    Also after adding questions for an enabled projects, we can assign answers to candidates or editings answers to a specific candidate and a specific question.
+    Also after adding questions for an enabled projects,
+    we can assign answers to candidates or editings answers to a specific candidate and a specific question.
 
 
     Text for the page "Sta je Glasomer"?
