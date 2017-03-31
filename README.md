@@ -45,7 +45,8 @@ The Application installation and deployment process
 
 5. Installation and configuration of apache:
 
-    - Install module mod_wsgi, this is a module of Apache HTTP Server that provides services for hosting Python apps that are web based .
+    - Install module mod_wsgi,
+    this is a module of Apache HTTP Server that provides services for hosting Python apps that are web based .
 
         sudo apt-get install libapache2-mod-wsgi
 
@@ -84,7 +85,8 @@ The Application installation and deployment process
 
 Instructions for the login page:
 
-Since we have also adminstration part, we are using authentication and there are some configurations that should be added on the config.cfg:
+Since we have also adminstration part,
+ we are using authentication and there are some configurations that should be added on the config.cfg:
 
     [Authentication]
     LOGIN_USER_TEMPLATE_PATH=mod_auth/login.html
@@ -101,7 +103,8 @@ Since we have also adminstration part, we are using authentication and there are
 
 User registraion:
     For security reasons and we have only one user(admin) for the moment.
-    In case we need to enable the registration, or to add another user as admin, we have to enable the action for registration in the :
+    In case we need to enable the registration, or to add another user as admin,
+     we have to enable the action for registration in the :
         - mod_auth/registation
     For the moment this action is commented and we can't access to it.
 
@@ -126,13 +129,17 @@ Instructions how admin is organized and how question should be added:
       2. Group
       3. Question
 
-    By level we mean that the questions first are dependent from the project and than by the group that they are in.
+    By level we mean that the questions first are dependent from the project
+    and than by the group that they are in.
 
     What do we mean by project?
 
-    There is a possibility to add multiple projects and than enable or disable a project. There cannot be multiple projects enabled at once.
-    The reason why we use projects is that we can make questionaries for different reasons, and we don't need to delete them.
-    We can disable that project, create another one, enable it and start adding groups and questions for the enabled project.
+    There is a possibility to add multiple projects and than enable or disable a project.
+    There cannot be multiple projects enabled at once.
+    The reason why we use projects is that we can make questionaries for different reasons,
+    and we don't need to delete them.
+    We can disable that project, create another one,
+    enable it and start adding groups and questions for the enabled project.
 
     Managing Groups and questions:
 
@@ -141,7 +148,8 @@ Instructions how admin is organized and how question should be added:
 
     Managing Groups:
     We are able to add, edit and delete the groups
-    Notice for delete action: If we delete a group, there also will be deleted the questions that were dependent to that group.
+    Notice for delete action: If we delete a group,
+     there also will be deleted the questions that were dependent to that group.
 
     Managing questions:
     Also in the questions we can add, edit and delete them.
@@ -155,7 +163,8 @@ Instructions how admin is organized and how question should be added:
 
     Text for the page "Sta je Glasomer"?
 
-    The text displayed in the page is managed from the admin dashboard, and there is a specific page for it. We can add or edit it.
+    The text displayed in the page is managed from the admin dashboard, and there is a specific page for it.
+     We can add or edit it.
     Its not related something to the enabled project.
 
 
