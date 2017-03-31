@@ -137,7 +137,8 @@ Login:
 
     What do we mean by project? 
     
-    
+    Reference-style: 
+    ![alt text][logo]
     [logo]: https://github.com/crtarsorg/glasomer.rs-v2/blob/master/app/static/assets/projects_screenshot.png "PROJECTS DASHBOARD"
     
     There is a possibility to add multiple projects and than enable or disable a project.
