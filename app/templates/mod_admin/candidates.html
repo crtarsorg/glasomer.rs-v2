@@ -10,13 +10,10 @@
         }).responseJSON;
         $(document).ready(function () {
             var oTable;
-
             function init_table(newRowData) {
                 oTable = $('#exampleTable').dataTable({
-
                     "aaData": newRowData,
                     "aoColumns": [
-
                         {"mDataProp": "generated_id"},
                         {"mDataProp": "slug"},
                         {"mDataProp": "candidate_name"},
@@ -39,9 +36,7 @@
                                 return "<a href='{{ url_for('admin.get_candidate_answers') }}?candidate=" + data + "'>Edit Answers</a>";
                             }
                         },
-
                         {"sDefaultContent": "<a  class='edit-candidate' id='' style='padding-right:20px;'><i class='fa fa-pencil-square-o fa-lg edit-group' aria-hidden='true' style='padding-bottom:20px;'></i></a>" + "<a href='#' class='remove-candidate'><i class='fa fa-trash-o fa-lg' aria-hidden='true'></i></a>"},
-
                     ],
                     "oLanguage": {
                         "sInfo": "_TOTAL_ entries"
@@ -49,7 +44,6 @@
                     "aaSorting": [[1, 'asc']]
                 });
             }
-
             init_table(newRowData);
             $('body').on('click', '.edit-candidate', function () {
                 var candidate_gid = $($(this).parent().parent().children()[0]).text();
@@ -73,7 +67,6 @@
                     }
                 });
             });
-
             $('body').on('click', '.remove-candidate', function () {
                 var candidate_gid = $($(this).parent().parent().children()[0]).text();
                 BootstrapDialog.show({
@@ -111,23 +104,18 @@
     </script>
     <div id="wrapper">
         <div id="page-wrapper">
-
             <div class="container-fluid">
                 <div class="row" style="margin-top:100px">
-
                     <div class="col-md-3"></div>
                     <div class="col-md-6">
                         <h2>Manages Candidates</h2>
                         {% with messages = get_flashed_messages() %}
                             {% if messages %}
-
                                 {% for message in messages %}
                                     <div class="alert alert-success">
                                         <strong>Success! </strong> {{ message.decode('utf-8') }}.
                                     </div>
-
                                 {% endfor %}
-
                             {% endif %}
                         {% endwith %}
                         <div id="add-candidate-modal">
@@ -137,14 +125,11 @@
                                 <input name="image_hidden" type="hidden" id="hidden_image_id">
                                 <div class="form-group">
                                     <label for="candidate_name">Candidate Name:</label>
-                                    <input name="candidate_name" type="text" class="form-control" id="candidate_id"
-                                           placeholder="Name">
+                                    <input name="candidate_name" type="text" class="form-control" id="candidate_id" placeholder="Name">
                                 </div>
                                 <div class="form-group">
                                     <label for="candidate_biography">Biography:</label>
-                                    <textarea name="candidate_biography" type="text" class="form-control"
-                                              id="candidate_biography" placeholder="Biography" rows="4"
-                                              cols="50"></textarea>
+                                    <textarea name="candidate_biography" type="text" class="form-control" id="candidate_biography" placeholder="Biography" rows="4" cols="50"></textarea>
                                 </div>
                                 <div class="form-group">
                                     <label for="candidate_biography">Image:</label>
@@ -154,10 +139,7 @@
                                     <img src="" class="candidate_image"/>
                                 </div>
                                 <div class="modal-footer">
-
-                                    <input type="submit" value="Save changes" name="editInd" class="btn btn-primary"
-                                           id="add-indicator-button">
-
+                                    <input type="submit" value="Save changes" name="editInd" class="btn btn-primary" id="add-indicator-button">
                                 </div>
                             </form>
                         </div>
