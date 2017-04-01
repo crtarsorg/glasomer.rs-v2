@@ -177,6 +177,8 @@ Login:
     The text displayed in the page is managed from the admin dashboard, and there is a specific page for it.
      We can add or edit it.
     Its not related something to the enabled project.
+  
+  ![image](https://cloud.githubusercontent.com/assets/3279668/24577831/de8a4842-16d5-11e7-91db-d5cfa5db924c.png)
 
 
 
