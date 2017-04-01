@@ -8,7 +8,7 @@ A quiz to assess who you should vote for in Serbian elections.
 
     - requirements.txt
 
-### To install all the points from requirements file we have to run:
+### To install all the libraties from requirements file we have to run:
 
     - "bash install.sh"
 
