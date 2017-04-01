@@ -153,7 +153,7 @@ Login:
 
     Managing Groups:
     
-    ![image](https://cloud.githubusercontent.com/assets/3279668/24577695/eb34db78-16d2-11e7-9220-f17dfd6a6617.png)
+   ![image](https://cloud.githubusercontent.com/assets/3279668/24577695/eb34db78-16d2-11e7-9220-f17dfd6a6617.png)
     
     We are able to add, edit and delete the groups
     Notice for delete action: If we delete a group,
