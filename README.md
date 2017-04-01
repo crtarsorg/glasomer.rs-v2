@@ -135,7 +135,7 @@ Login:
     By level we mean that the questions first are dependent from the project
     and than by the group that they are in.
 
-    What do we mean by project? 
+        What do we mean by project? 
    
    ![image](https://cloud.githubusercontent.com/assets/3279668/24561369/c904c0e0-1646-11e7-80aa-5d7d382c0bf1.png)
     There is a possibility to add multiple projects and than enable or disable a project.
@@ -146,8 +146,10 @@ Login:
     enable it and start adding groups and questions for the enabled project.
 
  
-    Managing Groups and questions:
+        Managing Groups and questions:
+    
     ![image](https://cloud.githubusercontent.com/assets/3279668/24577695/eb34db78-16d2-11e7-9220-f17dfd6a6617.png)
+    
     Here we are managing all in one table, we have datable for the groups and sub datatable the questions.
     So first we create a group and than we can enter in a group to add questions, into the sub datatable.
 
