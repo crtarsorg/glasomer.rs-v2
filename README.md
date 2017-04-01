@@ -147,6 +147,9 @@ Login:
     enable it and start adding groups and questions for the enabled project.
 
     Managing Groups and questions:
+    
+    ![image](https://cloud.githubusercontent.com/assets/3279668/24577695/eb34db78-16d2-11e7-9220-f17dfd6a6617.png)
+
 
     Here we are managing all in one table, we have datable for the groups and sub datatable the questions.
     So first we create a group and than we can enter in a group to add questions, into the sub datatable.
