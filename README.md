@@ -161,7 +161,7 @@ Login:
 
     Managing questions:
     Also in the questions we can add, edit and delete them.
-
+  ![image](https://cloud.githubusercontent.com/assets/3279668/24577815/87e13ae6-16d5-11e7-8117-ba215f516125.png)
     Manage Candidates Dashboard:
 
     There is a part where we manage candidates, like adding, editing or deleting.
