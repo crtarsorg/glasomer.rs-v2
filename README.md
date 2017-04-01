@@ -135,8 +135,10 @@ Login:
     By level we mean that the questions first are dependent from the project
     and than by the group that they are in.
 
-    What do we mean by project?
-
+    What do we mean by project? 
+   
+   ![image](https://cloud.githubusercontent.com/assets/3279668/24561369/c904c0e0-1646-11e7-80aa-5d7d382c0bf1.png)
+    
     There is a possibility to add multiple projects and than enable or disable a project.
     There cannot be multiple projects enabled at once.
     The reason why we use projects is that we can make questionaries for different reasons,
