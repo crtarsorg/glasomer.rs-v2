@@ -14,9 +14,6 @@ def index():
     for project in json.loads(json_util.dumps(project_enabled)):
         year = project['year']
     visited_users = mongo_utils.count_visits(year)
-    count_voters=0
     result_voters=mongo_utils.get_voters_count(year)
-    for c_v in result_voters:
-        print c_v
     return render_template('mod_statistics/index.html',visited_users=visited_users,voters=len(result_voters))
 
