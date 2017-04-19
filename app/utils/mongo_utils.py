@@ -14,6 +14,7 @@ class MongoUtils(object):
         self.answers_users = "answers_users"
         self.projects_collection = "projects_collection"
         self.glasomer_text_collection = "glasomer_text_collection"
+        self.visited_users = "visited_users"
 
     def insert_question(self, doc):
         count_groups=int(time.mktime(datetime.now().timetuple()))
@@ -50,6 +51,11 @@ class MongoUtils(object):
     def count_groups(self):
         result = self.mongo.db[self.group_collection].count()
         return result
+
+    def count_visits(self,project_enabled):
+        result = self.mongo.db[self.visited_users].count()
+        return result
+
     def find_selected_group(self,doc):
         result = self.mongo.db[self.group_collection].find_one({'generated_id':doc['group_name']})
         return result
@@ -299,4 +305,27 @@ class MongoUtils(object):
         result = self.mongo.db[self.glasomer_text_collection].remove({'year': enabled_year})
         return result
 
+    def insert_user_session(self, user_id,project_enabled,date):
+        result = self.mongo.db[self.visited_users].insert({'user_id':user_id,'year':project_enabled,'date':date})
+        return result
 
+    def get_voters_count(self,enabled_year):
+        group = {
+            '_id': {
+                'user_id': '$user_id',
+            },
+        }
+        match = {
+            'project_slug': enabled_year,
+        }
+
+        pipeline = [
+            {'$match': match},
+            {'$group': group}
+        ]
+        result = self.mongo.db[self.answers_users].aggregate(pipeline)
+        return result['result']
+
+    def get_visits(self,enabled_year):
+        result = self.mongo.db[self.visited_users].find({'year': enabled_year})
+        return result

@@ -291,3 +291,4 @@ def save_glasomer_text():
         mongo_utils.edit_glasomer_text(data,year)
         flash('Text is saved')
     return redirect(url_for('admin.whatisglasomer'))
+

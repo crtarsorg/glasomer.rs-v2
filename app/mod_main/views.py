@@ -13,14 +13,16 @@ mod_main = Blueprint('main', __name__)
 def index():
     project_enabled = mongo_utils.get_enabled_project()
     for project in json.loads(json_util.dumps(project_enabled)):
+        year=project['year']
         docs = mongo_utils.find_all(project['year'])
         count_questions = mongo_utils.get_nr_questions_front(project['year'])
         questions = mongo_utils.find_all_questions(project['year'])
         timestamp = int(time.mktime(datetime.now().timetuple()))
         session['user_id'] = timestamp
         user_id = session['user_id']
+    date=datetime.utcnow()
+    mongo_utils.insert_user_session(user_id,year,date)
     return render_template('mod_main/index.html', docs=json.loads(json_util.dumps(docs)),questions=json.loads(json_util.dumps(questions)), count_questions=count_questions,user_id=user_id)
-
 
 @mod_main.route('/results/<int:user_id>', methods=['GET'])
 def results(user_id):
@@ -63,7 +65,6 @@ def results(user_id):
         for c_a in candidates_array:
             if candidate['generated_id']==c_a['candidate_slug']:
                 count_match += 1
-
                 percentage = (float(count_match)/ number_of_questions) * 100
         candidates_percentages.append({
             'candidate_name':candidate['candidate_name'],
@@ -71,11 +72,8 @@ def results(user_id):
             'candidate_biography':candidate['candidate_biography'],
             'image':candidate['image']
         })
-
     sorted_c_array=sorted(candidates_percentages, key=itemgetter('percentage'),reverse=True)
     return render_template('mod_main/results.html', docs=json.loads(json_util.dumps(results)),results=json.loads(json_util.dumps(sorted_c_array)),user_id=user_id)
-
-
 
 @mod_main.route('/insertuseranswers', methods=['GET', "POST"])
 def insert_user_answers():

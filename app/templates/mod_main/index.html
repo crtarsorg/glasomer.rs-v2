@@ -387,20 +387,16 @@
                             oTable1.fnAddData(newRowData1);
                             oTable1.fnDraw();
                         }
-
                         $('#user-div-results').html('');
                         $('.user_questions').hide('slow');
                         $('.user_results').show('slow');
                         var count_questions = 0;
                         candidatesarray = [];
                         $(data['all_question']).each(function (keyq, valueq) {
-
                             var match = 0;
                             count_questions = count_questions + 1;
                             $(data['candidate_results']).each(function (keyc, valuek) {
-
                                 $(data['user_results']).each(function (keyu, valueu) {
-
                                     if (valuek['status_' + count_questions] == valueu['status_' + count_questions] && valuek['vazno_' + count_questions] == valueu['vazno_' + count_questions] && valuek['question_' + count_questions] == valueu['question_' + count_questions]) {
                                         match = match + 1;
                                         candidatesarray.push({

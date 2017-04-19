@@ -145,8 +145,10 @@ def init_modules(app):
     from app.mod_auth.views import mod_auth
     from app.mod_admin.views import mod_admin
     from app.mod_project.views import mod_project
+    from app.mod_statistics.views import mod_statistics
     app.register_blueprint(mod_auth)
     app.register_blueprint(mod_main)
     app.register_blueprint(mod_whatis)
     app.register_blueprint(mod_admin)
     app.register_blueprint(mod_project)
+    app.register_blueprint(mod_statistics)
