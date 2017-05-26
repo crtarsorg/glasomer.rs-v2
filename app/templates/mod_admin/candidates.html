@@ -119,8 +119,7 @@
                             {% endif %}
                         {% endwith %}
                         <div id="add-candidate-modal">
-                            <form id="add-candidate-form" name="add_group" method="POST" enctype="multipart/form-data"
-                                  action="{{ url_for('admin.add_candidate') }}">
+                            <form id="add-candidate-form" name="add_group" method="POST" enctype="multipart/form-data" action="{{ url_for('admin.add_candidate') }}">
                                 <input name="generated_id" type="hidden" id="hidden_generate_id">
                                 <input name="image_hidden" type="hidden" id="hidden_image_id">
                                 <div class="form-group">
