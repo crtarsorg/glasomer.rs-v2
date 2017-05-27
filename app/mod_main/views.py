@@ -22,7 +22,7 @@ def index():
         user_id = session['user_id']
     date=datetime.utcnow()
     mongo_utils.insert_user_session(user_id,year,date)
-    return render_template('mod_main/index.html', docs=json.loads(json_util.dumps(docs)),questions=json.loads(json_util.dumps(questions)), count_questions=count_questions,user_id=user_id)
+    return render_template('mod_main/under_construction.html', docs=json.loads(json_util.dumps(docs)),questions=json.loads(json_util.dumps(questions)), count_questions=count_questions,user_id=user_id)
 
 @mod_main.route('/results/<int:user_id>', methods=['GET'])
 def results(user_id):
