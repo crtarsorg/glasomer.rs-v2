@@ -13,7 +13,7 @@ from flask_mongoengine import MongoEngine
 from app.utils.mongo_utils import MongoUtils
 from app.utils.user_mongo_utils import UserMongoUtils
 
-UPLOAD_FOLDER =join(dirname(realpath(__file__)), 'static/uploads/')
+UPLOAD_FOLDER = join(dirname(realpath(__file__)), 'static/uploads/')
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 mongo = PyMongo()
 
@@ -103,10 +103,19 @@ def load_config(app):
     # Mongo configuration
     app.config['MONGO_DBNAME'] = config.get('Mongo', 'DB_NAME')
     app.config['MONGODB_DB'] = config.get('Mongo', 'DB_NAME')
-    app.config['MONGODB_PORT'] = int(config.get('Mongo', 'DB_PORT'))
-    app.config['MONGODB_HOST'] = config.get('Mongo', 'DB_HOST')
-    app.config['MONGO_PORT'] = config.get('Mongo', 'DB_PORT')
-    app.config['MONGO_HOST'] = config.get('Mongo', 'DB_HOST')
+
+    if config.get('Mongo', 'DB_PORT') != '':
+        app.config['MONGODB_PORT'] = int(config.get('Mongo', 'DB_PORT'))
+        app.config['MONGO_PORT'] = int(config.get('Mongo', 'DB_PORT'))
+
+    if config.get('Mongo', 'DB_HOST') != '':
+        app.config['MONGODB_HOST'] = config.get('Mongo', 'DB_HOST')
+        app.config['MONGO_HOST'] = config.get('Mongo', 'DB_HOST')
+
+    if config.get('Mongo', 'DB_USERNAME') != '':
+        app.config['MONGO_USERNAME'] = config.get('Mongo', 'DB_USERNAME')
+    if config.get('Mongo', 'DB_PASSWORD'):
+        app.config['MONGO_PASSWORD'] = config.get('Mongo', 'DB_PASSWORD')
 
     # Logging path might be relative or starts from the root.
     # If it's relative then be sure to prepend the path with the application's root directory path.
@@ -140,8 +149,8 @@ def configure_logging(app):
     # First log informs where we are logging to. Bit silly but serves  as a confirmation that logging works.
     app.logger.info('Logging to: %s', log_path)
 
-def init_modules(app):
 
+def init_modules(app):
     # Import blueprint modules
     from app.mod_main.views import mod_main
     from app.mod_whatis.views import mod_whatis
