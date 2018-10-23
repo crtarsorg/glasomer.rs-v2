@@ -7,32 +7,7 @@ mod_auth = Blueprint('auth', __name__, url_prefix='/auth')
 @mod_auth.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == "GET":
-
-        # Return the login form template
-        return render_template('mod_auth/login.html')
-    else:
-        # Get data from the submitted form
-        email = request.form['email']
-        password = request.form['password']
-
-        # Get the user from the database
-        user = user_datastore.find_user(email=email)
-
-        # Check if user exists
-        if user:
-            # Check if the given password matches with the one from the database
-            if bcrypt.check_password_hash(user['password'], password):
-                # If the password matches log in the user.
-                login_user(user)
-                # Return user to the index page after successful login
-                return redirect(url_for('admin.index'))
-            else:
-                # Return an error message
-                error = "Password doesn't match."
-                return render_template('mod_auth/login.html', error=error)
-        else:
-            error = "Sorry, user doesn't exist."
-            return render_template('mod_auth/login.html', error=error)
+        return redirect(url_for('admin.index'))
 
 
 
