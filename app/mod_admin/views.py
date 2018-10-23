@@ -9,11 +9,7 @@ mod_admin = Blueprint('admin', __name__, url_prefix='/admin')
 
 @mod_admin.route('/', methods=['GET', "POST"])
 def index():
-    if current_user.is_authenticated:
-        projects = mongo_utils.find_all_projects()
-        return render_template('mod_admin/index.html',projects=json.loads(json_util.dumps(projects)))
-    else:
-        return redirect(url_for('auth.login'))
+    return render_template('mod_admin/index.html',projects=json.loads(json_util.dumps(projects)))
 
 @login_required
 @mod_admin.route('/candidates', methods=['GET', "POST"])
