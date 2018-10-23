@@ -4,8 +4,8 @@ from app import user_datastore, bcrypt
 from flask.ext.security import login_user, logout_user
 mod_auth = Blueprint('auth', __name__, url_prefix='/auth')
 
-@mod_auth.route('/login', methods=['GET', 'POST'])
-def login():
+#@mod_auth.route('/login', methods=['GET', 'POST'])
+#def login():
     if request.method == "GET":
 
         # Return the login form template
