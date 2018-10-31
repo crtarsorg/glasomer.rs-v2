@@ -107,7 +107,7 @@ class MongoUtils(object):
                                                         'slug': slugify(doc['candidate_name']),
                                                         'candidate_name': doc['candidate_name'],
                                                         'candidate_biography': doc['candidate_biography'],
-                                                        'image': filename},upsert=False)
+                                                        'image': filename})
         return result
     def update_candidate(self, doc,filename):
         result = self.mongo.db[self.candidates_collection].update(
