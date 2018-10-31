@@ -216,7 +216,7 @@ class MongoUtils(object):
                                                         'slug': slugify(doc['project_name']),
                                                         'project_name': doc['project_name'],
                                                         'year': doc['year'],
-                                                        'enabled':"enabled"},upsert=False)
+                                                        'enabled':"enabled"})
         return result
 
     def update_project(self, doc):
