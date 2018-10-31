@@ -21,7 +21,6 @@ def index():
         docs = mongo_utils.find_all(project['year'])
         count_questions = mongo_utils.get_nr_questions_front(project['year'])
         questions = mongo_utils.find_all_questions(project['year'])
-
     date=datetime.utcnow()
     mongo_utils.insert_user_session(user_id,year,date)
     return render_template('mod_main/index.html', docs=json.loads(json_util.dumps(docs)),questions=json.loads(json_util.dumps(questions)), count_questions=count_questions,user_id=user_id)
@@ -336,4 +335,3 @@ def get_answers_user_candidate():
                 vazno = "/"
             created_array.append({'candidate_slug':"Vaš odgovor",'vazno':vazno,'status':status,'comment':"/"})
         return Response(response=json_util.dumps(created_array), status=200, mimetype='application/json')
-
