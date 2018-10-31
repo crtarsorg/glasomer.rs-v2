@@ -12,14 +12,16 @@ mod_main = Blueprint('main', __name__)
 @mod_main.route('/', methods=['GET'])
 def index():
     project_enabled = mongo_utils.get_enabled_project()
+    timestamp = int(time.mktime(datetime.now().timetuple()))
     session['user_id'] = timestamp
     user_id = session['user_id']
+    year=2017
     for project in json.loads(json_util.dumps(project_enabled)):
         year=project['year']
         docs = mongo_utils.find_all(project['year'])
         count_questions = mongo_utils.get_nr_questions_front(project['year'])
         questions = mongo_utils.find_all_questions(project['year'])
-        timestamp = int(time.mktime(datetime.now().timetuple()))
+
     date=datetime.utcnow()
     mongo_utils.insert_user_session(user_id,year,date)
     return render_template('mod_main/index.html', docs=json.loads(json_util.dumps(docs)),questions=json.loads(json_util.dumps(questions)), count_questions=count_questions,user_id=user_id)
