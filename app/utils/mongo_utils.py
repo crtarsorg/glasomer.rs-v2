@@ -323,7 +323,7 @@ class MongoUtils(object):
             {'$match': match},
             {'$group': group}
         ]
-        result = self.mongo.db[self.answers_users].aggregate(pipeline)
+        result = self.mongo.db[self.answers_users].aggregate(pipeline,{cursor: {batchSize: 2000000}})
         return result['result']
 
     def get_visits(self,enabled_year):
