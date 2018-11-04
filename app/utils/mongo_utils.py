@@ -304,27 +304,14 @@ class MongoUtils(object):
     def delete_glasomer_text(self,enabled_year):
         result = self.mongo.db[self.glasomer_text_collection].remove({'year': enabled_year})
         return result
-
     def insert_user_session(self, user_id,project_enabled,date):
         result = self.mongo.db[self.visited_users].insert({'user_id':user_id,'year':project_enabled,'date':date})
         return result
 
     def get_voters_count(self,enabled_year):
-        group = {
-            '_id': {
-                'user_id': '$user_id',
-            },
-        }
-        match = {
-            'project_slug': enabled_year,
-        }
-
-        pipeline = [
-            {'$match': match},
-            {'$group': group}
-        ]
-        result = self.mongo.db[self.answers_users].aggregate(pipeline,{'cursor': {'batchSize': 2000000}})
-        return result['result']
+        find=self.mongo.db[self.answers_users].find({'project_slug':enabled_year})
+        
+        return find.count()
 
     def get_visits(self,enabled_year):
         result = self.mongo.db[self.visited_users].find({'year': enabled_year})

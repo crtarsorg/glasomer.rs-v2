@@ -15,5 +15,4 @@ def index():
         year = project['year']
     visited_users = mongo_utils.count_visits(year)
     result_voters=mongo_utils.get_voters_count(year)
-    return render_template('mod_statistics/index.html',visited_users=visited_users,voters=len(result_voters))
-
+    return render_template('mod_statistics/index.html',visited_users=visited_users,voters=result_voters)
